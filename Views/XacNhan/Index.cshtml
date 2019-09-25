@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.DIEU_CHUYEN_THIET_BI>
+@model IEnumerable<Source.Models.DIEU_CHUYEN_THIET_BI>
 
     <main>
         <div class="container link">
@@ -20,13 +20,18 @@
                     <button class="btn-search">
                         <span>Tìm kiếm</span><i class="fas fa-search"></i>
                     </button>
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
                 </div>
                 <br>
                 <p class="thong-bao">Click chọn thiết bị để xác nhận.</p>
                 <div class="xac-nhan">
                     <table id="myTable" onclick="on_click()">
                         <tr>
-                            <th>Mã TB</th>
+                            <th>Mã ĐC</th>
                             <th>Mã TB</th>
                             <th>Thời gian chuyển</th>
                             <th>ĐVQL</th>
@@ -52,8 +57,8 @@
                                     @Html.DisplayFor(modelItem => item.DON_VI1.TEN_DON_VI)
                                 </td>
                                 @*<td>
-                                @Html.DisplayFor(modelItem => item.MAND_NHAN)
-                            </td>*@
+                                    @Html.DisplayFor(modelItem => item.MAND_NHAN)
+                                </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.GHI_CHU)
                                 </td>
@@ -95,13 +100,18 @@
                             </tr>
                         </table>
                         <div class="submit">
-                            <button class="da-nhan" name="XAC_NHAN">ĐÃ NHẬN</button>
+                            <button class="da-nhan" name="XAC_NHAN" value="xac_nhan">XÁC NHẬN</button>
                             <button class="luu" id="huy-xn">HỦY</button>
                         </div>
                     </div>
+
+                    <div hidden="hidden">
+                        <input name="MA_DIEU_CHUYEN" />
+                        <input name="MATB" />
+                    </div>
                 </div>
             }
-            </section>
+        </section>
     </main>
 
 
@@ -117,19 +127,23 @@
         evt.currentTarget.className += " active";
 
         $.ajax({
-                    type: "GET",
-                    url: "/Script/get_ThongTinDieuChuyen",
-                    data: { ma_DIEU_CHUYEN: row },
-                    success: function (data) {
-                        $("#MATB").html(data.MATB);
-                        $("#TENTB").html(data.TENTB);
-                        $("#NGAY_CHUYEN").html(data.NGAY_CHUYEN);
-                        $("#DV_QL").html(data.DV_QL);
-                        $("#DV_NHAN").html(data.DV_NHAN);
-                        $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
-                        $("#GHI_CHU").html(data.GHI_CHU);
-                    }
-                });
+            type: "GET",
+            url: "/Script/get_ThongTinDieuChuyen",
+            data: { ma_DIEU_CHUYEN: row },
+            success: function (data) {
+                $("#MA_DIEU_CHUYEN").html(data.MA_DIEU_CHUYEN);
+                $("#MATB").html(data.MATB);
+                $("#TENTB").html(data.TENTB);
+                $("#NGAY_CHUYEN").html(data.NGAY_CHUYEN);
+                $("#DV_QL").html(data.DV_QL);
+                $("#DV_NHAN").html(data.DV_NHAN);
+                $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
+                $("#GHI_CHU").html(data.GHI_CHU);
+
+                document.getElementsByName("MA_DIEU_CHUYEN")[0].value = data.MA_DIEU_CHUYEN;
+                document.getElementsByName("MATB")[0].value = data.MATB;
+            }
+        });
     }
 
     //function on_click() {
