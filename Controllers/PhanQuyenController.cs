@@ -47,7 +47,7 @@ namespace Source.Controllers
                         {
                             string[] sPLIT = item.Split(new char[] { '.' });
                             NHOM_ND_CHUCNANG create_NHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
-                            create_NHOM_ND_CHUCNANG.MA_NHOM = i.NHOM_NGUOI_DUNG.TEN_NHOM;
+                            create_NHOM_ND_CHUCNANG.MA_NHOM = i.MA_NHOM;
                             create_NHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
                             create_NHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
 
