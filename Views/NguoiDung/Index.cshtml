@@ -1,0 +1,215 @@
+﻿@model IEnumerable<Source.Models.NGUOI_DUNG>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Quản lý người dùng > Người dùng</p>
+        <hr />
+    </div>
+    <section class="container" id="nguoi-dung">
+        <h1 class="title">NGƯỜI DÙNG</h1>
+        <div class="div-nd">
+            <div class="them-nd">
+                <h4 class="sub-title">
+                    <span id="them-sua">Thêm</span> người dùng
+                </h4>
+                @using (Html.BeginForm("Index", "NguoiDung", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            <form action="">
+                <div class="form-group">
+                    <label for="">Mã ND:</label>
+                    <input class="form-control"
+                           id="MA_ND"
+                           name="MA_ND"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Tên ND:</label>
+                    <input class="form-control"
+                           id="TEN_ND"
+                           name="TEN_ND"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Nhóm người dùng:</label>
+                    <select class="form-control" name="MA_NHOM" id="MA_NHOM"></select>
+                </div>
+                <div class="form-group">
+                    <label for="">Đơn vị:</label>
+                    <select class="form-control" name="MA_DON_VI" id="MA_DON_VI"></select>
+                </div>
+                <div class="form-group">
+                    <label for="">SĐT:</label>
+                    <input class="form-control"
+                           id="DIEN_THOAI"
+                           name="DIEN_THOAI"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Email:</label>
+                    <input class="form-control"
+                           id="EMAIL"
+                           name="EMAIL"
+                           aria-describedby="emailHelp"
+                           placeholder="">
+                </div>
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                }
+
+                <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                <button class="reset d-none">HỦY</button>
+            </form>
+                }
+            </div>
+            <div class="ds-nd">
+                <h4 class="sub-title">
+                    Danh sách người dùng
+                </h4>
+                @*"Index", "NguoiDung", FormMethod.Get*@
+                @using (Html.BeginForm("Index", "NguoiDung", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="loc">
+                        <h4><i class="fas fa-filter"></i></h4>
+                        <div class="div-filter">
+                            <div class="filter">
+                                <label for="">Đơn vị</label>
+                                @Html.DropDownList("donVi", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit();"
+                                })
+                            </div>
+                            <div class="filter">
+                                <label for="">Nhóm</label>
+                                @Html.DropDownList("tenNhom", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit();"
+                                })
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="nguoi-dung">
+                    <table>
+                        <tr>
+                            <th>Mã người dùng</th>
+                            <th>Tên người dùng</th>
+                            <th>Đơn vị</th>
+                            <th>Nhóm</th>
+                            <th>Điện thoại</th>
+                            <th>Email</th>
+
+                        </tr>
+                        @using (Html.BeginForm("Index", "NguoiDung", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            foreach (var item in Model)
+                            {
+                                <tr class="tablinks" onclick="btn_Edit(event, '@item.MA_ND')">
+                                    <td>
+                                        <span id="@item.MA_ND" class="btn_edit" ><i class="far fa-edit" onclick="Edit('@item.MA_ND')"></i></span>
+                                        @Html.DisplayFor(modelItem => item.MA_ND)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TEN_ND)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                                    </td>
+                                    <td>
+                                        @foreach (var nd in item.NHOM_ND)
+                                        {
+                                            if (nd.MA_ND == item.MA_ND)
+                                            {
+                                                @Html.DisplayFor(m => nd.NHOM_NGUOI_DUNG.TEN_NHOM)<br />
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DIEN_THOAI)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EMAIL)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+</main>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_DONVI",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_DON_VI").html(s);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NHOM_ND",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_NHOM").html(s);
+            }
+        });
+    });
+
+    function Edit(row) {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinND",
+            data: { ma_ND: row },
+            success: function (data) {
+                $("#MA_ND").val(row);
+                $("#TEN_ND").val(data.TEN_ND);
+                $("#MA_NHOM").val(data.nhom_ND);
+                $("#MA_DON_VI").val(data.TEN_DON_VI);
+                $("#DIEN_THOAI").val(data.DIEN_THOAI);
+                $("#EMAIL").val(data.EMAIL);
+            }
+        });
+        document.getElementById("EDIT").hidden = false;
+        document.getElementById("CANCEL").hidden = false;
+        document.getElementById("SAVE").hidden = true;
+        document.getElementById("MA_ND").setAttribute("readonly", "true");
+    }
+        
+</script>
+

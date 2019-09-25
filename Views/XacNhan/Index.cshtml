@@ -1,0 +1,145 @@
+﻿@model IEnumerable<Source.Models.DIEU_CHUYEN_THIET_BI>
+
+    <main>
+        <div class="container link">
+            <p>Trang chủ > Báo cáo > Xác nhận điều chuyển</p>
+            <hr />
+        </div>
+        <section class="container" id="xac-nhan">
+            <h1 class="title">XÁC NHẬN</h1>
+            <h4 class="sub-title">Danh sách thiết bị chưa xác nhận</h4>
+            @using (Html.BeginForm("Index", "XacNhan", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="search">
+                    <input type="text"
+                           name="SEARCH_STRING"
+                           class="placeholder"
+                           placeholder="Tìm thiết bị" />
+                    <button class="btn-search">
+                        <span>Tìm kiếm</span><i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <br>
+                <p class="thong-bao">Click chọn thiết bị để xác nhận.</p>
+                <div class="xac-nhan">
+                    <table id="myTable" onclick="on_click()">
+                        <tr>
+                            <th>Mã TB</th>
+                            <th>Mã TB</th>
+                            <th>Thời gian chuyển</th>
+                            <th>ĐVQL</th>
+                            <th>ĐV nhận</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="xn" onclick="Edit(event, '@item.MA_DIEU_CHUYEN')">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MA_DIEU_CHUYEN)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NGAY_CHUYEN)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DON_VI1.TEN_DON_VI)
+                                </td>
+                                @*<td>
+                                @Html.DisplayFor(modelItem => item.MAND_NHAN)
+                            </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GHI_CHU)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="div-ttxn">
+                    <div class="thong-tin-xac-nhan">
+                        <h4 class="sub-title">THÔNG TIN XÁC NHẬN</h4>
+                        <table>
+                            <tr>
+                                <td>Mã thiết bị:</td>
+                                <td id="MATB"></td>
+                            </tr>
+                            <tr>
+                                <td>Tên thiết bị:</td>
+                                <td id="TENTB"></td>
+                            </tr>
+                            <tr>
+                                <td>Thời gian chuyển:</td>
+                                <td id="NGAY_CHUYEN"></td>
+                            </tr>
+                            <tr>
+                                <td>Đơn vị QL:</td>
+                                <td id="DV_QL"></td>
+                            </tr>
+                            <tr>
+                                <td>Đơn vị nhận:</td>
+                                <td id="DV_NHAN"></td>
+                            </tr>
+                            <tr>
+                                <td>Người thực hiện:</td>
+                                <td id="MAND_THUC_HIEN"></td>
+                            </tr>
+                            <tr>
+                                <td>Ghi chú:</td>
+                                <td id="GHI_CHU"></td>
+                            </tr>
+                        </table>
+                        <div class="submit">
+                            <button class="da-nhan" name="XAC_NHAN">ĐÃ NHẬN</button>
+                            <button class="luu" id="huy-xn">HỦY</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            </section>
+    </main>
+
+
+<script>   
+    function Edit(evt, row) {
+        var i, tablinks;
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        evt.currentTarget.className += " active";
+
+        $.ajax({
+                    type: "GET",
+                    url: "/Script/get_ThongTinDieuChuyen",
+                    data: { ma_DIEU_CHUYEN: row },
+                    success: function (data) {
+                        $("#MATB").html(data.MATB);
+                        $("#TENTB").html(data.TENTB);
+                        $("#NGAY_CHUYEN").html(data.NGAY_CHUYEN);
+                        $("#DV_QL").html(data.DV_QL);
+                        $("#DV_NHAN").html(data.DV_NHAN);
+                        $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
+                        $("#GHI_CHU").html(data.GHI_CHU);
+                    }
+                });
+    }
+
+    //function on_click() {
+    //    var table = document.getElementById('myTable');
+
+    //    for (var i = 1; i < table.rows.length; i++) {
+    //        table.rows[i].onclick = function () {
+    //            var ma_DIEU_CHUYEN = this.cells[0].innerHTML;
+                 
+    //        }
+    //    }
+    //};
+</script>

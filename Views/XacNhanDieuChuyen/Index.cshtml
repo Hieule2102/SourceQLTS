@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Source.Models.XAC_NHAN_DIEU_CHUYEN>
+
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Báo cáo > Xác nhận điều chuyển</p>
+        <hr />
+    </div>
+    <section class="container" id="xn-dc">
+        <h1 class="title">XÁC NHẬN ĐIỀU CHUYỂN</h1>
+
+        <div class="xn-dc">
+            <table>
+                <tr>
+                    <th>Mã TB</th>
+                    <th>Tên TB</th>
+                    <th>Thời gian chuyển</th>
+                    <th>ĐVQL</th>
+                    <th>ĐV nhận</th>
+                    <th>Người nhận</th>
+                    <th>Thời gian xác nhận</th>
+                    <th>Ghi chú</th>
+                    <th>Xác nhận</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+            <tr class="xn">
+                <td>@Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.NGAY_CHUYEN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI.TEN_DON_VI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.MANS_NHAN)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.GHI_CHU)
+                </td>
+                <td></td>
+            </tr>
+                }
+            </table>
+        </div>
+    </section>
+</main>

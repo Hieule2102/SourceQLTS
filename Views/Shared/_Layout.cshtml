@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Quản lý Tài Sản CNTT</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800|Oswald:300,400,500&display=swap&subset=vietnamese"
+          rel="stylesheet" />
+
+    <link rel="stylesheet" href="fontawesome-free-5.10.2-web/css/all.css" />
+
+    <link rel="stylesheet" href="Content/main.css" />
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script src="Scripts/jquery-ui.js"></script>
+    <script src="Scripts/main.js"></script>
+</head>
+<body>
+    <header class="">
+        <div class="navb"></div>
+        <div class="navbar">
+            <div class="container">
+                <div class="nav">
+                    <ul class="nav-c accordion">
+                        <li class="menuc1"><a href="" class="c1">Trang chủ</a></li>
+                        <li class="menuc1 accordion-section">
+                            <a href="#accordion-1" class="c1 accordion-section-title">
+                                Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                            </a>
+                            <ul id="accordion-1"
+                                class="c2 menuc2 accordion-section-content">
+                                <li>@Html.ActionLink("Nhập kho", "Index", "NhapKho")<span></span></li>
+                                <li>@Html.ActionLink("Xuất kho", "Index", "XuatKho")<span></span></li>
+                                <li>@Html.ActionLink("Điều chuyển", "Index", "DieuChuyenThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Xác nhận", "Index", "XacNhan")<span></span></li>
+                            </ul>
+                        </li>
+                        <li class="menuc1 accordion-section">
+                            <a href="#accordion-2" class="c1 accordion-section-title">
+                                Danh mục<span><i class="fas fa-sort-down fa-2x"></i></span>
+                            </a>
+                            <ul id="accordion-2"
+                                class="c2 menuc2 accordion-section-content">
+                                <li>@Html.ActionLink("Nhóm thiết bị", "Index", "NhomThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Loại thiết bị", "Index", "LoaiThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Đơn vị", "Index", "DonVi")<span></span></li>
+                                <li>@Html.ActionLink("Nhà cung cấp", "Index", "NhaCungCap")<span></span></li>
+                            </ul>
+                        </li>
+                        <li class="menuc1 accordion-section">
+                            <a href="#accordion-3" class="c1 accordion-section-title">
+                                Báo cáo<span><i class="fas fa-sort-down fa-2x"></i></span>
+                            </a>
+                            <ul id="accordion-3"
+                                class="c2 menuc2 accordion-section-content">
+                                <li>@Html.ActionLink("Danh sách thiết bị", "Index", "DanhSachThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Thống kê thiết bị", "Index", "ThongKeThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Nhật ký thiết bị", "Index", "NhatKyThietBi")<span></span></li>
+                                <li>@Html.ActionLink("Xác nhận điều chuyển", "Index", "XacNhanDieuChuyen")<span></span></li>
+                                <li><a href="">Tồn kho</a><span></span></li>
+                                <li><a href="">Hết hạn bảo hành</a><span></span></li>
+                            </ul>
+                        </li>
+                        <li class="menuc1 accordion-section">
+                            <a href="#accordion-4" class="c1 accordion-section-title">
+                                Quản lý người dùng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                            </a>
+                            <ul id="accordion-4"
+                                class="c2 menuc2 accordion-section-content">
+                                <li>@Html.ActionLink("Người dùng", "Index", "NguoiDung")<span></span></li>
+                                <li>@Html.ActionLink("Nhóm người dùng", "Index", "NhomNguoiDung")<span></span></li>
+                                <li>@Html.ActionLink("Phân quyền", "Index", "PhanQuyen")<span></span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="log">
+                    @if (ViewBag.TEN_DANG_NHAP != null || Session["TEN_DANG_NHAP"] != null)
+                    {
+                        <a>@Session["TEN_DANG_NHAP"]</a>
+
+                        @Html.ActionLink("Đổi mật khẩu", "Index", "DoiMatKhau")
+                        @Html.ActionLink("Đăng xuất", "Logout", "DangNhap")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Đăng nhập", "Index", "DangNhap")
+                    }
+                </div>
+                <a href="javascript:void(0);" class="nav-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+        </div>
+
+        <img src="./images/logo.png" alt="Logo KienLongBank" />
+    </header>
+    @RenderBody()
+    <footer>
+        <div class="container footer">
+            <div class="img">
+                <img src="Images/logo.png" alt="Logo KienLongBank" />
+            </div>
+
+            <div class="info">
+                <h5>Ngân hàng TMCP Kiên Long (Kienlongbank)</h5>
+                <p>
+                    Hội sở: 40-42-44 Phạm Hồng Thái, P.Vĩnh Thanh Vân, Tp.Rạch Giá,
+                    T.Kiên Giang Tp. HCM: 98-108A Cách Mạng Tháng 8, P.7, Q.3, Tp.HCM
+                </p>
+                <p>Điện thoại: (0297) 3869 950 hoặc (028) 3933 3393</p>
+                <p>
+                    Hotline gọi trong lãnh thổ Việt Nam: 1900 6929
+                </p>
+                <p>Hotline gọi từ nước ngoài về Việt Nam: (+84) 287309 6929</p>
+                <p>Mã SWIFT: KLBKVNVX</p>
+                <p>
+                    Email: kienlong@kienlongbank.com hoặc
+                    chamsockhachhang@kienlongbank.com
+                </p>
+            </div>
+            <div class="lien-ket">
+                <h5>Liên kết nhanh</h5>
+                <div class="icon">
+                    <a href=""><i class="fas fa-mobile-alt"></i></a>
+                    <a href=""><i class="fab fa-facebook-f"></i></a>
+                    <a href=""><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+<script src="Scripts/jquery-3.4.1.min.js"></script>
+<script src="Scripts/jquery-ui.js"></script>
+<script src="Scripts/main.js"></script>

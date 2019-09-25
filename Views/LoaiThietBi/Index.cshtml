@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Source.Models.LOAI_THIETBI>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Danh mục > Loại thiết bị</p>
+        <hr />
+    </div>
+    <section class="container" id="loai-tb">
+        <h1 class="title">LOẠI THIẾT BỊ</h1>
+        <div class="div-loai-tb">
+            <div class="them-loai-tb">
+                <h4 class="sub-title">
+                    <span id="them-sua">Thêm</span> loại thiết bị
+                </h4>
+                @using (Html.BeginForm("Index", "LoaiThietBi", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            <form action="">
+                <div class="form-group">
+                    <label for="">Mã LTB:</label>
+                    <input type="text"
+                           id="MA_LOAITB"
+                           name="MA_LOAITB"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Tên LTB:</label>
+                    <input type="text"
+                           id="TEN_LOAI"
+                           name="TEN_LOAI"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Thuộc NTB:</label>
+                    @*@Html.DropDownList("MA_NHOMTB", null, new
+            {
+                @class = "form-control",
+                @placeholder = ""
+            })*@
+                    <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB"></select>
+                </div>
+                <div class="form-group">
+                    <label for="nhom-tb">Ghi chú:</label>
+                    <textarea type="text"
+                              id="GHI_CHU"
+                              name="GHI_CHU"
+                              aria-describedby="emailHelp"
+                              placeholder=""></textarea>
+                </div>
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                }
+                <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                <button class="reset d-none">HỦY</button>
+            </form>
+                }
+            </div>
+            <div class="ds-ltb">
+                <h4 class="sub-title">
+                    Danh sách loại thiết bị
+                </h4>
+                <table>
+                    <tr>
+                        <th>Mã loại TB</th>
+                        <th>Tên loại TB</th>
+                        <th>Thuộc nhóm TB</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="tablinks" onclick="btn_Edit(event, '@item.MA_LOAITB')">
+                            <td>
+                                <span id="@item.MA_LOAITB" class="btn_edit" onclick="Edit('@item.MA_LOAITB')"><i class="far fa-edit"></i></span>
+                                @Html.DisplayFor(modelItem => item.MA_LOAITB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TEN_LOAI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NHOM_THIETBI.TEN_NHOM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GHI_CHU)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NHOMTB",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_NHOMTB").html(s);
+            }
+        });
+    });
+
+    function Edit(row) {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinLoaiTB",
+            data: { ma_LOAITB: row },
+            success: function (data) {
+                $("#MA_LOAITB").val(row);
+                $("#TEN_LOAI").val(data.TEN_LOAI);
+                $("#MA_NHOMTB").val(data.TEN_NHOM);
+                $("#GHI_CHU").val(data.GHI_CHU);
+            }
+        });
+        document.getElementById("EDIT").hidden = false;
+        document.getElementById("CANCEL").hidden = false;
+        document.getElementById("SAVE").hidden = true;
+    }
+</script>

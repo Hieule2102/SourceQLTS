@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Source.Models.NHAT_KY_THIET_BI>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <main>
+        <div class="container link">
+            <p>Trang chủ > Báo cáo > Nhật ký thiết bị</p>
+            <hr />
+        </div>
+        <section class="container" id="nk-tb">
+            <h1 class="title">NHẬT KÝ THIẾT BỊ</h1>
+            <div class="search">
+                <input type="text" name="search" class="placeholder" placeholder="Nhập mã thiết bị" />
+                <button class="btn-search">
+                    <span>Tìm kiếm</span><i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="thong-tin-tb">
+                <p class="ten-tb">Tên thiết bị: Laptop Dell 1280</p>
+                <p>Mã thiết bị: LD12345</p>
+            </div>
+            <div class="nk-tb">
+                <table>
+                    <tr>
+                        <th>Lịch sử</th>
+                        <th>Ngày chuyển</th>
+                        <th>Ngày nhận</th>
+                        <th>Trạng thái</th>
+                        <th>ĐVQL</th>
+                        <th>Người QL</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_TRANGTHAI",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn trạng thái thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#TINH_TRANG").html(s);
+            }
+        });
+    });
+</script>
+
+
+

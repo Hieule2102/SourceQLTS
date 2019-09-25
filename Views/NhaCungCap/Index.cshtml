@@ -1,0 +1,145 @@
+﻿@model IEnumerable<Source.Models.NHA_CUNG_CAP>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Danh mục > Nhà cung cấp</p>
+        <hr />
+    </div>
+    <section class="container" id="nha-cc">
+        <h1 class="title">NHÀ CUNG CẤP</h1>
+        <div class="div-ncc">
+            <div class="them-ncc">
+                <h4 class="sub-title">
+                    <span id="them-sua">Thêm</span> nhà cung cấp
+                </h4>
+                @using (Html.BeginForm("Index", "NhaCungCap", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            <form action="">
+                <div class="form-group">
+                    <input class="form-control"
+                           id="MA_NCC"
+                           name="MA_NCC"
+                           aria-describedby="emailHelp"
+                           placeholder="" hidden="hidden" />
+                </div>
+                <div class="form-group">
+                    <label for="">Tên NCC:</label>
+                    <input class="form-control"
+                           id="TEN_NCC"
+                           name="TEN_NCC"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Địa chỉ:</label>
+                    <input class="form-control"
+                           id="DIA_CHI"
+                           name="DIA_CHI"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Điện thoại:</label>
+                    <input class="form-control"
+                           id="DIEN_THOAI"
+                           name="DIEN_THOAI"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Fax:</label>
+                    <input class="form-control"
+                           id="FAX"
+                           name="FAX"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Ghi chú</label>
+                    <input class="form-control"
+                           id="GHI_CHU"
+                           name="GHI_CHU"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                }
+
+                <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                <button class="reset d-none">HỦY</button>
+            </form>
+                }
+            </div>
+            <div class="ds-ncc">
+                <h4 class="sub-title">
+                    Danh sách nhà cung cấp
+                </h4>
+                <table>
+                    <tr>
+                        <th>Mã NCC</th>
+                        <th>Tên nhà cung cấp</th>
+                        <th>Địa chỉ</th>
+                        <th>Điện thoại</th>
+                        <th>Fax</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="tablinks" onclick="btn_Edit(event, '@item.MA_NCC')">
+                            <td>
+                                <span id="@item.MA_NCC" class="btn_edit" onclick="Edit('@item.MA_NCC')"><i class="far fa-edit"></i></span>
+                                @Html.DisplayFor(modelItem => item.MA_NCC)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TEN_NCC)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIA_CHI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEN_THOAI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FAX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GHI_CHU)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function Edit(row) {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinNCC",
+            data: { ma_NCC: row },
+            success: function (data) {
+                $("#MA_NCC").val(row);
+                $("#TEN_NCC").val(data.TEN_NCC);
+                $("#DIA_CHI").val(data.DIA_CHI);
+                $("#DIEN_THOAI").val(data.DIEN_THOAI);
+                $("#FAX").val(data.FAX);
+                $("#GHI_CHU").val(data.GHI_CHU);
+            }
+        });
+        document.getElementById("EDIT").hidden = false;
+        document.getElementById("CANCEL").hidden = false;
+        document.getElementById("SAVE").hidden = true;
+    }
+</script>

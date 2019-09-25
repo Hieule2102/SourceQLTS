@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Source.Models.THIETBI>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Báo cáo > Thống kê thiết bị</p>
+        <hr />
+    </div>
+    <section class="container" id="tk-tb">
+        <h1 class="title">THỐNG KÊ THIẾT BỊ</h1>
+        @using (Html.BeginForm("Index", "ThongKeThietBi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="loc">
+                <h4><i class="fas fa-filter"></i></h4>
+                <div class="div-filter">
+                    <div class="filter1">
+                        <div class="filter">
+                            <label for="">Nhóm TB</label>
+                            @Html.DropDownList("nhomTB", null, "Tất cả", new
+                            {
+                                @class = "form-control",
+                                @placeholder = "",
+                                @onchange = @"form.submit();"
+                            })
+                            @*<select class="form-control" id="nhomTB" onchange="Fill_LoaiTB()"></select>*@
+                        </div>
+                        <div class="filter">
+                            <label for="">Loại TB</label>
+                            @Html.DropDownList("loaiTB", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit();"
+                                })
+                            @*<select class="form-control" id="loaiTB" onchange="form.submit()"></select>*@
+                        </div>
+                    </div>
+
+                    <div class="filter2">
+                        <div class="filter">
+                            <label for="">Đơn vị</label>
+                            @Html.DropDownList("donVi", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit();"
+                                })
+                        </div>
+                        <div class="filter">
+                            <label for="">Trạng thái</label>
+                            @Html.DropDownList("trangThai", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit();"
+                                })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="tk-tb">
+            <table>
+                <tr>
+                    <th>Mã TB</th>
+                    <th>Tên TB</th>
+                    <th>Serial</th>
+                    <th>Trạng thái</th>
+                    <th>ĐVQL</th>
+                    @*<th>Người QL</th>*@
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MATB)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TENTB)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SO_SERIAL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.MANS_QL)
+                            </td>*@
+                    </tr>
+                }
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="Scripts/jquery-3.4.1.min.js"></script>
+<script src="Scripts/jquery-ui.js"></script>
+<script src="Scripts/main.js"></script>
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/ThongKeThietBi/get_NHOMTB",
+    //        data: "{}",
+    //        success: function (data) {
+    //            var s = '<option value="-1">Xin chọn nhóm thiết bị</option>';
+    //            for (var i = 0; i < data.length; i++) {
+    //                s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //            }
+    //            $("#nhomTB").html(s);
+    //        }
+    //    });
+    //});
+
+    function Fill_LoaiTB() {
+        var nhom_TB = $('#nhomTB').val();
+        $.ajax({
+            type: "POST",
+            url: "/ThongKeThietBi/get_LOAITB",
+            data: { nhom_TB: nhom_TB },
+            success: function (data) {
+                //$("#loaiTB").html("");
+                var options = '<option value="-1">Xin chọn loại thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#loaiTB").html(options);
+            }
+        });
+    };
+</script>
+

@@ -1,0 +1,297 @@
+﻿@model IEnumerable<Source.Models.NHAP_KHO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <main>
+        <div class="container link">
+            <p>Trang chủ > Chức năng > Nhập kho</p>
+            <hr />
+        </div>
+        @using (Html.BeginForm("Index", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <section class="container" id="nhap-kho">
+                <h1 class="title">NHẬP KHO</h1>
+                <div class="form-nhap-kho">
+                    <div class="them-hinh-anh">
+                        <h4 class="sub-title">
+                            Thêm hình ảnh
+                        </h4>
+                        <div class="img-container">
+                            <img src="" alt="" />
+                        </div>
+                        <input type="file" name="HINH_ANH" />
+                    </div>
+                    <div class="thong-tin-chung">
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p style="color: red">@ViewBag.ErrorMessage</p>
+                        }
+                        <h4 class="sub-title">
+                            Thông tin chung
+                        </h4>
+                        <div class="form-group">
+                            <label for="">Nhóm thiết bị: </label>
+                            @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
+                            <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="Fill_LoaiTB()"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Loại thiết bị: </label>
+                            <select class="form-control" id="MA_LOAITB" name="MA_LOAITB"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Tên thiết bị:</label>
+                            <input type="text" name="TENTB" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Số serial:</label>
+                            <input type="text" name="SO_SERIAL" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Giá tiền:</label>
+                            <input type="text" name="GIA_TIEN" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">THBH:</label>
+                            <input type="text" name="THOI_HAN_BAO_HANH" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Ngày mua:</label>
+                            <input type="date" name="NGAY_MUA" />
+                        </div>
+                        @*<div class="form-group">
+                            <label for="">Ngày nhập:</label>
+                            <input type="text" name="user-name" />
+                        </div>*@
+                        <div class="form-group">
+                            <label for="">Đơn vị mua:</label>
+                            @*@Html.DropDownList("MA_DON_VI", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
+                            <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Nhà cung cấp:</label>
+                            @*@Html.DropDownList("MA_NCC", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
+                            <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
+                        </div>
+                    </div>
+                    <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
+                        <h4 class="sub-title">
+                            Thông số kỹ thuật
+                        </h4>
+                        <div id="first">
+                            <p id="label1"></p>
+                            <select class="form-control"
+                                    id="thong_so1"
+                                    name="thong_so1"></select>
+                        </div>
+                        <div id="second">
+                            <p id="label2"></p>
+                            <select class="form-control"
+                                    id="thong_so2"
+                                    name="thong_so2"></select>
+                        </div>
+                        <div id="third">
+                            <p id="label3"></p>
+                            <select class="form-control"
+                                    id="thong_so3"
+                                    name="thong_so3"></select>
+                            <input type="text" id="input_thong_so3" name="input_thong_so3" />
+                        </div>
+                        <div id="fourth">
+                            <p id="label4"></p>
+                            <select class="form-control"
+                                    id="thong_so4"
+                                    name="thong_so4"></select>
+                        </div>
+                        <div id="fifth">
+                            <p id="label5"></p>
+                            <select class="form-control"
+                                    id="thong_so5"
+                                    name="thong_so5"></select>
+
+                        </div>
+                        <div id="sixth">
+                            <p id="label6"></p>
+                            <select class="form-control"
+                                    id="thong_so6"
+                                    name="thong_so6"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit">
+                    <button class="luu" name="SAVE" value="save">LƯU</button>
+                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                </div>
+            </section>
+        }
+    </main>
+
+<script type="text/javascript" src="~/Scripts/main.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NHOMTB",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_NHOMTB").html(s);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_DONVI",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_DON_VI").html(s);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NCC",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn nhà cung cấp</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_NCC").html(s);
+            }
+        });
+    });
+
+
+    function Fill_LoaiTB() {
+        var nhom_TB = $('#MA_NHOMTB').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_LOAITB",
+            data: { nhom_TB: nhom_TB },
+            success: function (data) {
+                document.getElementById("thong-so-ky-thuat").hidden = false;
+                $("#MA_LOAITB").html("");
+                var options = '<option disabled selected value>Xin chọn loại thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_LOAITB").html(options);
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_THONG_SO_KY_THUAT",
+            data: { nhom_TB: nhom_TB },
+            success: function (data) {
+                if (data.NHOMTB == "PC") {
+                    document.getElementById("fifth").hidden = false;
+                    document.getElementById("sixth").hidden = false;
+                    document.getElementById("thong_so3").hidden = false;
+                    document.getElementById("input_thong_so3").hidden = true;
+
+                    document.getElementById("label1").innerHTML = "CPU:";
+                    document.getElementById("label2").innerHTML = "RAM";
+                    document.getElementById("label3").innerHTML = "Màn hình:";
+                    document.getElementById("label4").innerHTML = "Ổ cứng:";
+                    document.getElementById("label5").innerHTML = "VGA:";
+                    document.getElementById("label6").innerHTML = "Hệ điều hành:";
+
+                    
+
+                    $("#thong_so1").html("");
+                    $("#thong_so2").html("");
+                    $("#thong_so3").html("");
+                    $("#thong_so4").html("");
+                    $("#thong_so5").html("");
+                    $("#thong_so6").html("");
+
+                    var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    var options2 = '<option disabled selected value></option>';
+                    var options3 = '<option disabled selected value></option>';
+                    var options4 = '<option disabled selected value></option>';
+                    var options5 = '<option disabled selected value></option>';
+                    var options6 = '<option disabled selected value></option>';
+
+                    for (var i = 0; i < data.CPU.length; i++) {
+                        options1 += '<option value="' + data.CPU[i] + '">' + data.CPU[i] + '</option>';
+                    }
+
+                    for (var i = 0; i < data.RAM.length; i++) {
+                        options2 += '<option value="' + data.RAM[i] + '">' + data.RAM[i] + '</option>';
+                    }
+
+                    for (var i = 0; i < data.MAN_HINH.length; i++) {
+                        options3 += '<option value="' + data.MAN_HINH[i] + '">' + data.MAN_HINH[i] + '</option>';
+                    }
+
+                    for (var i = 0; i < data.O_CUNG.length; i++) {
+                        options4 += '<option value="' + data.O_CUNG[i] + '">' + data.O_CUNG[i] + '</option>';
+                    }
+
+                    for (var i = 0; i < data.VGA.length; i++) {
+                        options5 += '<option value="' + data.VGA[i] + '">' + data.VGA[i] + '</option>';
+                    }
+
+                    for (var i = 0; i < data.HDH.length; i++) {
+                        options6 += '<option value="' + data.HDH[i] + '">' + data.HDH[i] + '</option>';
+                    }
+
+                    $("#thong_so1").html(options1);
+                    $("#thong_so2").html(options2);
+                    $("#thong_so3").html(options3);
+                    $("#thong_so4").html(options4);
+                    $("#thong_so5").html(options5);
+                    $("#thong_so6").html(options6);
+
+
+                }
+                else if (data.NHOMTB == "PR") {
+                    document.getElementById("fifth").hidden = true;
+                    document.getElementById("sixth").hidden = true;
+                    document.getElementById("thong_so3").hidden = true;
+                    document.getElementById("input_thong_so3").hidden = false;
+
+                    document.getElementById("label1").innerHTML = "Kích thước:";
+                    document.getElementById("label2").innerHTML = "Loại mực:";
+                    document.getElementById("label3").innerHTML = "Tốc độ:";
+                    document.getElementById("label4").innerHTML = "Độ phân giải:";
+
+                    $("#thong_so1").html("");
+                    $("#thong_so2").html("");
+                    $("#thong_so4").html("");
+
+                    var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    var options2 = '<option disabled selected value></option>';
+                    //var options3 = '<option value="null"></option>';
+                    var options4 = '<option disabled selected value></option>';
+
+                    for (var i = 0; i < data.length; i++) {
+                        options1 += '<option value="' + data.KICH_THUOC + '">' + data.KICH_THUOC + '</option>';
+                        options2 += '<option value="' + data.LOAI_MUC + '">' + data.LOAI_MUC + '</option>';
+                        //options3 += '<option value="' + data[i].TOC_DO + '">' + data[i].TOC_DO + '</option>';
+                        options4 += '<option value="' + data.DO_PHAN_GIAI + '">' + data.DO_PHAN_GIAI + '</option>';
+                    }
+
+                    $("#thong_so1").html(options1);
+                    $("#thong_so2").html(options2);
+                    //$("#thong_so3").html(options3);
+                    $("#thong_so4").html(options4);
+                }
+            }
+        });
+    };
+</script>

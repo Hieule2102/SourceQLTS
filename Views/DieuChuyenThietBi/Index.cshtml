@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Source.Models.DIEU_CHUYEN_THIET_BI>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Chức năng > Điều chuyển thiết bị</p>
+        <hr />
+    </div>
+    <section class="container" id="dieu-chuyen">
+        <h1 class="title">ĐIỀU CHUYỂN THIẾT BỊ</h1>
+        @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="form-dieu-chuyen">
+                <div class="thong-tin-tb-dieu-chuyen">
+                    <h4 class="sub-title">
+                        Thông tin thiết bị điều chuyển
+                    </h4>
+                    <div class="form-group">
+                        <label for="">Mã thiết bị:</label>
+                        <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Tên thiết bị:</label>
+                        <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Người ĐC:</label>
+                        <input class="form-control"
+                               value="@Session["TEN_DANG_NHAP"]"
+                               name="TEN_ND"
+                               aria-describedby="emailHelp"
+                               placeholder=""
+                               readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Nội dung:</label>
+                        <input class="form-control"
+                               name="GHI_CHU"
+                               aria-describedby="emailHelp"
+                               placeholder="" />
+                    </div>
+                </div>
+                <div class="dv-quan-ly">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                    <h4 class="sub-title">
+                        Đơn vị quản lý
+                    </h4>
+                    <div class="form-group">
+                        <label for="">ĐVQL:</label>
+                        <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người QL:</label>
+                        <input class="form-control"
+                               name="TEN_DON_VI"
+                               aria-describedby="emailHelp"
+                               placeholder="" />
+                    </div>
+                </div>
+                <div class="dv-tiep-nhan">
+                    <h4 class="sub-title">
+                        Đơn vị tiếp nhận
+                    </h4>
+                    <div class="form-group">
+                        <label for="">ĐV nhận:</label>
+                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người nhận:</label>
+                        <input class="form-control"
+                               name="TEN_DON_VI"
+                               aria-describedby="emailHelp"
+                               placeholder="" />
+                    </div>
+                </div>
+            </div>
+            <div class="submit">
+                <button class="luu" name="SAVE" value="save">LƯU</button>
+                <button class="reset" name="REFESH" value="refesh">LÀM MỚI</button>
+            </div>
+        }
+    </section>
+
+</main>
+
+<script type="text/javascript" src="~/Scripts/main.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_MATB",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn mã thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MATB").html(s);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_DONVI",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MADV_NHAN").html(s);
+            }
+        });
+    });
+
+    function get_ThongTinTB() {
+        var maTB = $('#MATB').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinTB",
+            data: { maTB: maTB },
+            success: function (data) {
+                $("#TENTB").val(data.tenTB);
+                $("#MADV_QL").val(data.tenDonVi);
+            }
+        });
+    };
+</script>

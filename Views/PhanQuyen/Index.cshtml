@@ -1,0 +1,711 @@
+﻿<main>
+    <div class="container link">
+        <p>Trang chủ > Quản lý người dùng > Phân quuyền</p>
+        <hr />
+    </div>
+    <section class="container" id="phan-quyen">
+        <h1 class="title">PHÂN QUYỀN</h1>
+        @using (Html.BeginForm("Index", "PhanQuyen", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="chon-nhom">
+                <label for="">Chọn nhóm người dùng:</label>
+                <select class="form-control" name="MA_NHOM" id="MA_NHOM" onchange="Fill_Phan_Quyen()"></select>
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p style="color: red">@ViewBag.ErrorMessage</p>
+                }
+            </div>
+
+            <div class="phan-quyen">
+                <ul class="bang-pq">
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>MENU</span>
+                            <ul>
+                                <li>Xem</li>
+                                <li>Thêm</li>
+                                <li>Sửa</li>
+                                <li>Xóa</li>
+                                <li>Xác nhận</li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>TRANG CHỦ</span>
+                            <ul>
+                                <li>
+                                    <div class="squaredcheck">
+                                        <input type="checkbox" value="None" id="squaredcheck" class="checkbox1" name="check" />
+                                        <label for="squaredcheck"></label>
+                                    </div>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>CHỨC NĂNG</span>
+                            <ul>
+                                <li>
+                                    <div class="squaredcheck">
+                                        <input type="checkbox" value="chuc_nang" id="squaredcheck1" class="checkbox1" name="check" />
+                                        <label for="squaredcheck1"></label>
+                                    </div>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </a>
+                        <ul>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Nhập kho </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="None" id="squaredcheck111" class="checkbox1" name="check" />
+                                            <label for="squaredcheck111"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhap_kho2" id="squaredcheck112" class="checkbox1" name="check" />
+                                            <label for="squaredcheck112"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhap_kho3" id="squaredcheck113" class="checkbox1" name="check" />
+                                            <label for="squaredcheck113"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Xuất kho </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="xuat_kho1" id="squaredcheck121" class="checkbox1" name="check" />
+                                            <label for="squaredcheck121"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="xuat_kho2" id="squaredcheck122" class="checkbox1" name="check" />
+                                            <label for="squaredcheck122"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="xuat_kho3" id="squaredcheck123" class="checkbox1" name="check" />
+                                            <label for="squaredcheck123"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Điều chuyển </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dieu_chuyen1" id="squaredcheck131" class="checkbox1" name="check" />
+                                            <label for="squaredcheck131"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dieu_chuyen2" id="squaredcheck132" class="checkbox1" name="check" />
+                                            <label for="squaredcheck132"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dieu_chuyen3" id="squaredcheck133" class="checkbox1" name="check" />
+                                            <label for="squaredcheck133"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dieu_chuyen5" id="squaredcheck135" class="checkbox1" name="check" />
+                                            <label for="squaredcheck135"></label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>DANH MỤC</span>
+                            <ul>
+                                <li>
+                                    <div class="squaredcheck">
+                                        <input type="checkbox" value="danh_muc" id="squaredcheck2" class="checkbox1" name="check" />
+                                        <label for="squaredcheck2"></label>
+                                    </div>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </a>
+                        <ul>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Nhóm thiết bị </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_tb1" id="squaredcheck241" class="checkbox1" name="check" />
+                                            <label for="squaredcheck241"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_tb1" id="squaredcheck242" class="checkbox1" name="check" />
+                                            <label for="squaredcheck242"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_tb3" id="squaredcheck243" class="checkbox1" name="check" />
+                                            <label for="squaredcheck243"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Loại thiết bị </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="loai_tb1" id="squaredcheck251" class="checkbox1" name="check" />
+                                            <label for="squaredcheck251"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="loai_tb2" id="squaredcheck252" class="checkbox1" name="check" />
+                                            <label for="squaredcheck252"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="loai_tb3" id="squaredcheck253" class="checkbox1" name="check" />
+                                            <label for="squaredcheck253"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Đơn vị </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dov_vi1" id="squaredcheck261" class="checkbox1" name="check" />
+                                            <label for="squaredcheck261"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dov_vi2" id="squaredcheck262" class="checkbox1" name="check" />
+                                            <label for="squaredcheck262"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="dov_vi3" id="squaredcheck263" class="checkbox1" name="check" />
+                                            <label for="squaredcheck263"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Nhà cung cấp </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="ncc1" id="squaredcheck271" class="checkbox1" name="check" />
+                                            <label for="squaredcheck271"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="ncc2" id="squaredcheck272" class="checkbox1" name="check" />
+                                            <label for="squaredcheck272"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="ncc3" id="squaredcheck273" class="checkbox1" name="check" />
+                                            <label for="squaredcheck273"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>BÁO CÁO</span>
+                            <ul>
+                                <li>
+                                    <div class="squaredcheck">
+                                        <input type="checkbox" value="bao_cao" id="squaredcheck3" class="checkbox1" name="check" />
+                                        <label for="squaredcheck3"></label>
+                                    </div>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </a>
+                        <ul>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Danh sách thiết bị </a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="ds_tb4" id="squaredcheck384" class="checkbox1" name="check" />
+                                            <label for="squaredcheck384"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Thống kê thiết bị</a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="tk_tb4" id="squaredcheck394" class="checkbox1" name="check" />
+                                            <label for="squaredcheck394"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Nhật ký thiết bị </a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nk_tb4" id="squaredcheck3104" class="checkbox1" name="check" />
+                                            <label for="squaredcheck3104"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Xác nhận điều chuyển </a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="xn_dc4" id="squaredcheck3114" class="checkbox1" name="check" />
+                                            <label for="squaredcheck3114"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Tồn kho </a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="ton_kho4" id="squaredcheck3124" class="checkbox1" name="check" />
+                                            <label for="squaredcheck3124"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Hết hạn bảo hành </a>
+                                <ul>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="hh_bh4" id="squaredcheck3134" class="checkbox1" name="check" />
+                                            <label for="squaredcheck3134"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="rowc1">
+                        <a href="" class="menuc1">
+                            <span>QUẢN LÝ NGƯỜI DÙNG</span>
+                            <ul>
+                                <li>
+                                    <div class="squaredcheck">
+                                        <input type="checkbox" value="ql_nd" id="squaredcheck4" class="checkbox1" name="check" />
+                                        <label for="squaredcheck4"></label>
+                                    </div>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </a>
+                        <ul>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Người dùng </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nd1" id="squaredcheck4141" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4141"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nd2" id="squaredcheck4142" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4142"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nd3" id="squaredcheck4143" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4143"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Nhóm người dùng </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_nd1" id="squaredcheck4151" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4151"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_nd2" id="squaredcheck4152" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4152"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="nhom_nd3" id="squaredcheck4153" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4153"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                            <li class="rowc2">
+                                <a href="" class="menuc2">Phân quyền </a>
+                                <ul>
+                                    <li></li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="phan_quyen1" id="squaredcheck4161" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4161"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="phan_quyen1" id="squaredcheck4162" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4162"></label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="squaredcheck">
+                                            <input type="checkbox" value="phan_quyen3" id="squaredcheck4163" class="checkbox1" name="check" />
+                                            <label for="squaredcheck4163"></label>
+                                        </div>
+                                    </li>
+                                    <li></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="submit">
+                    <button type="submit" class="luu" name="SAVE" value="save">LƯU</button>
+                    <button type="submit" class="reset" name="REFESH" value="refesh">Làm mới</button>
+                </div>
+            </div>
+        }
+    </section>
+</main>
+
+<script type="text/javascript">
+     $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NHOM_ND",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MA_NHOM").html(s);
+            }
+        });
+    });
+
+    function Fill_Phan_Quyen() {
+        var ma_NHOM = $('#MA_NHOM').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinPhanQuyen",
+            data: { ma_NHOM: ma_NHOM },
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    //Chức năng checked
+                    if (data[i].MA_DM == 1) {
+                        document.getElementById("squaredcheck1").checked = true;
+
+                        //Nhập kho checked
+                        if (data[i].MA_CHUC_NANG == 1) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck111").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck112").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck113").checked = true;
+                            }
+                        }
+
+                        //Xuất kho checked
+                        else if (data[i].MA_CHUC_NANG == 2) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck121").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck122").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck123").checked = true;
+                            }
+                        }
+
+                        //Điều chuyển checked
+                         else if (data[i].MA_CHUC_NANG == 3) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck131").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck132").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck133").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 5)
+                            {
+                                document.getElementById("squaredcheck135").checked = true;
+                            }
+                        }
+                    }
+                    //Danh mục checked
+                    else if (data[i].MA_DM == 2) {
+                        document.getElementById("squaredcheck2").checked = true;
+
+                        //Nhóm thiết bị checked
+                        if (data[i].MA_CHUC_NANG == 4) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck241").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck242").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck243").checked = true;
+                            }
+                        }
+
+                        //Xuất kho checked
+                        else if (data[i].MA_CHUC_NANG == 5) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck251").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck253").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck253").checked = true;
+                            }
+                        }
+
+                        //Điều chuyển checked
+                         else if (data[i].MA_CHUC_NANG == 6) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck261").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck262").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck263").checked = true;
+                            }
+                        }
+
+                        //Nhà cung cấp checked
+                        else if (data[i].MA_CHUC_NANG == 7) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck271").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck272").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck273").checked = true;
+                            }
+                        }
+                    }
+                    //Báo cáo checked
+                    else if (data[i].MA_DM == 3) {
+                        document.getElementById("squaredcheck3").checked = true;
+
+                        if (data[i].MA_CHUC_NANG == 8) {
+                            document.getElementById("squaredcheck384").checked = true;
+                        }
+                        else if (data[i].MA_CHUC_NANG == 9) {
+                            document.getElementById("squaredcheck394").checked = true;
+                        }
+                        else if (data[i].MA_CHUC_NANG == 10) {
+                            document.getElementById("squaredcheck3104").checked = true;
+                        }
+                        else if (data[i].MA_CHUC_NANG == 11) {
+                            document.getElementById("squaredcheck3114").checked = true;
+                        }
+                        else if (data[i].MA_CHUC_NANG == 12) {
+                            document.getElementById("squaredcheck3124").checked = true;
+                        }
+                        else if (data[i].MA_CHUC_NANG == 13) {
+                            document.getElementById("squaredcheck3134").checked = true;
+                        }
+                    }
+                    //Quản lý người dùng checked
+                    if (data[i].MA_DM == 4) {
+                        document.getElementById("squaredcheck4").checked = true;
+
+                        //Nhập kho checked
+                        if (data[i].MA_CHUC_NANG == 14) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck4141").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck4142").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck4143").checked = true;
+                            }
+                        }
+
+                        //Xuất kho checked
+                        else if (data[i].MA_CHUC_NANG == 15) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck4151").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck4152").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck4153").checked = true;
+                            }
+                        }
+
+                        //Điều chuyển checked
+                         else if (data[i].MA_CHUC_NANG == 16) {
+                            if (data[i].MA_QUYEN == 1)
+                            {
+                                document.getElementById("squaredcheck4161").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 2)
+                            {
+                                document.getElementById("squaredcheck4162").checked = true;
+                            }
+                            else if (data[i].MA_QUYEN == 3)
+                            {
+                                document.getElementById("squaredcheck4163").checked = true;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+</script>

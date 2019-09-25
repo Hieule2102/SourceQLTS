@@ -1,0 +1,518 @@
+﻿@model IEnumerable<Source.Models.THIETBI>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
+        <hr />
+        <h2>@ViewBag.HINH_ANH</h2>
+    </div>
+    <section class="container" id="ds-tb">
+        @using (Html.BeginForm("Index", "DanhSachThietBi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <h1 class="title">DANH SÁCH THIẾT BỊ</h1>
+            <div class="search">
+                <input type="text"
+                       name="searchString"
+                       class="placeholder"
+                       placeholder="Nhập tên thiết bị" />
+                <button type="submit" class="btn-search">
+                    <span>Tìm kiếm</span><i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="loc">
+                <h4><i class="fas fa-filter"></i></h4>
+                <div class="div-filter">
+                    <div class="filter1">
+                        <div class="filter">
+                            <label for="">Nhóm TB</label>
+                            @Html.DropDownList("MA_NHOMTB", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="form.submit()"></select>*@
+                        </div>
+                        <div class="filter">
+                            <label for="">Loại TB</label>
+                            @Html.DropDownList("MA_LOAITB", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="form.submit()"></select>*@
+                        </div>
+                    </div>
+                    <div class="filter2">
+                        <div class="filter">
+                            <label for="">Đơn vị</label>
+                            @Html.DropDownList("MA_DON_VI", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_DON_VI" name="MA_DON_VI" onchange="form.submit()"></select>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="div-dstb">
+            <div class="ds-tb">
+                <table>
+                    @*class="table table-hover" id="myTable" onclick="on_click()"*@
+                    <tr>
+                        <th>Mã TB</th>
+                        <th>Tên TB</th>
+                        <th>Nhóm TB</th>
+                        <th>Loại TB</th>
+                        <th>Serial</th>
+                        <th>Giá tiền</th>
+                        <th>THBH</th>
+                        <th>Tình trạng</th>
+                        <th>ĐVQL</th>
+                        @*<th>Người QL</th>*@
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr class="tablinks" onclick="Edit(event, '@item.MATB')">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MATB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TENTB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LOAI_THIETBI.NHOM_THIETBI.TEN_NHOM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LOAI_THIETBI.TEN_LOAI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_SERIAL)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GIA_TIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.THOI_HAN_BAO_HANH)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.MANS_QL)
+                                </td>*@
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="div-cauhinh">
+                <div class="cau-hinh">
+                    <span class="close-cauhinh">
+                        <i class="far fa-times-circle fa-2x"></i>
+                    </span>
+                    <div class="img">
+                        <div class="img-container">
+                            <img id="img" alt="hinh-anh-thiet-bi" />
+                        </div>
+                        <p class="ten-tb" id="TENTB"></p>
+                    </div>
+                    <h4 class="sub-title">Thông số kỹ thuật</h4>
+                    <div class="div-thong-so">
+
+                        <table>
+                            <tr>
+                                <td id="label1"></td>
+                                <td id="thong_so1"></td>
+                            </tr>
+                            <tr>
+                                <td id="label2"></td>
+                                <td id="thong_so2"></td>
+                            </tr>
+                            <tr>
+                                <td id="label3"></td>
+                                <td id="thong_so3"></td>
+                            </tr>
+                            <tr>
+                                <td id="label4"></td>
+                                <td id="thong_so4"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <button id="chct">Cấu hình chi tiết</button>
+                </div>
+
+                <div class="cau-hinh-chi-tiet">
+                    <div class="cau-hinh">
+                        <span class="close-cauhinh">
+                            <i class="far fa-times-circle fa-2x"></i>
+                        </span>
+                        <div class="img">
+                            <div class="img-container">
+                                <img id="img_ct" alt="hinh-anh-thiet-bi" />
+                            </div>
+                            <p class="ten-tb" id="TENTB_ct"></p>
+                        </div>
+                        <h4 class="sub-title">Thông số kỹ thuật</h4>
+                        <div class="div-thong-so">
+
+                            <table>
+                                <tr>
+                                    <td id="label1_ct"></td>
+                                    <td id="thong_so1_ct"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label2_ct"></td>
+                                    <td id="thong_so2_ct"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label3_ct"></td>
+                                    <td id="thong_so3_ct"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label4_ct"></td>
+                                    <td id="thong_so4_ct"></td>
+                                </tr>
+                                <tr id="more1">
+                                    <td id="label5_ct"></td>
+                                    <td id="thong_so5_ct"></td>
+                                </tr>
+                                <tr id="more2">
+                                    <td id="label6_ct"></td>
+                                    <td id="thong_so6_ct"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Script/get_NHOMTB",
+    //        data: "{}",
+    //        success: function (data) {
+    //            var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
+    //            for (var i = 0; i < data.length; i++) {
+    //                s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //            }
+    //            $("#MA_NHOMTB").html(s);
+    //        }
+    //    });
+    //    //$.ajax({
+    //    //    type: "GET",
+    //    //    url: "/Script/get_DONVI",
+    //    //    data: "{}",
+    //    //    success: function (data) {
+    //    //        var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+    //    //        for (var i = 0; i < data.length; i++) {
+    //    //            s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //    //        }
+    //    //        $("#MA_DON_VI").html(s);
+    //    //    }
+    //    //});
+    //});
+
+    //function Fill_LoaiTB() {
+    //    var nhom_TB = $('#MA_NHOMTB').val();
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Script/get_LOAITB",
+    //        data: { nhom_TB: nhom_TB },
+    //        success: function (data) {
+    //            $("#MA_LOAITB").html("");
+    //            var options = '<option value="-1">Xin chọn loại thiết bị</option>';
+    //            for (var i = 0; i < data.length; i++) {
+    //                options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //            }
+    //            $("#MA_LOAITB").html(options);
+    //        }
+    //    });
+    //};
+
+    function Edit(evt, row) {
+        var i, tablinks;
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        evt.currentTarget.className += " active";
+
+        $.ajax({
+            type: "POST",
+            url: "/Script/get_CauHinh",
+            data: { maTB: row },
+            success: function (data) {
+                $("#TENTB").html(data.TENTB);
+                $("#TENTB_ct").html(data.TENTB);
+                if (data.MA_NHOMTB == "PC") {
+                    //Thông số kỹ thuật
+                    document.getElementById("label1").innerHTML = "CPU:";
+                    document.getElementById("label2").innerHTML = "RAM:";
+                    document.getElementById("label3").innerHTML = "Màn hình:";
+                    document.getElementById("label4").innerHTML = "Ổ cứng:";
+
+                    $("#thong_so1").html(data.CPU);
+                    $("#thong_so2").html(data.RAM);
+                    $("#thong_so3").html(data.MAN_HINH);
+                    $("#thong_so4").html(data.O_CUNG);
+
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("more1").hidden = false;
+                    document.getElementById("more2").hidden = false;
+
+
+                    document.getElementById("label1_ct").innerHTML = "CPU:";
+                    document.getElementById("label2_ct").innerHTML = "RAM:";
+                    document.getElementById("label3_ct").innerHTML = "Màn hình:";
+                    document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
+                    document.getElementById("label5_ct").innerHTML = "VGA:";
+                    document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
+
+                    $("#thong_so1_ct").html(data.CPU);
+                    $("#thong_so2_ct").html(data.RAM);
+                    $("#thong_so3_ct").html(data.MAN_HINH);
+                    $("#thong_so4_ct").html(data.O_CUNG);
+                    $("#thong_so5_ct").html(data.VGA);
+                    $("#thong_so6_ct").html(data.HDH);
+                }
+                else if (data.MA_NHOMTB == "PR") {
+                    //Thông số kỹ thuật
+                    document.getElementById("label1").innerHTML = "Kích thước:";
+                    document.getElementById("label2").innerHTML = "Loại mực:";
+                    document.getElementById("label3").innerHTML = "Tốc độ:";
+                    document.getElementById("label4").innerHTML = "Độ phân giải:";
+
+                    $("#thong_so1").html(data.KICH_THUOC);
+                    $("#thong_so2").html(data.LOAI_MUC);
+                    $("#thong_so3").html(data.TOC_DO);
+                    $("#thong_so4").html(data.DO_PHAN_GIAI);
+
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("label1_ct").innerHTML = "Kích thước:";
+                    document.getElementById("label2_ct").innerHTML = "Loại mực:";
+                    document.getElementById("label3_ct").innerHTML = "Tốc độ:";
+                    document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
+                    document.getElementById("more1").hidden = true;
+                    document.getElementById("more2").hidden = true;
+
+
+                    $("#thong_so1_ct").html(data.KICH_THUOC);
+                    $("#thong_so2_ct").html(data.LOAI_MUC);
+                    $("#thong_so3_ct").html(data.TOC_DO);
+                    $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
+                }
+                else {
+                    //Thông số kỹ thuật
+                    document.getElementById("label1").innerHTML = "";
+                    document.getElementById("label2").innerHTML = "";
+                    document.getElementById("label3").innerHTML = "";
+                    document.getElementById("label4").innerHTML = "";
+
+                    $("#thong_so1").html("");
+                    $("#thong_so2").html("");
+                    $("#thong_so3").html("");
+                    $("#thong_so4").html("");
+
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("label1_ct").innerHTML = "";
+                    document.getElementById("label2_ct").innerHTML = "";
+                    document.getElementById("label3_ct").innerHTML = "";
+                    document.getElementById("label4_ct").innerHTML = "";
+                    document.getElementById("more1").hidden = true;
+                    document.getElementById("more2").hidden = true;
+
+
+                    $("#thong_so1_ct").html("");
+                    $("#thong_so2_ct").html("");
+                    $("#thong_so3_ct").html("");
+                    $("#thong_so4_ct").html("");
+                }
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_HinhAnh",
+            data: { maTB: row },
+            success: function (data) {
+                //Thông số kỹ thuật
+                var src = document.createAttribute("src");
+                var img = document.getElementById("img");
+                //Thông số kỹ thuật chi tiết
+                var src_ct = document.createAttribute("src");
+                var img_ct = document.getElementById("img_ct");
+
+                if (data != null) {
+                    src.value = "Images/" + data;
+                    src_ct.value = "Images/" + data;
+                }
+                else {
+                    src.value = "Images/alibaba";
+                    src_ct.value = "Images/alibaba";
+                }
+
+                img.setAttributeNode(src);
+                img_ct.setAttributeNode(src_ct);
+
+            }
+        });
+    }
+
+    //function on_click() {
+    //    var table = document.getElementById('myTable');
+
+    //    for (var i = 1; i < table.rows.length; i++) {
+    //        table.rows[i].onclick = function () {
+    //            //rIndex = this.rowIndex;
+    //           var maTB = this.cells[0].innerHTML;
+    //            $.ajax({
+    //                type: "POST",
+    //                url: "/Script/get_CauHinh",
+    //                data: { maTB: maTB },
+    //                success: function (data) {
+    //                    $("#TENTB").html(data.TENTB);
+    //                    $("#TENTB_ct").html(data.TENTB);
+    //                    if (data.MA_NHOMTB == "PC") {
+    //                        //Thông số kỹ thuật
+    //                        document.getElementById("label1").innerHTML = "CPU:";
+    //                        document.getElementById("label2").innerHTML = "RAM:";
+    //                        document.getElementById("label3").innerHTML = "Màn hình:";
+    //                        document.getElementById("label4").innerHTML = "Ổ cứng:";
+
+    //                        $("#thong_so1").html(data.CPU);
+    //                        $("#thong_so2").html(data.RAM);
+    //                        $("#thong_so3").html(data.MAN_HINH);
+    //                        $("#thong_so4").html(data.O_CUNG);
+
+    //                        //Thông số kỹ thuật chi tiết
+    //                        document.getElementById("fifth_gtct").hidden = false;
+    //                        document.getElementById("sixth_gtct").hidden = false;
+    //                        document.getElementById("fifth_ct").hidden = false;
+    //                        document.getElementById("sixth_ct").hidden = false;
+
+    //                        document.getElementById("label1_ct").innerHTML = "CPU:";
+    //                        document.getElementById("label2_ct").innerHTML = "RAM:";
+    //                        document.getElementById("label3_ct").innerHTML = "Màn hình:";
+    //                        document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
+    //                        document.getElementById("label5_ct").innerHTML = "VGA:";
+    //                        document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
+
+    //                        $("#thong_so1_ct").html(data.CPU);
+    //                        $("#thong_so2_ct").html(data.RAM);
+    //                        $("#thong_so3_ct").html(data.MAN_HINH);
+    //                        $("#thong_so4_ct").html(data.O_CUNG);
+    //                        $("#thong_so5_ct").html(data.VGA);
+    //                        $("#thong_so6_ct").html(data.HDH);
+    //                    }
+    //                    else if (data.MA_NHOMTB == "PR") {
+    //                        //Thông số kỹ thuật
+    //                        document.getElementById("label1").innerHTML = "Kích thước:";
+    //                        document.getElementById("label2").innerHTML = "Loại mực:";
+    //                        document.getElementById("label3").innerHTML = "Tốc độ:";
+    //                        document.getElementById("label4").innerHTML = "Độ phân giải:";
+
+    //                        $("#thong_so1").html(data.KICH_THUOC);
+    //                        $("#thong_so2").html(data.LOAI_MUC);
+    //                        $("#thong_so3").html(data.TOC_DO);
+    //                        $("#thong_so4").html(data.DO_PHAN_GIAI);
+
+    //                        //Thông số kỹ thuật chi tiết
+    //                        document.getElementById("label1_ct").innerHTML = "Kích thước:";
+    //                        document.getElementById("label2_ct").innerHTML = "Loại mực:";
+    //                        document.getElementById("label3_ct").innerHTML = "Tốc độ:";
+    //                        document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
+    //                        document.getElementById("fifth_gtct").hidden = true;
+    //                        document.getElementById("sixth_gtct").hidden = true;
+    //                        document.getElementById("fifth_ct").hidden = true;
+    //                        document.getElementById("sixth_ct").hidden = true;
+
+    //                        $("#thong_so1_ct").html(data.KICH_THUOC);
+    //                        $("#thong_so2_ct").html(data.LOAI_MUC);
+    //                        $("#thong_so3_ct").html(data.TOC_DO);
+    //                        $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
+    //                    }
+    //                    else
+    //                    {
+    //                        //Thông số kỹ thuật
+    //                        document.getElementById("label1").innerHTML = "Null:";
+    //                        document.getElementById("label2").innerHTML = "Null:";
+    //                        document.getElementById("label3").innerHTML = "Null:";
+    //                        document.getElementById("label4").innerHTML = "Null:";
+
+    //                        $("#thong_so1").html("Null");
+    //                        $("#thong_so2").html("Null");
+    //                        $("#thong_so3").html("Null");
+    //                        $("#thong_so4").html("Null");
+
+    //                        //Thông số kỹ thuật chi tiết
+    //                        document.getElementById("label1_ct").innerHTML = "Null:";
+    //                        document.getElementById("label2_ct").innerHTML = "Null:";
+    //                        document.getElementById("label3_ct").innerHTML = "Null:";
+    //                        document.getElementById("label4_ct").innerHTML = "Null:";
+    //                        document.getElementById("fifth_gtct").hidden = true;
+    //                        document.getElementById("sixth_gtct").hidden = true;
+    //                        document.getElementById("fifth_ct").hidden = true;
+    //                        document.getElementById("sixth_ct").hidden = true;
+
+    //                        $("#thong_so1_ct").html("Null");
+    //                        $("#thong_so2_ct").html("Null");
+    //                        $("#thong_so3_ct").html("Null");
+    //                        $("#thong_so4_ct").html("Null");
+    //                    }
+    //                }
+    //            });
+    //            $.ajax({
+    //                type: "GET",
+    //                url: "/Script/get_HinhAnh",
+    //                data: { maTB: maTB },
+    //                success: function (data) {
+    //                    //Thông số kỹ thuật
+    //                    var src = document.createAttribute("src");
+    //                    var img = document.getElementById("img");
+    //                    //Thông số kỹ thuật chi tiết
+    //                    var src_ct = document.createAttribute("src");
+    //                    var img_ct = document.getElementById("img_ct");
+
+    //                    if (data != null)
+    //                    {
+    //                        src.value = "Images/" + data;
+    //                        src_ct.value = "Images/" + data;
+    //                    }
+    //                    else
+    //                    {
+    //                        src.value = "Images/alibaba";
+    //                        src_ct.value = "Images/alibaba";
+    //                    }
+
+    //                    img.setAttributeNode(src);
+    //                    img_ct.setAttributeNode(src_ct);
+
+    //                }
+    //            });
+    //        };
+    //    }
+    //};
+</script>
+

@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Source.Models.XUAT_KHO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main>
+    <div class="container link">
+        <p>Trang chủ > Chức năng > Xuất kho</p>
+        <hr />
+    </div>
+    <section class="container" id="xuat-kho">
+        <h1 class="title">XUẤT KHO</h1>
+        @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+    <div class="form-xuat-kho">
+        <div class="thong-tin-tb-xuat-kho">
+            <h4 class="sub-title">
+                Thông tin thiết bị xuất kho
+            </h4>
+            <div class="form-group">
+                <label for="">Mã thiết bị:</label>
+                <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
+            </div>
+            <div class="form-group">
+                <label for="">Tên thiết bị:</label>
+                @*@Html.TextBox("TENTB", null, new { @class = "form-control" })*@
+                <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
+            </div>
+            <div class="form-group">
+                <label for="">ĐVQL:</label>
+                <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
+            </div>
+            <div class="form-group">
+                <label for="">Người xuất:</label>
+                <input class="form-control"
+                       value="@Session["TEN_DANG_NHAP"]"
+                       name="TEN_ND"
+                       aria-describedby="emailHelp"
+                       placeholder=""
+                       readonly />
+            </div>
+            <div class="form-group">
+                <label for="">Ghi chú:</label>
+                <input type="text" name="GHI_CHU" />
+            </div>
+        </div>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <p style="color: red">@ViewBag.ErrorMessage</p>
+        }
+        <div class="dv-nhan">
+            <h4 class="sub-title">
+                Đơn vị tiếp nhận
+            </h4>
+            <div class="form-group">
+                <label for="">ĐV nhận:</label>
+                <select class="form-control" id="MADV_NHAN" name="MADV_NHAN"></select>
+            </div>
+            <div class="form-group">
+                <label for="">Người nhận:</label>
+                <select type="text" id="">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+    </div>
+            <div class="submit">
+                <button class="luu" name="SAVE" value="save">LƯU</button>
+                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+            </div>
+        }
+    </section>
+</main>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_MATB",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn mã thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MATB").html(s);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_DONVI",
+            data: "{}",
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MADV_NHAN").html(s);
+            }
+        });
+    });
+
+    function get_ThongTinTB() {
+        var maTB = $('#MATB').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinTB",
+            data: { maTB: maTB },
+            success: function (data) {
+                $("#TENTB").val(data.tenTB);
+                $("#MADV_QL").val(data.tenDonVi);
+            }
+        });
+    };
+</script>
