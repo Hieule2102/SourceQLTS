@@ -1,56 +1,76 @@
-﻿@model IEnumerable<Source.Models.NHAT_KY_THIET_BI>
+@model IEnumerable<Source.Models.NHAT_KY_THIET_BI>
 
 @{
     ViewBag.Title = "Index";
 }
 
-    <main>
-        <div class="container link">
-            <p>Trang chủ > Báo cáo > Nhật ký thiết bị</p>
-            <hr />
-        </div>
-        <section class="container" id="nk-tb">
-            <h1 class="title">NHẬT KÝ THIẾT BỊ</h1>
+<main>
+    <div class="container link">
+        <p>Trang chủ > Báo cáo > Nhật ký thiết bị</p>
+        <hr />
+    </div>
+    <section class="container" id="nk-tb">
+        <h1 class="title">NHẬT KÝ THIẾT BỊ</h1>
+        @using (Html.BeginForm("Index", "NhatKyThietBi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
             <div class="search">
-                <input type="text" name="search" class="placeholder" placeholder="Nhập mã thiết bị" />
-                <button class="btn-search">
+                <input class="form-control"
+                       type="text"
+                       id="SEARCH_STRING"
+                       name="SEARCH_STRING"
+                       placeholder="&#xf002;" />
+                <button type="submit" class="btn-search">
                     <span>Tìm kiếm</span><i class="fas fa-search"></i>
                 </button>
             </div>
-            <div class="thong-tin-tb">
-                <p class="ten-tb">Tên thiết bị: Laptop Dell 1280</p>
-                <p>Mã thiết bị: LD12345</p>
-            </div>
-            <div class="nk-tb">
-                <table>
-                    <tr>
-                        <th>Lịch sử</th>
-                        <th>Ngày chuyển</th>
-                        <th>Ngày nhận</th>
-                        <th>Trạng thái</th>
-                        <th>ĐVQL</th>
-                        <th>Người QL</th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-    </main>
+            if (ViewBag.MATB != null)
+            {
+                <div class="thong-tin-tb">
+                    <p class="ten-tb">Tên thiết bị: @ViewBag.TENTB</p>
+                    <p>Mã thiết bị: @ViewBag.MATB</p>
+                </div>
+            }
+        }
+
+        <div class="nk-tb">
+            <table>
+                <tr>
+                    <th>Mã nhật ký</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày thực hiện</th>
+                    <th>ĐVQL</th>
+                    @*<th>Người QL</th>*@
+                </tr>
+                @if (ViewBag.MATB != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MA_NHAT_KY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NGAY_THUC_HIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.THIETBI.DON_VI.TEN_DON_VI)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.NGAY_THUC_HIEN)
+                            </td>*@
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </section>
+</main>
 
 
 <script type="text/javascript">
