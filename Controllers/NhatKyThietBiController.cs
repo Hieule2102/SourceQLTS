@@ -17,33 +17,26 @@ namespace Source.Controllers
         // GET: NhatKyThietBi
         public async Task<ActionResult> Index()
         {
-            ////Trạng thái
-            //var dsTrangThai = new List<string>();
-            //var qTrangThai = (from d in db.THIETBIs
-            //                  orderby d.TINH_TRANG
-            //                  select d.TINH_TRANG);
-            //dsTrangThai.AddRange(qTrangThai.Distinct());
-            //ViewBag.trangThai = new SelectList(dsTrangThai);
-
             var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.THIETBI);
             return View(await nHAT_KY_THIET_BI.ToListAsync());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(string TINH_TRANG, string searchString)
+        public async Task<ActionResult> Index(string TINH_TRANG, string SEARCH_STRING)
         {
             var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.THIETBI);
-
-            //Tìm trạng thái
-            if (!String.IsNullOrEmpty(TINH_TRANG))
-            {
-                nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.TINH_TRANG == TINH_TRANG);
-            }
             //Tìm tên thiết bị
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.THIETBI.TENTB.Contains(searchString));
+                nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.THIETBI.TENTB.Contains(SEARCH_STRING));
+                ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.MATB).FirstOrDefault();
+                ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.THIETBI.TENTB).FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.MATB = null;
+                ViewBag.TENTB = null;
             }
             
             return View(await nHAT_KY_THIET_BI.ToListAsync());

@@ -43,10 +43,6 @@ namespace Source.Controllers
 
                     ViewBag.ErrorMessage = "Thêm thành công";
                 }
-                else
-                {
-                    ViewBag.ErrorMessage = "";
-                }
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {

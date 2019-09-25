@@ -19,7 +19,7 @@ namespace Source.Controllers
         public async Task<ActionResult> Index()
         {
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
-            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN)); ;
+            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
             return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
         }
 
@@ -36,10 +36,10 @@ namespace Source.Controllers
             else if (!String.IsNullOrEmpty(XAC_NHAN))
             {
                 //Thêm vào xác nhận điều chuyển
-                XAC_NHAN_DIEU_CHUYEN a = new XAC_NHAN_DIEU_CHUYEN();
-                a.MA_DIEU_CHUYEN = Int32.Parse(form["MA_DIEU_CHUYEN"]);
+                XAC_NHAN_DIEU_CHUYEN create_XAC_NHAN_DIEU_CHUYEN = new XAC_NHAN_DIEU_CHUYEN();
+                create_XAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN = Int32.Parse(form["MA_DIEU_CHUYEN"]);
                 //a.MAND_XAC_NHAN = Session["TEN_DANG_NHAP"].ToString();
-                a.THOI_GIAN_XAC_NHAN = DateTime.Now;
+                create_XAC_NHAN_DIEU_CHUYEN.THOI_GIAN_XAC_NHAN = DateTime.Now;
 
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
@@ -49,11 +49,17 @@ namespace Source.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    db.Entry(a).State = EntityState.Modified;
+                    db.XAC_NHAN_DIEU_CHUYEN.Add(create_XAC_NHAN_DIEU_CHUYEN);
                     db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                     await db.SaveChangesAsync();
+
+                    ViewBag.ErrorMessage = "Xác nhận thành công";
                 }
+                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(b => b.MA_DIEU_CHUYEN).ToList();
+                dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(b => !xAC_NHAN_DIEU_CHUYEN.Contains(b.MA_DIEU_CHUYEN));
             }
+
+            
             return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
         }
 

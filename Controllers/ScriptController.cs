@@ -287,13 +287,14 @@ namespace Source.Controllers
             if (!String.IsNullOrEmpty(ma_DIEU_CHUYEN))
             {
                 int temp = Int32.Parse(ma_DIEU_CHUYEN);
+                var NGAY_CHUYEN = String.Format("MM/dd/yyyy");
                 var dIEUCHUYEN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MA_DIEU_CHUYEN == temp)
                                                         .Select(x => new
                                                                 {
                                                                     x.MA_DIEU_CHUYEN,
                                                                     x.MATB,
                                                                     x.THIETBI.TENTB,
-                                                                    x.NGAY_CHUYEN,
+                                                                    NGAY_CHUYEN = x.NGAY_CHUYEN.ToString(),
                                                                     DV_QL = x.DON_VI.TEN_DON_VI,
                                                                     DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                                     x.MAND_THUC_HIEN,

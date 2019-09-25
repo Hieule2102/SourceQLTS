@@ -16,15 +16,15 @@ namespace Source.Controllers
         private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
 
         // GET: /PhanQuyen/
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
-            //return View(await db.PHAN_QUYEN.ToListAsync());
+            //return View();
+            return View(await db.PHAN_QUYEN.ToListAsync());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string SAVE, FormCollection form)
+        public async Task<ActionResult> Index(string SAVE, FormCollection form)
         {
             if(!String.IsNullOrEmpty(SAVE))
             {
@@ -34,14 +34,45 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    string[] checkedBox = form.GetValues("check");
-                    foreach(var item in checkedBox)
-                    {
+                    var temp = form["MA_NHOM"].ToString();
+                    List<NHOM_ND_CHUCNANG> pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
+                    List<NHOM_ND_CHUCNANG> nHOM_ND_CHUCNANGs = new List<NHOM_ND_CHUCNANG>();
 
+                    string[] checkedBox = form.GetValues("check");
+                    //Tạo nhóm ND - chức năng
+                    foreach (var i in pHANQUYEN)
+                    {
+                        bool flag = false;
+                        foreach (var item in checkedBox)
+                        {
+                            string[] sPLIT = item.Split(new char[] { '.' });
+                            NHOM_ND_CHUCNANG create_NHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
+                            create_NHOM_ND_CHUCNANG.MA_NHOM = i.NHOM_NGUOI_DUNG.TEN_NHOM;
+                            create_NHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
+                            create_NHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
+
+                            if (pHANQUYEN.FirstOrDefault(a => a.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && 
+                                                              a.MA_QUYEN == Int32.Parse(sPLIT[1])) == null)
+                            {
+                                db.NHOM_ND_CHUCNANG.Add(create_NHOM_ND_CHUCNANG);
+                                await db.SaveChangesAsync();
+                            }
+                            else if(i.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && i.MA_QUYEN == Int32.Parse(sPLIT[1]))
+                            {
+                                flag = true;
+                            }
+                        }
+                        if(flag == false)
+                        {
+                            db.NHOM_ND_CHUCNANG.Remove(i);
+                            await db.SaveChangesAsync();
+                        }
                     }
+                    ViewBag.ErrorMessage = "Lưu thành công";
+
                 }
             }
-            return View();
+            return View(await db.PHAN_QUYEN.ToListAsync());
         }
 
         // GET: /PhanQuyen/Details/5
