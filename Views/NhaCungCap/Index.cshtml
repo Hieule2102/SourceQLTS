@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.NHA_CUNG_CAP>
+@model IEnumerable<Source.Models.NHA_CUNG_CAP>
 
 @{
     ViewBag.Title = "Index";
@@ -20,64 +20,64 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-            <form action="">
-                <div class="form-group">
-                    <input class="form-control"
-                           id="MA_NCC"
-                           name="MA_NCC"
-                           aria-describedby="emailHelp"
-                           placeholder="" hidden="hidden" />
-                </div>
-                <div class="form-group">
-                    <label for="">Tên NCC:</label>
-                    <input class="form-control"
-                           id="TEN_NCC"
-                           name="TEN_NCC"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="">Địa chỉ:</label>
-                    <input class="form-control"
-                           id="DIA_CHI"
-                           name="DIA_CHI"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="">Điện thoại:</label>
-                    <input class="form-control"
-                           id="DIEN_THOAI"
-                           name="DIEN_THOAI"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="">Fax:</label>
-                    <input class="form-control"
-                           id="FAX"
-                           name="FAX"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Ghi chú</label>
-                    <input class="form-control"
-                           id="GHI_CHU"
-                           name="GHI_CHU"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
+                    <form action="">
+                        <div class="form-group">
+                            <input class="form-control"
+                                   id="MA_NCC"
+                                   name="MA_NCC"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" hidden="hidden" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tên NCC:</label>
+                            <input class="form-control"
+                                   id="TEN_NCC"
+                                   name="TEN_NCC"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Địa chỉ:</label>
+                            <input class="form-control"
+                                   id="DIA_CHI"
+                                   name="DIA_CHI"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Điện thoại:</label>
+                            <input class="form-control"
+                                   id="DIEN_THOAI"
+                                   name="DIEN_THOAI"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Fax:</label>
+                            <input class="form-control"
+                                   id="FAX"
+                                   name="FAX"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Ghi chú</label>
+                            <input class="form-control"
+                                   id="GHI_CHU"
+                                   name="GHI_CHU"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
 
-                @if (ViewBag.ErrorMessage != null)
-                {
-                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
-                }
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                        }
 
-                <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
-                <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
-                <button class="reset d-none">HỦY</button>
-            </form>
+                        <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                        <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none" hidden="hidden">SỬA</button>
+                        <button type="submit" id="CANCEL" name="CANCEL" value="cancel" class="reset d-none" hidden="hidden">HỦY</button>
+                    </form>
                 }
             </div>
             <div class="ds-ncc">
