@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.LOAI_THIETBI>
+@model IEnumerable<Source.Models.LOAI_THIETBI>
 
 @{
     ViewBag.Title = "Index";
@@ -14,55 +14,58 @@
         <div class="div-loai-tb">
             <div class="them-loai-tb">
                 <h4 class="sub-title">
-                    <span id="them-sua">Thêm</span> loại thiết bị
+                    Thêm loại thiết bị
                 </h4>
                 @using (Html.BeginForm("Index", "LoaiThietBi", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-            <form action="">
-                <div class="form-group">
-                    <label for="">Mã LTB:</label>
-                    <input type="text"
-                           id="MA_LOAITB"
-                           name="MA_LOAITB"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="">Tên LTB:</label>
-                    <input type="text"
-                           id="TEN_LOAI"
-                           name="TEN_LOAI"
-                           aria-describedby="emailHelp"
-                           placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label for="">Thuộc NTB:</label>
-                    @*@Html.DropDownList("MA_NHOMTB", null, new
-            {
-                @class = "form-control",
-                @placeholder = ""
-            })*@
-                    <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB"></select>
-                </div>
-                <div class="form-group">
-                    <label for="nhom-tb">Ghi chú:</label>
-                    <textarea type="text"
-                              id="GHI_CHU"
-                              name="GHI_CHU"
-                              aria-describedby="emailHelp"
-                              placeholder=""></textarea>
-                </div>
+                    <form action="">
+                        <div class="form-group">
+                            <label for="">Mã LTB:</label>
+                            <input type="text"
+                                   id="MA_LOAITB"
+                                   name="MA_LOAITB"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tên LTB:</label>
+                            <input type="text"
+                                   id="TEN_LOAI"
+                                   name="TEN_LOAI"
+                                   aria-describedby="emailHelp"
+                                   placeholder="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Thuộc NTB:</label>
+                            @*@Html.DropDownList("MA_NHOMTB", null, new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = ""
+                                })*@
+                            <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nhom-tb">Ghi chú:</label>
+                                <textarea type="text"
+                                          id="GHI_CHU"
+                                          name="GHI_CHU"
+                                          aria-describedby="emailHelp"
+                                          placeholder=""></textarea>
+                            </div>
 
-                @if (ViewBag.ErrorMessage != null)
-                {
-                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
-                }
-                <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
-                <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
-                <button class="reset d-none">HỦY</button>
-            </form>
+                            <div id="ErrorMessage">
+                                @if (ViewBag.ErrorMessage != null)
+                                {
+                                    <p style="color: red">@ViewBag.ErrorMessage</p>
+                                }
+                            </div>
+                            
+                            <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="them" hidden="hidden">SỬA</button>
+                            <button type="submit" id="CANCEL" name="CANCEL" value="cancel" class="them" hidden="hidden">HỦY</button>
+                        </form>
                 }
             </div>
             <div class="ds-ltb">
