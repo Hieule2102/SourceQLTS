@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -18,7 +18,7 @@ namespace Source.Controllers
         // GET: /DonVi/
         public async Task<ActionResult> Index()
         {
-            return View(await db.DON_VI.ToListAsync());
+            return View(await db.DON_VI.Where(a => a.MA_DON_VI != 7).ToListAsync());
         }
 
         [HttpPost]
@@ -70,7 +70,10 @@ namespace Source.Controllers
                                                   where a.TEN_DON_VI == temp1
                                                   select a.MA_DON_VI).FirstOrDefault();
                 }
-                
+                else if (String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
+                {
+                    edit_DONVI.DON_VI_CAP_TREN = 7;
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -81,7 +84,7 @@ namespace Source.Controllers
                 }
             }
 
-            return View(await db.DON_VI.ToListAsync());
+            return View(await db.DON_VI.Where(a => a.MA_DON_VI != 7).ToListAsync());
         }
 
         // GET: /DonVi/Details/5
