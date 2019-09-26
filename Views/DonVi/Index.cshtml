@@ -50,7 +50,8 @@
                         </div>
                         <div class="form-group">
                             <label for="">Điện thoại:</label>
-                            <input class="form-control"
+                            <input type="number"
+                                   class="form-control"
                                    id="DIEN_THOAI"
                                    name="DIEN_THOAI"
                                    aria-describedby="emailHelp"
@@ -126,7 +127,7 @@
             url: "/Script/get_DONVI",
             data: "{}",
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
+                var s = '<option value="">Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
                     s += '<option value="' + data[i] + '">' + data[i] + '</option>';
                 }
