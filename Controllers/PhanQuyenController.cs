@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -36,11 +36,10 @@ namespace Source.Controllers
                 {
                     var temp = form["MA_NHOM"].ToString();
                     List<NHOM_ND_CHUCNANG> pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
-                    List<NHOM_ND_CHUCNANG> nHOM_ND_CHUCNANGs = new List<NHOM_ND_CHUCNANG>();
 
                     string[] checkedBox = form.GetValues("check");
                     //Tạo nhóm ND - chức năng
-                    if(pHANQUYEN.Count < 0)
+                    if(pHANQUYEN.Count < 1)
                     {
                         temp = (from a in db.NHOM_NGUOI_DUNG
                                 where a.TEN_NHOM == temp

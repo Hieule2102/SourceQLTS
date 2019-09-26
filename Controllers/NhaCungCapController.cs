@@ -27,7 +27,7 @@ namespace Source.Controllers
         {
             if (!String.IsNullOrEmpty(SAVE))
             {
-                if (!String.IsNullOrEmpty(form["TEN_NCC"]))
+                if (String.IsNullOrEmpty(form["TEN_NCC"]))
                 {
                     ViewBag.ErrorMessage = "Xin nhập đầy đủ thông tin";
                 }

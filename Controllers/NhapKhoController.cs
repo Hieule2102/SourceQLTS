@@ -139,22 +139,15 @@ namespace Source.Controllers
                 {
                     if (!String.IsNullOrEmpty(form["thong_so1"]))
                     {
-                        //temp = form["CPU"].ToString();
-                        //cau_Hinh.CPU = (from p in db.DM_CPU
-                        //                where p.TEN_CPU == temp
-                        //                select p.MA_CPU).First();
-
-                        cau_Hinh.KICH_THUOC = form["thong_so1"];
+                        cau_Hinh.KICH_THUOC = form["input_thong_so1"];
                     }
 
                     if (!String.IsNullOrEmpty(form["thong_so2"]))
                     {
-                        //temp = form["CPU"].ToString();
-                        //cau_Hinh.CPU = (from p in db.DM_CPU
-                        //                where p.TEN_CPU == temp
-                        //                select p.MA_CPU).First();
-
-                        cau_Hinh.LOAI_MUC = form["thong_so2"];
+                        temp = form["thong_so2"].ToString();
+                        cau_Hinh.LOAI_MUC = (from a in db.DM_LOAI_MUC
+                                             where a.TEN_LOAI_MUC == temp
+                                             select a.MA_LOAI_MUC).FirstOrDefault();
                     }
 
                     if (!String.IsNullOrEmpty(form["input_thong_so3"]))
@@ -164,12 +157,7 @@ namespace Source.Controllers
 
                     if (!String.IsNullOrEmpty(form["thong_so4"]))
                     {
-                        //temp = form["CPU"].ToString();
-                        //cau_Hinh.CPU = (from p in db.DM_CPU
-                        //                where p.TEN_CPU == temp
-                        //                select p.MA_CPU).First();
-
-                        cau_Hinh.DO_PHAN_GIAI = form["thong_so4"];
+                        cau_Hinh.DO_PHAN_GIAI = form["input_thong_so4"];
                     }
                 }
 
