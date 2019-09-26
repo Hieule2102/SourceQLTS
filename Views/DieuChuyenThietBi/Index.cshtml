@@ -72,14 +72,11 @@
                     </h4>
                     <div class="form-group">
                         <label for="">ĐV nhận:</label>
-                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN"></select>
+                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="fill_ND()"></select>
                     </div>
                     <div class="form-group">
                         <label for="">Người nhận:</label>
-                        <input class="form-control"
-                               name="TEN_DON_VI"
-                               aria-describedby="emailHelp"
-                               placeholder="" />
+                        <select class="form-control" id="MAND_NHAN" name="MAND_NHAN"></select>
                     </div>
                 </div>
             </div>
@@ -98,7 +95,7 @@
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: "/Script/get_MATB",
+            url: "/Script/get_MATB_DIEU_CHUYEN",
             data: "{}",
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn mã thiết bị</option>';
@@ -131,6 +128,22 @@
             success: function (data) {
                 $("#TENTB").val(data.tenTB);
                 $("#MADV_QL").val(data.tenDonVi);
+            }
+        });
+    };
+
+    function fill_ND() {
+        var ma_DV = $('#MADV_NHAN').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ND",
+            data: { ma_DV: ma_DV },
+            success: function (data) {
+                var s = '<option disabled selected value>Xin chọn người nhận</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                }
+                $("#MAND_NHAN").html(s);
             }
         });
     };
