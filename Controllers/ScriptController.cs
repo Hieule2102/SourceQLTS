@@ -1,4 +1,4 @@
-﻿using Source.Models;
+using Source.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -198,12 +198,12 @@ namespace Source.Controllers
                 }
                 else if (nhomTB == "PR")
                 {
+                    var LOAI_MUC = db.DM_LOAI_MUC.Select(x => x.TEN_LOAI_MUC).ToList();
+
                     var cauHinh = db.CAU_HINH.Select(x => new
                     {
                         NHOMTB = nhomTB,
-                        KICH_THUOC = "a",
-                        LOAI_MUC = "a",
-                        DO_PHAN_GIAI = "a",
+                        LOAI_MUC,
                     }).FirstOrDefault();
                     return Json(cauHinh, JsonRequestBehavior.AllowGet);
                 }
@@ -230,7 +230,7 @@ namespace Source.Controllers
                                              VGA = x.DM_VGA.TEN_VGA,
                                              HDH = x.DM_HDH.TEN_HDH,
                                              x.KICH_THUOC,
-                                             x.LOAI_MUC,
+                                             LOAI_MUC = x.DM_LOAI_MUC.TEN_LOAI_MUC,
                                              x.TOC_DO,
                                              x.DO_PHAN_GIAI
                                          })
@@ -382,6 +382,7 @@ namespace Source.Controllers
         {
             var dsDonVi = new List<string>();
             var qDonVi = (from d in db.DON_VI
+                          where d.MA_DON_VI != 7
                           orderby d.TEN_DON_VI
                           select d.TEN_DON_VI);
             dsDonVi.AddRange(qDonVi.ToList());
@@ -409,6 +410,19 @@ namespace Source.Controllers
             dsTenNhom.AddRange(qTenNhom.Distinct());
 
             return Json(dsTenNhom, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult get_ND(string ma_DV)
+        {
+            var dsND = new List<string>();
+            var qND = (from d in db.NGUOI_DUNG
+                       where d.DON_VI.TEN_DON_VI == ma_DV
+                       orderby d.TEN_ND
+                       select d.TEN_ND);
+            dsND.AddRange(qND.Distinct());
+
+            return Json(dsND, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult get_CPU()
@@ -476,6 +490,34 @@ namespace Source.Controllers
             dsHDH.AddRange(qHDH.Distinct());
 
             return Json(dsHDH, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult get_MATB_XUAT_KHO()
+        {
+            var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
+
+            var dsMaTB = new List<int>();
+            var qMaTB = (from d in db.THIETBIs
+                         where !maTB_XUAT_KHO.Contains(d.MATB)
+                         orderby d.MATB
+                         select d.MATB);
+            dsMaTB.AddRange(qMaTB.ToList());
+            return Json(dsMaTB, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult get_MATB_DIEU_CHUYEN()
+        {
+            var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
+
+            var dsMaTB = new List<int>();
+            var qMaTB = (from d in db.THIETBIs
+                         where !maTB_DIEU_CHUYEN.Contains(d.MATB)
+                         orderby d.MATB
+                         select d.MATB);
+            dsMaTB.AddRange(qMaTB.ToList());
+            return Json(dsMaTB, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }
