@@ -8,6 +8,21 @@
     </div>
     <section class="container" id="xn-dc">
         <h1 class="title">XÁC NHẬN ĐIỀU CHUYỂN</h1>
+        @using (Html.BeginForm("Index", "XacNhanDieuChuyen", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="search">
+                <input class="form-control"
+                       type="text"
+                       id="SEARCH_STRING"
+                       name="SEARCH_STRING"
+                       placeholder="&#xf002;" />
+                <button type="submit" class="btn-search">
+                    <span>Tìm kiếm</span><i class="fas fa-search"></i>
+                </button>
+            </div>
+        }
         <div class="xn-dc">
             <table>
                 <tr>
