@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -35,15 +35,15 @@ namespace Source.Controllers
                 else
                 {
                     var temp = form["MA_NHOM"].ToString();
+                    temp = (from a in db.NHOM_NGUOI_DUNG
+                            where a.TEN_NHOM == temp
+                            select a.MA_NHOM).FirstOrDefault();
                     List<NHOM_ND_CHUCNANG> pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
 
                     string[] checkedBox = form.GetValues("check");
                     //Tạo nhóm ND - chức năng
                     if(pHANQUYEN.Count < 1)
                     {
-                        temp = (from a in db.NHOM_NGUOI_DUNG
-                                where a.TEN_NHOM == temp
-                                select a.MA_NHOM).FirstOrDefault();
                         foreach (var item in checkedBox)
                         {
                             string[] sPLIT = item.Split(new char[] { '.' });
@@ -58,32 +58,40 @@ namespace Source.Controllers
                     }
                     else
                     {
-                        foreach (var i in pHANQUYEN)
+                        List<NHOM_ND_CHUCNANG> create_NHOM_ND_CHUCNANG = new List<NHOM_ND_CHUCNANG>();                       
+                        foreach (var item in checkedBox)
+                        {
+                            string[] sPLIT = item.Split(new char[] { '.' });
+                            NHOM_ND_CHUCNANG nHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
+                            nHOM_ND_CHUCNANG.MA_NHOM = temp;
+                            nHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
+                            nHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
+
+                            if (pHANQUYEN.FirstOrDefault(a => a.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) &&
+                                                                  a.MA_QUYEN == Int32.Parse(sPLIT[1])) == null)
+                            {
+                                db.NHOM_ND_CHUCNANG.Add(nHOM_ND_CHUCNANG);
+                                await db.SaveChangesAsync();
+                            }
+                            create_NHOM_ND_CHUCNANG.Add(nHOM_ND_CHUCNANG);
+                        }
+
+                        pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
+
+                        foreach(var itemA in pHANQUYEN)
                         {
                             bool flag = false;
-                            foreach (var item in checkedBox)
+                            foreach (var itemB in create_NHOM_ND_CHUCNANG)
                             {
-                                string[] sPLIT = item.Split(new char[] { '.' });
-                                if (pHANQUYEN.FirstOrDefault(a => a.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) &&
-                                                                  a.MA_QUYEN == Int32.Parse(sPLIT[1])) == null)
-                                {
-
-                                    NHOM_ND_CHUCNANG create_NHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
-                                    create_NHOM_ND_CHUCNANG.MA_NHOM = i.MA_NHOM;
-                                    create_NHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
-                                    create_NHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
-
-                                    db.NHOM_ND_CHUCNANG.Add(create_NHOM_ND_CHUCNANG);
-                                    await db.SaveChangesAsync();
-                                }
-                                else if (i.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && i.MA_QUYEN == Int32.Parse(sPLIT[1]))
+                                if(itemA.MA_CHUC_NANG == itemB.MA_CHUC_NANG && itemA.MA_QUYEN == itemB.MA_QUYEN)
                                 {
                                     flag = true;
+                                    break;
                                 }
                             }
-                            if (flag == false)
+                            if(flag == false)
                             {
-                                db.NHOM_ND_CHUCNANG.Remove(i);
+                                db.NHOM_ND_CHUCNANG.Remove(itemA);
                                 await db.SaveChangesAsync();
                             }
                         }
