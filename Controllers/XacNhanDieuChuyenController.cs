@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -17,9 +17,22 @@ namespace Source.Controllers
         private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
 
         // GET: /XacNhanDieuChuyen/
-        public async Task<ActionResult> Index(string XAC_NHAN, FormCollection form)
+        public async Task<ActionResult> Index()
         {
             var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Include(x => x.DIEU_CHUYEN_THIET_BI);
+            return View(await xac_nhan_dieu_chuyen.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(string SEARCH_STRING)
+        {
+            var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Include(x => x.DIEU_CHUYEN_THIET_BI);
+
+            if (!String.IsNullOrEmpty(SEARCH_STRING))
+            {
+                xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));
+            }
             return View(await xac_nhan_dieu_chuyen.ToListAsync());
         }
 
