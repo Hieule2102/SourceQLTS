@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -40,37 +40,58 @@ namespace Source.Controllers
 
                     string[] checkedBox = form.GetValues("check");
                     //Tạo nhóm ND - chức năng
-                    foreach (var i in pHANQUYEN)
+                    if(pHANQUYEN.Count < 0)
                     {
-                        bool flag = false;
+                        temp = (from a in db.NHOM_NGUOI_DUNG
+                                where a.TEN_NHOM == temp
+                                select a.MA_NHOM).FirstOrDefault();
                         foreach (var item in checkedBox)
                         {
                             string[] sPLIT = item.Split(new char[] { '.' });
                             NHOM_ND_CHUCNANG create_NHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
-                            create_NHOM_ND_CHUCNANG.MA_NHOM = i.MA_NHOM;
+                            create_NHOM_ND_CHUCNANG.MA_NHOM = temp;
                             create_NHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
                             create_NHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
 
-                            if (pHANQUYEN.FirstOrDefault(a => a.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && 
-                                                              a.MA_QUYEN == Int32.Parse(sPLIT[1])) == null)
-                            {
-                                db.NHOM_ND_CHUCNANG.Add(create_NHOM_ND_CHUCNANG);
-                                await db.SaveChangesAsync();
-                            }
-                            else if(i.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && i.MA_QUYEN == Int32.Parse(sPLIT[1]))
-                            {
-                                flag = true;
-                            }
-                        }
-                        if(flag == false)
-                        {
-                            db.NHOM_ND_CHUCNANG.Remove(i);
+                            db.NHOM_ND_CHUCNANG.Add(create_NHOM_ND_CHUCNANG);
                             await db.SaveChangesAsync();
                         }
                     }
-                    ViewBag.ErrorMessage = "Lưu thành công";
+                    else
+                    {
+                        foreach (var i in pHANQUYEN)
+                        {
+                            bool flag = false;
+                            foreach (var item in checkedBox)
+                            {
+                                string[] sPLIT = item.Split(new char[] { '.' });
+                                if (pHANQUYEN.FirstOrDefault(a => a.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) &&
+                                                                  a.MA_QUYEN == Int32.Parse(sPLIT[1])) == null)
+                                {
 
+                                    NHOM_ND_CHUCNANG create_NHOM_ND_CHUCNANG = new NHOM_ND_CHUCNANG();
+                                    create_NHOM_ND_CHUCNANG.MA_NHOM = i.MA_NHOM;
+                                    create_NHOM_ND_CHUCNANG.MA_CHUC_NANG = Int32.Parse(sPLIT[0]);
+                                    create_NHOM_ND_CHUCNANG.MA_QUYEN = Int32.Parse(sPLIT[1]);
+
+                                    db.NHOM_ND_CHUCNANG.Add(create_NHOM_ND_CHUCNANG);
+                                    await db.SaveChangesAsync();
+                                }
+                                else if (i.MA_CHUC_NANG == Int32.Parse(sPLIT[0]) && i.MA_QUYEN == Int32.Parse(sPLIT[1]))
+                                {
+                                    flag = true;
+                                }
+                            }
+                            if (flag == false)
+                            {
+                                db.NHOM_ND_CHUCNANG.Remove(i);
+                                await db.SaveChangesAsync();
+                            }
+                        }
+                    }
+                    ViewBag.ErrorMessage = "Lưu thành công";
                 }
+
             }
             return View(await db.PHAN_QUYEN.ToListAsync());
         }
