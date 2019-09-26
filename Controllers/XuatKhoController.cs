@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -43,16 +43,25 @@ namespace Source.Controllers
 
                 var temp = form["MADV_QL"].ToString();
                 xuat_kho.MADV_XUAT = (from p in db.DON_VI
-                                             where p.TEN_DON_VI.ToString() == temp
+                                             where p.TEN_DON_VI == temp
                                              select p.MA_DON_VI).FirstOrDefault();
+
+                temp = Session["TEN_DANG_NHAP"].ToString();
+                xuat_kho.MAND_XUAT = (from p in db.NGUOI_DUNG
+                                      where p.TEN_DANG_NHAP == temp
+                                      select p.MA_ND).FirstOrDefault();
 
                 temp = form["MADV_NHAN"].ToString();
                 xuat_kho.MADV_NHAN = (from p in db.DON_VI
-                                             where p.TEN_DON_VI.ToString() == temp
+                                             where p.TEN_DON_VI == temp
                                              select p.MA_DON_VI).FirstOrDefault();
 
+                temp = form["MAND_NHAN"].ToString();
+                xuat_kho.MAND_NHAN = (from p in db.NGUOI_DUNG
+                                      where p.TEN_ND == temp
+                                      select p.MA_ND).FirstOrDefault();
+
                 xuat_kho.GHI_CHU = form["GHI_CHU"];
-                //xuat_kho.MAND_XUAT = Session["TEN_DANG_NHAP"].ToString();
                 xuat_kho.NGAY_XUAT = DateTime.Now;
 
                 //Thêm vào nhật ký thiết bị
