@@ -38,7 +38,7 @@ namespace Source.Controllers
                     temp = (from a in db.NHOM_NGUOI_DUNG
                             where a.TEN_NHOM == temp
                             select a.MA_NHOM).FirstOrDefault();
-                    List<NHOM_ND_CHUCNANG> pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
+                    List<NHOM_ND_CHUCNANG> pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == temp).ToList();
 
                     string[] checkedBox = form.GetValues("check");
                     //Tạo nhóm ND - chức năng
@@ -76,7 +76,7 @@ namespace Source.Controllers
                             create_NHOM_ND_CHUCNANG.Add(nHOM_ND_CHUCNANG);
                         }
 
-                        pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == temp).ToList();
+                        pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == temp).ToList();
 
                         foreach(var itemA in pHANQUYEN)
                         {
