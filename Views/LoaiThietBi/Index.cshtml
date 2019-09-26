@@ -1,4 +1,4 @@
-@model IEnumerable<Source.Models.LOAI_THIETBI>
+﻿@model IEnumerable<Source.Models.LOAI_THIETBI>
 
 @{
     ViewBag.Title = "Index";
@@ -134,5 +134,6 @@
         document.getElementById("EDIT").hidden = false;
         document.getElementById("CANCEL").hidden = false;
         document.getElementById("SAVE").hidden = true;
+        document.getElementById("MA_LOAITB").setAttribute("readonly", "true");
     }
 </script>
