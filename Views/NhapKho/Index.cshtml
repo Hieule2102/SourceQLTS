@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.NHAP_KHO>
+@model IEnumerable<Source.Models.NHAP_KHO>
 
 @{
     ViewBag.Title = "Index";
@@ -87,6 +87,7 @@
                             <select class="form-control"
                                     id="thong_so1"
                                     name="thong_so1"></select>
+                            <input type="text" id="input_thong_so1" name="input_thong_so1" />
                         </div>
                         <div id="second">
                             <p id="label2"></p>
@@ -106,13 +107,13 @@
                             <select class="form-control"
                                     id="thong_so4"
                                     name="thong_so4"></select>
+                            <input type="text" id="input_thong_so4" name="input_thong_so4" />
                         </div>
                         <div id="fifth">
                             <p id="label5"></p>
                             <select class="form-control"
                                     id="thong_so5"
                                     name="thong_so5"></select>
-
                         </div>
                         <div id="sixth">
                             <p id="label6"></p>
@@ -200,8 +201,12 @@
                 if (data.NHOMTB == "PC") {
                     document.getElementById("fifth").hidden = false;
                     document.getElementById("sixth").hidden = false;
+                    document.getElementById("thong_so1").hidden = false;
+                    document.getElementById("input_thong_so1").hidden = true;
                     document.getElementById("thong_so3").hidden = false;
                     document.getElementById("input_thong_so3").hidden = true;
+                    document.getElementById("thong_so4").hidden = false;
+                    document.getElementById("input_thong_so4").hidden = true;
 
                     document.getElementById("label1").innerHTML = "CPU:";
                     document.getElementById("label2").innerHTML = "RAM";
@@ -262,34 +267,29 @@
                 else if (data.NHOMTB == "PR") {
                     document.getElementById("fifth").hidden = true;
                     document.getElementById("sixth").hidden = true;
+                    document.getElementById("thong_so1").hidden = true;
+                    document.getElementById("input_thong_so1").hidden = false;
                     document.getElementById("thong_so3").hidden = true;
                     document.getElementById("input_thong_so3").hidden = false;
+                    document.getElementById("thong_so4").hidden = true;
+                    document.getElementById("input_thong_so4").hidden = false;
 
                     document.getElementById("label1").innerHTML = "Kích thước:";
                     document.getElementById("label2").innerHTML = "Loại mực:";
                     document.getElementById("label3").innerHTML = "Tốc độ:";
                     document.getElementById("label4").innerHTML = "Độ phân giải:";
 
-                    $("#thong_so1").html("");
                     $("#thong_so2").html("");
-                    $("#thong_so4").html("");
 
-                    var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
-                    var options2 = '<option disabled selected value></option>';
+                    var options2 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
                     //var options3 = '<option value="null"></option>';
-                    var options4 = '<option disabled selected value></option>';
 
-                    for (var i = 0; i < data.length; i++) {
-                        options1 += '<option value="' + data.KICH_THUOC + '">' + data.KICH_THUOC + '</option>';
-                        options2 += '<option value="' + data.LOAI_MUC + '">' + data.LOAI_MUC + '</option>';
-                        //options3 += '<option value="' + data[i].TOC_DO + '">' + data[i].TOC_DO + '</option>';
-                        options4 += '<option value="' + data.DO_PHAN_GIAI + '">' + data.DO_PHAN_GIAI + '</option>';
+                    for (var i = 0; i < data.LOAI_MUC.length; i++) {
+                       options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
                     }
 
-                    $("#thong_so1").html(options1);
                     $("#thong_so2").html(options2);
                     //$("#thong_so3").html(options3);
-                    $("#thong_so4").html(options4);
                 }
             }
         });
