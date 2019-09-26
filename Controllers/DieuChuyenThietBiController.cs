@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -49,6 +49,11 @@ namespace Source.Controllers
                 dieu_chuyen_thiet_bi.MADV_NHAN = (from p in db.DON_VI
                                                          where p.TEN_DON_VI == temp
                                                          select p.MA_DON_VI).FirstOrDefault();
+                temp = form["MAND_NHAN"].ToString();
+                dieu_chuyen_thiet_bi.MAND_NHAN = (from p in db.NGUOI_DUNG
+                                                  where p.TEN_ND == temp
+                                                  select p.MA_ND).FirstOrDefault();
+
                 //dieu_chuyen_thiet_bi.MAND_THUC_HIEN = Session["TEN_DANG_NHAP"].ToString();
                 dieu_chuyen_thiet_bi.MAND_THUC_HIEN = "temp";
                 dieu_chuyen_thiet_bi.NGAY_CHUYEN = DateTime.Now;
