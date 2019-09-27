@@ -20,6 +20,17 @@ namespace Source.Controllers
         {
             //var dieu_chuyen_thiet_bi = db.DIEU_CHUYEN_THIET_BI.Include(d => d.DON_VI).Include(d => d.DON_VI1).Include(d => d.THIETBI);
             //return View(await dieu_chuyen_thiet_bi.ToListAsync());
+            if(!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
+                                                         a.MA_QUYEN == 1 && 
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
+                                                        a.MA_QUYEN == 3 && 
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
             return View();
         }
 
@@ -27,6 +38,15 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             if (String.IsNullOrEmpty(form["maTB"]))
             {
                 ViewBag.ErrorMessage = "Xin chọn thiết bị";

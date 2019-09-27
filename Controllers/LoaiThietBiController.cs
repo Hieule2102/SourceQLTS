@@ -26,6 +26,18 @@ namespace Source.Controllers
             dsNhomTB.AddRange(qNhomTB.Distinct());
             ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
+            if (!String.IsNullOrEmpty(Session["DANH_MUC"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
+                                                        a.MA_QUYEN == 3 &&
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+
             var loai_thietbi = db.LOAI_THIETBI.Include(l => l.NHOM_THIETBI);
             return View(await loai_thietbi.ToListAsync());
         }
@@ -34,6 +46,15 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index([Bind(Include = "MA_LOAITB,TEN_LOAI,MA_NHOMTB,GHI_CHU")] LOAI_THIETBI loai_thietbi, FormCollection form, string SAVE, string EDIT)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             if (!String.IsNullOrEmpty(SAVE))
             {
                 if (db.LOAI_THIETBI.FirstOrDefault(a => a.MA_LOAITB == loai_thietbi.MA_LOAITB) != null)

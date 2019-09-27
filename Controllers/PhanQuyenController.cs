@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -19,6 +19,15 @@ namespace Source.Controllers
         public async Task<ActionResult> Index()
         {
             //return View();
+
+            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 16 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            }
             return View(await db.PHAN_QUYEN.ToListAsync());
         }
 
@@ -26,7 +35,12 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string SAVE, FormCollection form)
         {
-            if(!String.IsNullOrEmpty(SAVE))
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 16 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            if (!String.IsNullOrEmpty(SAVE))
             {
                 if (String.IsNullOrEmpty(form["MA_NHOM"]))
                 {

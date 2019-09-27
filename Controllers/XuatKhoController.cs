@@ -20,6 +20,16 @@ namespace Source.Controllers
         {
             //var xuat_kho = db.XUAT_KHO.Include(x => x.DON_VI).Include(x => x.DON_VI1).Include(x => x.NGUOI_DUNG).Include(x => x.NGUOI_DUNG1).Include(x => x.THIETBI);
             //return View(await xuat_kho.ToListAsync());
+
+            if (!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            }
+
             return View();
         }
 
@@ -27,6 +37,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             if (String.IsNullOrEmpty(form["maTB"]))
             {
                 ViewBag.ErrorMessage = "Xin chọn thiết bị";

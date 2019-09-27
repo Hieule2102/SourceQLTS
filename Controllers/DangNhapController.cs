@@ -44,7 +44,25 @@ namespace Source.Controllers
                     Session["NHOM_ND"] = (from b in db.NHOM_ND
                                           where b.MA_ND == ma_ND
                                           select b.MA_NHOM).FirstOrDefault();
-                    return View("~/Views/Home/Index.cshtml");
+                    var nhom_ND = Session["NHOM_ND"].ToString();
+
+                    Session["CHUC_NANG"] = (from b in db.NHOM_ND_CHUCNANG
+                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 1
+                                            select b.MA_NHOM).FirstOrDefault();
+
+                    Session["DANH_MUC"] = (from b in db.NHOM_ND_CHUCNANG
+                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2
+                                            select b.MA_NHOM).FirstOrDefault();
+
+                    Session["BAO_CAO"] = (from b in db.NHOM_ND_CHUCNANG
+                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3
+                                            select b.MA_NHOM).FirstOrDefault();
+
+                    Session["QL_ND"] = (from b in db.NHOM_ND_CHUCNANG
+                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4
+                                            select b.MA_NHOM).FirstOrDefault();
+
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return View();
@@ -55,7 +73,7 @@ namespace Source.Controllers
         {
             Session.RemoveAll();
             //return View("~/Views/Home/Index.cshtml");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
         }
 
 

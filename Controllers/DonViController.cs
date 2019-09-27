@@ -18,6 +18,17 @@ namespace Source.Controllers
         // GET: /DonVi/
         public async Task<ActionResult> Index()
         {
+            if (!String.IsNullOrEmpty(Session["DANH_MUC"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
+                                                        a.MA_QUYEN == 3 &&
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
             return View(await db.DON_VI.Where(a => a.MA_DON_VI != 7).ToListAsync());
         }
 
@@ -25,7 +36,16 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT)
         {
-            if(!String.IsNullOrEmpty(SAVE))
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            if (!String.IsNullOrEmpty(SAVE))
             {
                 if (String.IsNullOrEmpty(form["TEN_DON_VI"]))
                 {
@@ -56,8 +76,8 @@ namespace Source.Controllers
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                var temp = Int32.Parse(form["MA_DON_VI"].ToString());
-                DON_VI edit_DONVI = db.DON_VI.Where(a => a.MA_DON_VI == temp).FirstOrDefault();
+                var ma_DV = Int32.Parse(form["MA_DON_VI"].ToString());
+                DON_VI edit_DONVI = db.DON_VI.Where(a => a.MA_DON_VI == ma_DV).FirstOrDefault();
                 edit_DONVI.TEN_DON_VI = form["TEN_DON_VI"];
                 edit_DONVI.DIA_CHI = form["DIA_CHI"];
                 edit_DONVI.DIEN_THOAI = form["DIEN_THOAI"];

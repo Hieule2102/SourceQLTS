@@ -43,6 +43,18 @@ namespace Source.Controllers
             dsTenDonVi.AddRange(qTenDonVi.Distinct());
             ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
 
+            //if (!String.IsNullOrEmpty(Session["BAO_CAO"].ToString()))
+            //{
+            //    var temp = Session["NHOM_ND"].ToString();
+            //    ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 8 &&
+            //                                             a.MA_QUYEN == 4 &&
+            //                                             a.MA_NHOM == temp).FirstOrDefault();
+
+            //    ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+            //                                            a.MA_QUYEN == 3 &&
+            //                                            a.MA_NHOM == temp).FirstOrDefault();
+            //}
+
             var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
             return View(await thietbis.ToListAsync());
         }

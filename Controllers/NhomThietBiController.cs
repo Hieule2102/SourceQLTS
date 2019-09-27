@@ -18,6 +18,18 @@ namespace Source.Controllers
         // GET: /NhomThietBi/
         public async Task<ActionResult> Index()
         {
+            if (!String.IsNullOrEmpty(Session["DANH_MUC"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
+                                                        a.MA_QUYEN == 3 &&
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+
             return View(await db.NHOM_THIETBI.ToListAsync());
         }
 
@@ -25,6 +37,15 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index([Bind(Include = "MA_NHOMTB,TEN_NHOM,GHI_CHU")] NHOM_THIETBI nHOM_THIETBI, string SAVE, string EDIT)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             if (!String.IsNullOrEmpty(SAVE))
             {
                 if (db.NHOM_THIETBI.FirstOrDefault(a => a.MA_NHOMTB == nHOM_THIETBI.MA_NHOMTB) != null)

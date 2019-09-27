@@ -37,9 +37,19 @@ namespace Source.Controllers
             dsTenNhom.AddRange(qTenNhom.Distinct());
             ViewBag.tenNhom = new SelectList(dsTenNhom);
 
-            var nguoi_dung = db.NGUOI_DUNG.Include(n => n.DON_VI);
+            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-            
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
+                                                        a.MA_QUYEN == 3 &&
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+
+            var nguoi_dung = db.NGUOI_DUNG.Include(n => n.DON_VI);
             return View(await nguoi_dung.ToListAsync());
         }
 
@@ -47,6 +57,15 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT, string donVi, string tenNhom, string value)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             //Đơn vị
             var dsTenDonVi = new List<string>();
             var qTenDonVi = (from d in db.DON_VI

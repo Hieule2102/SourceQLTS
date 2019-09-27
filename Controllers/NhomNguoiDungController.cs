@@ -19,6 +19,19 @@ namespace Source.Controllers
         public async Task<ActionResult> Index()
         {
             var nhom_nguoi_dung = db.NHOM_NGUOI_DUNG.Include(n => n.NHOM_ND_CHUCNANG);
+
+            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                        a.MA_QUYEN == 3 &&
+                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+
             return View(await nhom_nguoi_dung.ToListAsync());
         }
 
@@ -26,6 +39,24 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index([Bind(Include = "MA_NHOM,TEN_NHOM,GHI_CHU")] NHOM_NGUOI_DUNG nHOM_NGUOI_DUNG, string SAVE, string EDIT)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            var temp = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == temp).FirstOrDefault();
+
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
+                                                    a.MA_QUYEN == 3 &&
+                                                    a.MA_NHOM == temp).FirstOrDefault();
+
             if (!String.IsNullOrEmpty(SAVE))
             {
                 if (String.IsNullOrEmpty(nHOM_NGUOI_DUNG.MA_NHOM) || String.IsNullOrEmpty(nHOM_NGUOI_DUNG.TEN_NHOM))

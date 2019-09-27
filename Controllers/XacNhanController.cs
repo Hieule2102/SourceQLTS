@@ -20,6 +20,15 @@ namespace Source.Controllers
         {
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
             var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
+
+            if (!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            {
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 18 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
+            }
             return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
         }
 
@@ -27,6 +36,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string XAC_NHAN, FormCollection form, string SEARCH_STRING)
         {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 18 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
             var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
             if (!String.IsNullOrEmpty(SEARCH_STRING))
