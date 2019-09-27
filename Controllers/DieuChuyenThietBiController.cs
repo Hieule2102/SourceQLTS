@@ -27,9 +27,9 @@ namespace Source.Controllers
                                                          a.MA_QUYEN == 1 && 
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
-                                                        a.MA_QUYEN == 3 && 
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
+                //                                        a.MA_QUYEN == 3 && 
+                //                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
             }
             return View();
         }
@@ -43,9 +43,9 @@ namespace Source.Controllers
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
+                //                                        a.MA_QUYEN == 3 && 
+                //                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
             if (String.IsNullOrEmpty(form["maTB"]))
             {
