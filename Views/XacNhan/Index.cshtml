@@ -21,10 +21,12 @@
                         <span>Tìm kiếm</span><i class="fas fa-search"></i>
                     </button>
 
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <p style="color: red">@ViewBag.ErrorMessage</p>
-                    }
+                    <div id="ErrorMessage">
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p style="color: red">@ViewBag.ErrorMessage</p>
+                        }
+                    </div>
                 </div>
                 <br>
                 <p class="thong-bao">Click chọn thiết bị để xác nhận.</p>
@@ -100,8 +102,11 @@
                             </tr>
                         </table>
                         <div class="submit">
-                            <button class="da-nhan" name="XAC_NHAN" value="xac_nhan">XÁC NHẬN</button>
-                            <button class="luu" id="huy-xn">HỦY</button>
+                            @if (ViewBag.Them != null)
+                            {
+                                <button class="da-nhan" name="XAC_NHAN" value="xac_nhan">XÁC NHẬN</button>
+                                <button class="luu" id="huy-xn">HỦY</button>
+                            }
                         </div>
                     </div>
 

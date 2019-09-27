@@ -124,8 +124,11 @@
                     </div>
                 </div>
                 <div class="submit">
-                    <button class="luu" name="SAVE" value="save">LƯU</button>
-                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    @if (ViewBag.Them != null)
+                    {
+                        <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                        <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    }
                 </div>
             </section>
         }

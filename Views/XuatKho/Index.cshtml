@@ -46,10 +46,12 @@
                         <label for="">Ghi chú:</label>
                         <input type="text" name="GHI_CHU" />
                     </div>
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <p style="color: red">@ViewBag.ErrorMessage</p>
-                    }
+                    <div id="ErrorMessage">
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p style="color: red">@ViewBag.ErrorMessage</p>
+                        }
+                    </div>
                 </div>
                 
                 <div class="dv-nhan">
@@ -67,8 +69,11 @@
                 </div>
             </div>
             <div class="submit">
-                <button class="luu" name="SAVE" value="save">LƯU</button>
-                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                @if (ViewBag.Them != null)
+                {
+                    <button class="luu" name="SAVE" value="save">LƯU</button>
+                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                }
             </div>
         }
     </section>

@@ -12,10 +12,12 @@
             <div class="chon-nhom">
                 <label for="">Chọn nhóm người dùng:</label>
                 <select class="form-control" name="MA_NHOM" id="MA_NHOM" onchange="Fill_Phan_Quyen()"></select>
-                @if (ViewBag.ErrorMessage != null)
-                {
-                    <p style="color: red">@ViewBag.ErrorMessage</p>
-                }
+                <div id="ErrorMessage">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
             </div>
 
             <div class="phan-quyen">
@@ -472,8 +474,11 @@
                     </li>
                 </ul>
                 <div class="submit">
-                    <button type="submit" class="luu" name="SAVE" value="save">LƯU</button>
-                    <button type="submit" class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    @if (ViewBag.Them != null)
+                    {
+                        <button type="submit" class="luu" name="SAVE" value="save">LƯU</button>
+                        <button type="submit" class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    }
                 </div>
             </div>
         }

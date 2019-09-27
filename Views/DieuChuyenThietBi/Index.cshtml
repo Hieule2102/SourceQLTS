@@ -81,7 +81,10 @@
                 </div>
             </div>
             <div class="submit">
-                <button class="luu" name="SAVE" value="save">LƯU</button>
+                @if (ViewBag.Them != null)
+                {
+                    <button class="luu" name="SAVE" value="save">LƯU</button>
+                }
                 <button class="reset" name="REFESH" value="refesh">LÀM MỚI</button>
             </div>
         }

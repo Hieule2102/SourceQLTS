@@ -27,54 +27,66 @@
                 <div class="nav">
                     <ul class="nav-c accordion">
                         <li class="menuc1"><a href="" class="c1">Trang chủ</a></li>
+                        @if (Session["CHUC_NANG"] != null)
+                        {
+                            <li class="menuc1 accordion-section">
+                                <a href="#accordion-1" class="c1 accordion-section-title">
+                                    Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                </a>
+                                <ul id="accordion-1"
+                                    class="c2 menuc2 accordion-section-content">
+                                    <li>@Html.ActionLink("Nhập kho", "Index", "NhapKho")<span></span></li>
+                                    <li>@Html.ActionLink("Xuất kho", "Index", "XuatKho")<span></span></li>
+                                    <li>@Html.ActionLink("Điều chuyển", "Index", "DieuChuyenThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Xác nhận", "Index", "XacNhan")<span></span></li>
+                                </ul>
+                            </li>
+                        }
                         <li class="menuc1 accordion-section">
-                            <a href="#accordion-1" class="c1 accordion-section-title">
-                                Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
-                            </a>
-                            <ul id="accordion-1"
-                                class="c2 menuc2 accordion-section-content">
-                                <li>@Html.ActionLink("Nhập kho", "Index", "NhapKho")<span></span></li>
-                                <li>@Html.ActionLink("Xuất kho", "Index", "XuatKho")<span></span></li>
-                                <li>@Html.ActionLink("Điều chuyển", "Index", "DieuChuyenThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Xác nhận", "Index", "XacNhan")<span></span></li>
-                            </ul>
+                            @if (Session["DANH_MUC"] != null)
+                            {
+                                <a href="#accordion-2" class="c1 accordion-section-title">
+                                    Danh mục<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                </a>
+                                <ul id="accordion-2"
+                                    class="c2 menuc2 accordion-section-content">
+                                    <li>@Html.ActionLink("Nhóm thiết bị", "Index", "NhomThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Loại thiết bị", "Index", "LoaiThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Đơn vị", "Index", "DonVi")<span></span></li>
+                                    <li>@Html.ActionLink("Nhà cung cấp", "Index", "NhaCungCap")<span></span></li>
+                                </ul>
+                            }
                         </li>
                         <li class="menuc1 accordion-section">
-                            <a href="#accordion-2" class="c1 accordion-section-title">
-                                Danh mục<span><i class="fas fa-sort-down fa-2x"></i></span>
-                            </a>
-                            <ul id="accordion-2"
-                                class="c2 menuc2 accordion-section-content">
-                                <li>@Html.ActionLink("Nhóm thiết bị", "Index", "NhomThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Loại thiết bị", "Index", "LoaiThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Đơn vị", "Index", "DonVi")<span></span></li>
-                                <li>@Html.ActionLink("Nhà cung cấp", "Index", "NhaCungCap")<span></span></li>
-                            </ul>
+                            @if (Session["BAO_CAO"] != null)
+                            {
+                                <a href="#accordion-3" class="c1 accordion-section-title">
+                                    Báo cáo<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                </a>
+                                <ul id="accordion-3"
+                                    class="c2 menuc2 accordion-section-content">
+                                    <li>@Html.ActionLink("Danh sách thiết bị", "Index", "DanhSachThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Thống kê thiết bị", "Index", "ThongKeThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Nhật ký thiết bị", "Index", "NhatKyThietBi")<span></span></li>
+                                    <li>@Html.ActionLink("Xác nhận điều chuyển", "Index", "XacNhanDieuChuyen")<span></span></li>
+                                    <li><a href="">Tồn kho</a><span></span></li>
+                                    <li><a href="">Hết hạn bảo hành</a><span></span></li>
+                                </ul>
+                            }
                         </li>
                         <li class="menuc1 accordion-section">
-                            <a href="#accordion-3" class="c1 accordion-section-title">
-                                Báo cáo<span><i class="fas fa-sort-down fa-2x"></i></span>
-                            </a>
-                            <ul id="accordion-3"
-                                class="c2 menuc2 accordion-section-content">
-                                <li>@Html.ActionLink("Danh sách thiết bị", "Index", "DanhSachThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Thống kê thiết bị", "Index", "ThongKeThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Nhật ký thiết bị", "Index", "NhatKyThietBi")<span></span></li>
-                                <li>@Html.ActionLink("Xác nhận điều chuyển", "Index", "XacNhanDieuChuyen")<span></span></li>
-                                <li><a href="">Tồn kho</a><span></span></li>
-                                <li><a href="">Hết hạn bảo hành</a><span></span></li>
-                            </ul>
-                        </li>
-                        <li class="menuc1 accordion-section">
-                            <a href="#accordion-4" class="c1 accordion-section-title">
-                                Quản lý người dùng<span><i class="fas fa-sort-down fa-2x"></i></span>
-                            </a>
-                            <ul id="accordion-4"
-                                class="c2 menuc2 accordion-section-content">
-                                <li>@Html.ActionLink("Người dùng", "Index", "NguoiDung")<span></span></li>
-                                <li>@Html.ActionLink("Nhóm người dùng", "Index", "NhomNguoiDung")<span></span></li>
-                                <li>@Html.ActionLink("Phân quyền", "Index", "PhanQuyen")<span></span></li>
-                            </ul>
+                            @if (Session["QL_ND"] != null)
+                            {
+                                <a href="#accordion-4" class="c1 accordion-section-title">
+                                    Quản lý người dùng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                </a>
+                                <ul id="accordion-4"
+                                    class="c2 menuc2 accordion-section-content">
+                                    <li>@Html.ActionLink("Người dùng", "Index", "NguoiDung")<span></span></li>
+                                    <li>@Html.ActionLink("Nhóm người dùng", "Index", "NhomNguoiDung")<span></span></li>
+                                    <li>@Html.ActionLink("Phân quyền", "Index", "PhanQuyen")<span></span></li>
+                                </ul>
+                            }
                         </li>
                     </ul>
                 </div>
