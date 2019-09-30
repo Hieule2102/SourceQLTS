@@ -16,6 +16,14 @@ namespace Source.Controllers
         // GET: /DanhSachThietBi/
         public async Task<ActionResult> Index()
         {
+            if(Session["TEN_DANG_NHAP"] != null)
+            {
+
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
             var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
             return View(await thietbis.ToListAsync());
         }

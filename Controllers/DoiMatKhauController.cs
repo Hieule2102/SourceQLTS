@@ -17,6 +17,14 @@ namespace Source.Controllers
         // GET: /DoiMatKhau/
         public ActionResult Index()
         {
+            if (Session["TEN_DANG_NHAP"] != null)
+            {
+
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
             return View();
         }
 
