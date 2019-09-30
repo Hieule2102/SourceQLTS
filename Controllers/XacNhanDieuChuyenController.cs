@@ -19,6 +19,15 @@ namespace Source.Controllers
         // GET: /XacNhanDieuChuyen/
         public async Task<ActionResult> Index()
         {
+            if (Session["BAO_CAO"] != null)
+            {
+
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
+
             var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Include(x => x.DIEU_CHUYEN_THIET_BI);
             return View(await xac_nhan_dieu_chuyen.ToListAsync());
         }

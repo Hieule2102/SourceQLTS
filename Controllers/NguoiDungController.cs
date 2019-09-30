@@ -19,26 +19,26 @@ namespace Source.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
-            //Đơn vị
-            var dsTenDonVi = new List<string>();
-            var qTenDonVi = (from d in db.DON_VI
-                             orderby d.TEN_DON_VI
-                             select d.TEN_DON_VI);
-
-            dsTenDonVi.AddRange(qTenDonVi.Distinct());
-            ViewBag.donVi = new SelectList(dsTenDonVi);
-
-            //Nhóm người dùng
-            var dsTenNhom = new List<string>();
-            var qTenNhom = (from d in db.NHOM_NGUOI_DUNG
-                            orderby d.TEN_NHOM
-                            select d.TEN_NHOM);
-
-            dsTenNhom.AddRange(qTenNhom.Distinct());
-            ViewBag.tenNhom = new SelectList(dsTenNhom);
-
-            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            if (Session["QL_ND"] != null)
             {
+                //Đơn vị
+                var dsTenDonVi = new List<string>();
+                var qTenDonVi = (from d in db.DON_VI
+                                 orderby d.TEN_DON_VI
+                                 select d.TEN_DON_VI);
+
+                dsTenDonVi.AddRange(qTenDonVi.Distinct());
+                ViewBag.donVi = new SelectList(dsTenDonVi);
+
+                //Nhóm người dùng
+                var dsTenNhom = new List<string>();
+                var qTenNhom = (from d in db.NHOM_NGUOI_DUNG
+                                orderby d.TEN_NHOM
+                                select d.TEN_NHOM);
+
+                dsTenNhom.AddRange(qTenNhom.Distinct());
+                ViewBag.tenNhom = new SelectList(dsTenNhom);
+
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
                                                          a.MA_QUYEN == 1 &&
@@ -47,6 +47,10 @@ namespace Source.Controllers
                 ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
                                                         a.MA_QUYEN == 3 &&
                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
 
             var nguoi_dung = db.NGUOI_DUNG.Include(n => n.DON_VI);

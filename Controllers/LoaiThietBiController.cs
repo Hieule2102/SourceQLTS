@@ -18,16 +18,16 @@ namespace Source.Controllers
         // GET: /LoaiThietBi/
         public async Task<ActionResult> Index()
         {
-            //Nhóm thiết bị
-            var dsNhomTB = new List<string>();
-            var qNhomTB = (from d in db.NHOM_THIETBI
-                           orderby d.TEN_NHOM
-                           select d.TEN_NHOM);
-            dsNhomTB.AddRange(qNhomTB.Distinct());
-            ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
-
-            if (!String.IsNullOrEmpty(Session["DANH_MUC"].ToString()))
+            if (Session["DANH_MUC"] != null)
             {
+                //Nhóm thiết bị
+                var dsNhomTB = new List<string>();
+                var qNhomTB = (from d in db.NHOM_THIETBI
+                               orderby d.TEN_NHOM
+                               select d.TEN_NHOM);
+                dsNhomTB.AddRange(qNhomTB.Distinct());
+                ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
+
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
                                                          a.MA_QUYEN == 1 &&
@@ -36,6 +36,10 @@ namespace Source.Controllers
                 ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
                                                         a.MA_QUYEN == 3 &&
                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
 
             var loai_thietbi = db.LOAI_THIETBI.Include(l => l.NHOM_THIETBI);

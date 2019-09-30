@@ -20,13 +20,17 @@ namespace Source.Controllers
         {
             //return View();
 
-            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            if (Session["QL_ND"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 16 &&
                                                          a.MA_QUYEN == 1 &&
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
             return View(await db.PHAN_QUYEN.ToListAsync());
         }

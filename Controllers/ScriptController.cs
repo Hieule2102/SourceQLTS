@@ -221,6 +221,7 @@ namespace Source.Controllers
                 var cauHinh = db.CAU_HINH.Where(x => x.MATB == temp)
                                          .Select(x => new
                                          {
+                                             x.MATB,
                                              x.THIETBI.LOAI_THIETBI.MA_NHOMTB,
                                              x.THIETBI.TENTB,
                                              CPU = x.DM_CPU.TEN_CPU,
@@ -303,7 +304,6 @@ namespace Source.Controllers
 
                 return Json(dIEUCHUYEN, JsonRequestBehavior.AllowGet);
             }
-
             return null;
         }
         #endregion
@@ -497,13 +497,13 @@ namespace Source.Controllers
         {
             var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
 
-            var dsMaTB = new List<int>();
-            var qMaTB = (from d in db.THIETBIs
-                         where !maTB_XUAT_KHO.Contains(d.MATB)
-                         orderby d.MATB
-                         select d.MATB);
-            dsMaTB.AddRange(qMaTB.ToList());
-            return Json(dsMaTB, JsonRequestBehavior.AllowGet);
+            var xUATKHO = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB))
+                                     .Select(x => new
+                                     {
+                                         x.MATB,
+                                         x.THIETBI.TENTB
+                                     }).ToList();
+            return Json(xUATKHO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -511,13 +511,13 @@ namespace Source.Controllers
         {
             var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
 
-            var dsMaTB = new List<int>();
-            var qMaTB = (from d in db.THIETBIs
-                         where !maTB_DIEU_CHUYEN.Contains(d.MATB)
-                         orderby d.MATB
-                         select d.MATB);
-            dsMaTB.AddRange(qMaTB.ToList());
-            return Json(dsMaTB, JsonRequestBehavior.AllowGet);
+            var dIEUCHUYEN = db.XUAT_KHO.Where(x => !maTB_DIEU_CHUYEN.Contains(x.MATB))
+                                        .Select(x => new
+                                        {
+                                            x.MATB,
+                                            x.THIETBI.TENTB
+                                        }).ToList();
+            return Json(dIEUCHUYEN, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

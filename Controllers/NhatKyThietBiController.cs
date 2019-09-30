@@ -17,6 +17,14 @@ namespace Source.Controllers
         // GET: NhatKyThietBi
         public async Task<ActionResult> Index()
         {
+            if (Session["BAO_CAO"] != null)
+            {
+
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
             var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.THIETBI);
             return View(await nHAT_KY_THIET_BI.ToListAsync());
         }

@@ -18,7 +18,7 @@ namespace Source.Controllers
         // GET: /DonVi/
         public async Task<ActionResult> Index()
         {
-            if (!String.IsNullOrEmpty(Session["DANH_MUC"].ToString()))
+            if (Session["DANH_MUC"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
@@ -28,6 +28,10 @@ namespace Source.Controllers
                 ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
                                                         a.MA_QUYEN == 3 &&
                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
             return View(await db.DON_VI.Where(a => a.MA_DON_VI != 7).ToListAsync());
         }

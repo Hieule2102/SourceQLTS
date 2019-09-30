@@ -21,13 +21,17 @@ namespace Source.Controllers
             //var xuat_kho = db.XUAT_KHO.Include(x => x.DON_VI).Include(x => x.DON_VI1).Include(x => x.NGUOI_DUNG).Include(x => x.NGUOI_DUNG1).Include(x => x.THIETBI);
             //return View(await xuat_kho.ToListAsync());
 
-            if (!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
                                                          a.MA_QUYEN == 1 &&
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
 
             return View();
@@ -79,14 +83,23 @@ namespace Source.Controllers
                 xuat_kho.GHI_CHU = form["GHI_CHU"];
                 xuat_kho.NGAY_XUAT = DateTime.Now;
 
+                //Thay đổi trạng thái thiết bị
+                var mATB = Int32.Parse(form["maTB"]);
+                var tHIETBI = (from a in db.THIETBIs
+                               where a.MATB == mATB
+                               select a).FirstOrDefault();
+                tHIETBI.TINH_TRANG = "Đang điều chuyển";
+
+
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
                 nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                nHAT_KY_THIET_BI.TINH_TRANG = "Đã xuất kho";
+                nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
                 nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
 
                 if (ModelState.IsValid)
                 {
+                    db.Entry(tHIETBI).State = EntityState.Modified;
                     db.XUAT_KHO.Add(xuat_kho);
                     db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                     await db.SaveChangesAsync();

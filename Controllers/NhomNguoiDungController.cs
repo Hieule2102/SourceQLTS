@@ -20,7 +20,7 @@ namespace Source.Controllers
         {
             var nhom_nguoi_dung = db.NHOM_NGUOI_DUNG.Include(n => n.NHOM_ND_CHUCNANG);
 
-            if (!String.IsNullOrEmpty(Session["QL_ND"].ToString()))
+            if (Session["QL_ND"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
@@ -30,6 +30,10 @@ namespace Source.Controllers
                 ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
                                                         a.MA_QUYEN == 3 &&
                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
 
             return View(await nhom_nguoi_dung.ToListAsync());

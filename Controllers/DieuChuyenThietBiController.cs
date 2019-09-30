@@ -16,20 +16,23 @@ namespace Source.Controllers
         private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
 
         // GET: /DieuChuyenThietBi/
+        [HttpGet]
         public ActionResult Index()
         {
-            //var dieu_chuyen_thiet_bi = db.DIEU_CHUYEN_THIET_BI.Include(d => d.DON_VI).Include(d => d.DON_VI1).Include(d => d.THIETBI);
-            //return View(await dieu_chuyen_thiet_bi.ToListAsync());
-            if(!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
-                                                         a.MA_QUYEN == 1 && 
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+                                                         a.MA_QUYEN == 1 &&
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
                 //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
                 //                                        a.MA_QUYEN == 3 && 
                 //                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
             return View();
         }
@@ -42,10 +45,6 @@ namespace Source.Controllers
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
-
-            //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 && 
-                //                                        a.MA_QUYEN == 3 && 
-                //                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
             if (String.IsNullOrEmpty(form["maTB"]))
             {
@@ -74,19 +73,30 @@ namespace Source.Controllers
                                                   where p.TEN_ND == temp
                                                   select p.MA_ND).FirstOrDefault();
 
-                //dieu_chuyen_thiet_bi.MAND_THUC_HIEN = Session["TEN_DANG_NHAP"].ToString();
+                temp = Session["TEN_DANG_NHAP"].ToString();
+                dieu_chuyen_thiet_bi.MAND_THUC_HIEN = (from p in db.NGUOI_DUNG
+                                                      where p.TEN_DANG_NHAP == temp
+                                                      select p.MA_ND).FirstOrDefault();
                 dieu_chuyen_thiet_bi.MAND_THUC_HIEN = "temp";
                 dieu_chuyen_thiet_bi.NGAY_CHUYEN = DateTime.Now;
                 dieu_chuyen_thiet_bi.GHI_CHU = form["GHI_CHU"];
 
+                //Thay đổi trạng thái thiết bị
+                var mATB = Int32.Parse(form["maTB"]);
+                var tHIETBI = (from a in db.THIETBIs
+                               where a.MATB == mATB
+                               select a).FirstOrDefault();
+                tHIETBI.TINH_TRANG = "Đang điều chuyển";
+
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
                 nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                nHAT_KY_THIET_BI.TINH_TRANG = "Được điều chuyển";
+                nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
                 nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
 
                 if (ModelState.IsValid)
                 {
+                    db.Entry(tHIETBI).State = EntityState.Modified;
                     db.DIEU_CHUYEN_THIET_BI.Add(dieu_chuyen_thiet_bi);
                     db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                     await db.SaveChangesAsync();
@@ -99,19 +109,14 @@ namespace Source.Controllers
         }
 
         // GET: /DieuChuyenThietBi/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DIEU_CHUYEN_THIET_BI dieu_chuyen_thiet_bi = await db.DIEU_CHUYEN_THIET_BI.FindAsync(id);
-            if (dieu_chuyen_thiet_bi == null)
-            {
-                return HttpNotFound();
-            }
-            return View(dieu_chuyen_thiet_bi);
-        }
+        //public async Task<ActionResult> Details(FormCollection form, int? mATB)
+        //{
+        //    if(!String.IsNullOrEmpty(mATB))
+        //    {
+        //        form["MATB"] = mATB;
+        //    }
+        //    return RedirectToAction("Index");
+        //}
 
         // GET: /DieuChuyenThietBi/Create
         public ActionResult Create()

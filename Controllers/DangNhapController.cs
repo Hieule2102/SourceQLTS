@@ -23,13 +23,9 @@ namespace Source.Controllers
             if (temp != null)
             {
                 var temp1 = form["MAT_KHAU"];
-                if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == temp) == null)
+                if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == temp) == null || db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == temp1) == null)
                 {
-                    ViewBag.ErrorMessage = "Tài khoản không tồn tại";
-                }
-                else if (db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == temp1) == null)
-                {
-                    ViewBag.ErrorMessage = "Mật khẩu không đúng";
+                    ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ";
                 }
                 else
                 {
@@ -51,16 +47,16 @@ namespace Source.Controllers
                                             select b.MA_NHOM).FirstOrDefault();
 
                     Session["DANH_MUC"] = (from b in db.NHOM_ND_CHUCNANG
-                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2
-                                            select b.MA_NHOM).FirstOrDefault();
+                                           where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2
+                                           select b.MA_NHOM).FirstOrDefault();
 
                     Session["BAO_CAO"] = (from b in db.NHOM_ND_CHUCNANG
-                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3
-                                            select b.MA_NHOM).FirstOrDefault();
+                                          where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3
+                                          select b.MA_NHOM).FirstOrDefault();
 
                     Session["QL_ND"] = (from b in db.NHOM_ND_CHUCNANG
-                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4
-                                            select b.MA_NHOM).FirstOrDefault();
+                                        where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4
+                                        select b.MA_NHOM).FirstOrDefault();
 
                     return RedirectToAction("Index", "Home");
                 }

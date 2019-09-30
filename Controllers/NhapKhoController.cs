@@ -21,12 +21,16 @@ namespace Source.Controllers
             //var nhap_kho = db.NHAP_KHO.Include(n => n.DON_VI).Include(n => n.NGUOI_DUNG).Include(n => n.THIETBI);
             //return View(await nhap_kho.ToListAsync());
 
-            if (!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 1 &&
                                                          a.MA_QUYEN == 1 &&
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
             }
 
             return View();
@@ -91,6 +95,7 @@ namespace Source.Controllers
                 }
 
                 thiet_Bi.NGAY_MUA = DateTime.Parse(form["NGAY_MUA"]);
+                thiet_Bi.TINH_TRANG = "Mới nhập";
 
                 temp = form["MA_NHOMTB"].ToString();
                 var nhomTB = (from d in db.NHOM_THIETBI
@@ -186,6 +191,11 @@ namespace Source.Controllers
                                                  select p.MA_DON_VI).FirstOrDefault();
                 }
                 nhap_Kho_Create.NGAY_NHAP = DateTime.Now;
+
+                temp = Session["TEN_DANG_NHAP"].ToString();
+                nhap_Kho_Create.MAND_NHAP = (from p in db.NGUOI_DUNG
+                                      where p.TEN_DANG_NHAP == temp
+                                      select p.MA_ND).FirstOrDefault();
 
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();

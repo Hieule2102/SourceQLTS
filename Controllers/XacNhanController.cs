@@ -18,10 +18,7 @@ namespace Source.Controllers
         // GET: XacNhan
         public async Task<ActionResult> Index()
         {
-            var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
-            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
-
-            if (!String.IsNullOrEmpty(Session["CHUC_NANG"].ToString()))
+            if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 18 &&
@@ -29,6 +26,13 @@ namespace Source.Controllers
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
             }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
+
+            var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
+            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
             return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
         }
 

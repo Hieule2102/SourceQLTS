@@ -19,49 +19,52 @@ namespace Source.Controllers
         // GET: /DanhSachThietBi/
         public async Task<ActionResult> Index()
         {
-            //Nhóm thiết bị
-            var dsLOAITB = new List<string>();
-            var qLOAITB = (from d in db.LOAI_THIETBI
-                           orderby d.TEN_LOAI
-                           select d.TEN_LOAI);
-            dsLOAITB.AddRange(qLOAITB.Distinct());
-            ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
+            if (Session["BAO_CAO"] != null)
+            {
+                var temp = Session["NHOM_ND"].ToString();
+                //ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 8 &&
+                //                                         a.MA_QUYEN == 4 &&
+                //                                         a.MA_NHOM == temp).FirstOrDefault();
 
-            //Nhóm thiết bị
-            var dsNhomTB = new List<string>();
-            var qNhomTB = (from d in db.NHOM_THIETBI
-                           orderby d.TEN_NHOM
-                           select d.TEN_NHOM);
-            dsNhomTB.AddRange(qNhomTB.Distinct());
-            ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
+                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+                //                                        a.MA_QUYEN == 3 &&
+                //                                        a.MA_NHOM == temp).FirstOrDefault();
 
-            //Đơn vị
-            var dsTenDonVi = new List<string>();
-            var qTenDonVi = (from d in db.DON_VI
-                             orderby d.TEN_DON_VI
-                             select d.TEN_DON_VI);
-            dsTenDonVi.AddRange(qTenDonVi.Distinct());
-            ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
+                //Nhóm thiết bị
+                var dsLOAITB = new List<string>();
+                var qLOAITB = (from d in db.LOAI_THIETBI
+                               orderby d.TEN_LOAI
+                               select d.TEN_LOAI);
+                dsLOAITB.AddRange(qLOAITB.Distinct());
+                ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
 
-            //if (!String.IsNullOrEmpty(Session["BAO_CAO"].ToString()))
-            //{
-            //    var temp = Session["NHOM_ND"].ToString();
-            //    ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 8 &&
-            //                                             a.MA_QUYEN == 4 &&
-            //                                             a.MA_NHOM == temp).FirstOrDefault();
+                //Nhóm thiết bị
+                var dsNhomTB = new List<string>();
+                var qNhomTB = (from d in db.NHOM_THIETBI
+                               orderby d.TEN_NHOM
+                               select d.TEN_NHOM);
+                dsNhomTB.AddRange(qNhomTB.Distinct());
+                ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
-            //    ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
-            //                                            a.MA_QUYEN == 3 &&
-            //                                            a.MA_NHOM == temp).FirstOrDefault();
-            //}
-
+                //Đơn vị
+                var dsTenDonVi = new List<string>();
+                var qTenDonVi = (from d in db.DON_VI
+                                 orderby d.TEN_DON_VI
+                                 select d.TEN_DON_VI);
+                dsTenDonVi.AddRange(qTenDonVi.Distinct());
+                ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
+            }
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
             var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
             return View(await thietbis.ToListAsync());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(string searchString, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB)
+        public async Task<ActionResult> Index(string searchString, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB, int? id)
         {
             //Đơn vị
             var dsTenDonVi = new List<string>();
@@ -117,6 +120,8 @@ namespace Source.Controllers
             else if (!String.IsNullOrEmpty(MA_DON_VI))
             {
                 thietbis = thietbis.Where(data => data.DON_VI.TEN_DON_VI == MA_DON_VI);
+
+                RedirectToAction("Index", "Home", new { id = 3 });
             }
 
             dsLOAITB.AddRange(qLOAITB.Distinct());

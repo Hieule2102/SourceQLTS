@@ -52,7 +52,7 @@ namespace Source.Controllers
                 }
             }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: /DoiMatKhau/Details/5
