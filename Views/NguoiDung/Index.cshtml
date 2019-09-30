@@ -16,6 +16,12 @@
                 <h4 class="sub-title">
                     <span id="them-sua">Thêm</span> người dùng
                 </h4>
+                <div id="ErrorMessage">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
                 @using (Html.BeginForm("Index", "NguoiDung", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
@@ -64,12 +70,7 @@
                                    placeholder="">
                         </div>
 
-                        <div id="ErrorMessage">
-                            @if (ViewBag.ErrorMessage != null)
-                            {
-                                <p style="color: red">@ViewBag.ErrorMessage</p>
-                            }
-                        </div>
+
 
                         @if (ViewBag.Them != null)
                         {
@@ -77,9 +78,10 @@
                         }
                         @if (ViewBag.Sua != null)
                         {
-                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="them" hidden="hidden">SỬA</button>
-                            <button type="submit" id="CANCEL" name="CANCEL" value="cancel" class="them" hidden="hidden">HỦY</button>
+                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                            <button class="reset d-none">HỦY</button>
                         }
+
                     </form>
                 }
             </div>

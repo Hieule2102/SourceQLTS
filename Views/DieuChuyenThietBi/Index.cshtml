@@ -11,6 +11,10 @@
     </div>
     <section class="container" id="dieu-chuyen">
         <h1 class="title">ĐIỀU CHUYỂN THIẾT BỊ</h1>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <p id="tb-sm">@ViewBag.ErrorMessage</p>
+        }
         @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
@@ -47,10 +51,7 @@
                     </div>
                 </div>
                 <div class="dv-quan-ly">
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <p style="color: red">@ViewBag.ErrorMessage</p>
-                    }
+
                     <h4 class="sub-title">
                         Đơn vị quản lý
                     </h4>
@@ -101,9 +102,9 @@
             url: "/Script/get_MATB_DIEU_CHUYEN",
             data: "{}",
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn mã thiết bị</option>';
+                var s = '<option disabled selected value>Xin chọn thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
                 }
                 $("#MATB").html(s);
             }
@@ -120,6 +121,8 @@
                 $("#MADV_NHAN").html(s);
             }
         });
+
+
     });
 
     function get_ThongTinTB() {

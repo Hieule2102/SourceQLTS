@@ -11,6 +11,12 @@
     </div>
     <section class="container" id="xuat-kho">
         <h1 class="title">XUẤT KHO</h1>
+        <div id="ErrorMessage">
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p id="tb-sm">@ViewBag.ErrorMessage</p>
+            }
+        </div>
         @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
@@ -46,14 +52,9 @@
                         <label for="">Ghi chú:</label>
                         <input type="text" name="GHI_CHU" />
                     </div>
-                    <div id="ErrorMessage">
-                        @if (ViewBag.ErrorMessage != null)
-                        {
-                            <p style="color: red">@ViewBag.ErrorMessage</p>
-                        }
-                    </div>
+
                 </div>
-                
+
                 <div class="dv-nhan">
                     <h4 class="sub-title">
                         Đơn vị tiếp nhận
@@ -86,9 +87,9 @@
             url: "/Script/get_MATB_XUAT_KHO",
             data: "{}",
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn mã thiết bị</option>';
+                var s = '<option disabled selected value>Xin chọn thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
                 }
                 $("#MATB").html(s);
             }

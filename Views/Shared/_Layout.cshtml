@@ -26,7 +26,7 @@
             <div class="container">
                 <div class="nav">
                     <ul class="nav-c accordion">
-                        <li class="menuc1"><a href="" class="c1">Trang chủ</a></li>
+                        <li class="menuc1"><a href="Home" class="c1">Trang chủ</a></li>
                         @if (Session["CHUC_NANG"] != null)
                         {
                             <li class="menuc1 accordion-section">
@@ -98,10 +98,7 @@
                         @Html.ActionLink("Đổi mật khẩu", "Index", "DoiMatKhau")
                         @Html.ActionLink("Đăng xuất", "Logout", "DangNhap")
                     }
-                    else
-                    {
-                        @Html.ActionLink("Đăng nhập", "Index", "DangNhap")
-                    }
+                    
                 </div>
                 <a href="javascript:void(0);" class="nav-icon">
                     <span></span>

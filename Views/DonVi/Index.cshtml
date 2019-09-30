@@ -14,8 +14,14 @@
         <div class="div-don-vi">
             <div class="them-don-vi">
                 <h4 class="sub-title">
-                    Thêm đơn vị
+                    <span id="them-sua">Thêm</span> đơn vị
                 </h4>
+                <div id="ErrorMessage">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
                 @using (Html.BeginForm("Index", "DonVi", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
@@ -26,7 +32,7 @@
                                    id="MA_DON_VI"
                                    name="MA_DON_VI"
                                    aria-describedby="emailHelp"
-                                   placeholder="" hidden="hidden"/>
+                                   placeholder="" hidden="hidden" />
                         </div>
                         <div class="form-group">
                             <label for="">Tên ĐV:</label>
@@ -66,21 +72,16 @@
                                    placeholder="" />
                         </div>
 
-                        <div id="ErrorMessage">
-                            @if (ViewBag.ErrorMessage != null)
-                            {
-                                <p style="color: red">@ViewBag.ErrorMessage</p>
-                            }
-                        </div>
 
-                        @if(ViewBag.Them != null)
+
+                        @if (ViewBag.Them != null)
                         {
                             <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
                         }
-                        @if(ViewBag.Sua != null)
+                        @if (ViewBag.Sua != null)
                         {
-                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="them" hidden="hidden">SỬA</button>
-                            <button type="submit" id="CANCEL" name="CANCEL" value="cancel" class="them" hidden="hidden">HỦY</button>
+                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                            <button class="reset d-none">HỦY</button>
                         }
                     </form>
                 }

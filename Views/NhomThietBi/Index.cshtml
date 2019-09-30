@@ -13,54 +13,55 @@
         <div class="div-nhom-tb">
             <div class="them-nhom-tb">
                 <h4 class="sub-title">
-                    Thêm nhóm thiết bị
+                    <span id="them-sua">Thêm</span> nhóm thiết bị
                 </h4>
+                <div id="ErrorMessage">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <p style="color: red">@ViewBag.ErrorMessage</p>
+                    }
+                </div>
+
                 @using (Html.BeginForm("Index", "NhomThietBi", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-                    <form action="">
-                        <div class="form-group">
-                            <label for="">Mã NTB:</label>
-                            <input type="text"
-                                   id="MA_NHOMTB"
-                                   name="MA_NHOMTB"
-                                   aria-describedby="emailHelp"
-                                   placeholder="" />
-                        </div>
-                        <div class="form-group">
-                            <label for="">Tên NTB:</label>
-                            <input type="text"
-                                   id="TEN_NHOM"
-                                   name="TEN_NHOM"
-                                   aria-describedby="emailHelp"
-                                   placeholder="" />
-                        </div>
-                        <div class="form-group">
-                            <label for="nhom-tb">Ghi chú:</label>
-                            <textarea id="GHI_CHU"
-                                      name="GHI_CHU"
-                                      aria-describedby="emailHelp"
-                                      placeholder=""></textarea>
-                        </div>
+            <form action="">
+                <div class="form-group">
+                    <label for="">Mã NTB:</label>
+                    <input type="text"
+                           id="MA_NHOMTB"
+                           name="MA_NHOMTB"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="">Tên NTB:</label>
+                    <input type="text"
+                           id="TEN_NHOM"
+                           name="TEN_NHOM"
+                           aria-describedby="emailHelp"
+                           placeholder="" />
+                </div>
+                <div class="form-group">
+                    <label for="nhom-tb">Ghi chú:</label>
+                    <textarea id="GHI_CHU"
+                              name="GHI_CHU"
+                              aria-describedby="emailHelp"
+                              placeholder=""></textarea>
+                </div>
 
-                        <div id="ErrorMessage">
-                            @if (ViewBag.ErrorMessage != null)
-                            {
-                                <p style="color: red">@ViewBag.ErrorMessage</p>
-                            }
-                        </div>
 
-                        @if (ViewBag.Them != null)
-                        {
-                            <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
-                        }
-                        @if (ViewBag.Sua != null)
-                        {
-                            <button type="submit" id="EDIT" name="EDIT" value="edit" class="them" hidden="hidden">SỬA</button>
-                            <button type="submit" id="CANCEL" name="CANCEL" value="cancel" class="them" hidden="hidden">HỦY</button>
-                        }
-                    </form>
+                @if (ViewBag.Them != null)
+                {
+                    <button type="submit" id="SAVE" name="SAVE" value="save" class="them">THÊM</button>
+                }
+                @if (ViewBag.Sua != null)
+                {
+                    <button type="submit" id="EDIT" name="EDIT" value="edit" class="sua d-none">SỬA</button>
+                    <button class="reset d-none">HỦY</button>
+                }
+            </form>
                 }
             </div>
             <div class="ds-ntb">

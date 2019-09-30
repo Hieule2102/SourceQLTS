@@ -2,7 +2,7 @@
 
     <main>
         <div class="container link">
-            <p>Trang chủ > Báo cáo > Xác nhận điều chuyển</p>
+            <p>Trang chủ > Báo cáo > Xác nhận</p>
             <hr />
         </div>
         <section class="container" id="xac-nhan">
@@ -35,6 +35,7 @@
                         <tr>
                             <th>Mã ĐC</th>
                             <th>Mã TB</th>
+                            <th>Tên TB</th>
                             <th>Thời gian chuyển</th>
                             <th>ĐVQL</th>
                             <th>ĐV nhận</th>
@@ -42,29 +43,32 @@
                         </tr>
                         @foreach (var item in Model)
                         {
-                            <tr class="xn" onclick="Edit(event, '@item.MA_DIEU_CHUYEN')">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MA_DIEU_CHUYEN)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.NGAY_CHUYEN)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DON_VI1.TEN_DON_VI)
-                                </td>
-                                @*<td>
-                                    @Html.DisplayFor(modelItem => item.MAND_NHAN)
-                                </td>*@
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.GHI_CHU)
-                                </td>
-                            </tr>
+                    <tr class="xn" onclick="Edit(event, '@item.MA_DIEU_CHUYEN')">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MA_DIEU_CHUYEN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.THIETBI.MATB)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NGAY_CHUYEN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DON_VI1.TEN_DON_VI)
+                        </td>
+                        @*<td>
+            @Html.DisplayFor(modelItem => item.MAND_NHAN)
+        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GHI_CHU)
+                        </td>
+                    </tr>
                         }
                     </table>
                 </div>
@@ -116,6 +120,7 @@
                     </div>
                 </div>
             }
+
         </section>
     </main>
 

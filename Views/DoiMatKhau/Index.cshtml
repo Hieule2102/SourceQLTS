@@ -5,9 +5,13 @@
 }
 
 <main>
-    <section id="login" class="login-show">
+    <section id="login">
         <div class="dang-nhap">
             <h4>ĐỔI MẬT KHẨU</h4>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p id="tb-sm">@ViewBag.ErrorMessage</p>
+            }
             @using (Html.BeginForm("Index", "DoiMatKhau", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
@@ -32,15 +36,12 @@
                         <input type="password" name="XAC_NHAN_MAT_KHAU" placeholder="" />
                     </div>
 
-                    @if (ViewBag.ErrorMessage != null)
-                        {
-                            <p style="color: red">@ViewBag.ErrorMessage</p>
-                        }
+
 
                     <button type="submit">Xác nhận</button>
                 </form>
             }
-            <a class="login-close"><i class="far fa-times-circle fa-2x"></i></a>
+
         </div>
     </section>
 </main>
