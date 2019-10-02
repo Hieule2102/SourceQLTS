@@ -1,27 +1,25 @@
 ﻿$(document).ready(function () {
     $('.nav-icon').click(function () {
         $('.nav-icon').toggleClass('nav-close');
-    });
-    $('.nav-icon').click(function () {
+        $('.nav').toggleClass('d-none');
         $('header').toggleClass('header-show');
-    });
-    $('.nav-icon').click(function () {
         $('.navbar').toggleClass('navbar-show');
     });
-    $('.nav-icon').click(function () {
-        $('.nav').toggleClass('d-none');
-    });
-
-
+    
     $('.login-close').click(function () {
         $('#login').removeClass('login-show');
     });
 
-    $('#chct').click(function () {
-        $('.cau-hinh-chi-tiet').addClass('cau-hinh-chi-tiet-show');
+    $(".tablinks").click(function () {
+        $(".xk-dc").removeClass("d-none");
+        $(".div-cauhinh").removeClass("d-none");
     });
-    $('.close-cauhinh').click(function () {
-        $('.cau-hinh-chi-tiet').removeClass('cau-hinh-chi-tiet-show');
+    $("#chct").click(function () {
+        $(".cau-hinh-chi-tiet").removeClass("d-none");
+    });
+
+    $(".close-cauhinh").click(function () {
+        $(".cau-hinh-chi-tiet").addClass("d-none");
     });
 
     $('.xn').click(function () {
@@ -53,31 +51,39 @@
         $("#them-sua").html("Sửa");
         $("#tb-sm").addClass("d-none");
     });
-});
 
-    // Accordion
-    function close_accordion_section() {
-        $('.accordion .accordion-section-title').removeClass('active');
-        $('.accordion .accordion-section-content').slideUp(300).removeClass('open');
+    if ($("body").width() <= 768) {
+        $(".tablinks").click(function () {
+            $(".cau-hinh-chi-tiet").removeClass("d-none");
+        });
     }
 
-    $('.accordion-section-title').click(function (e) {
-        // Grab current anchor value
-        var currentAttrValue = $(this).attr('href');
-
-        if ($(e.target).is('.active')) {
-            close_accordion_section();
-        } else {
-            close_accordion_section();
-
-            // Add active class to section title
-            $(this).addClass('active');
-            // Open up the hidden content panel
-            $('.accordion ' + currentAttrValue).slideDown(300).addClass('open');
-        }
-
+    $(".toggle").click(function (e) {
         e.preventDefault();
+
+        var $this = $(this);
+
+        if ($this.next().hasClass("show")) {
+            $this.next().removeClass("show");
+            $this.next().slideUp(350);
+        } else {
+            $this
+                .parent()
+                .parent()
+                .find("li .inner")
+                .removeClass("show");
+            $this
+                .parent()
+                .parent()
+                .find("li .inner")
+                .slideUp(350);
+            $this.next().toggleClass("show");
+            $this.next().slideToggle(350);
+        }
     });
+});
+
+    
 
 function btn_Edit(evt, row) {
     var i, btn_edit, tablinks;
