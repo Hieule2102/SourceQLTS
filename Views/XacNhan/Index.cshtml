@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.DIEU_CHUYEN_THIET_BI>
+﻿@model IEnumerable<Source.Models.XAC_NHAN_DIEU_CHUYEN>
 
     <main>
         <div class="container link">
@@ -33,41 +33,22 @@
                 <div class="xac-nhan">
                     <table id="myTable" onclick="on_click()">
                         <tr>
-                            <th>Mã ĐC</th>
                             <th>Mã TB</th>
                             <th>Tên TB</th>
-                            <th>Thời gian chuyển</th>
-                            <th>ĐVQL</th>
-                            <th>ĐV nhận</th>
-                            <th>Ghi chú</th>
+                            @*<th>Thời gian chuyển</th>*@
                         </tr>
                         @foreach (var item in Model)
                         {
-                    <tr class="xn" onclick="Edit(event, '@item.MA_DIEU_CHUYEN')">
+                    <tr class="xn" onclick="Edit(event, '@item.MATB')">
                         <td>
-                            @Html.DisplayFor(modelItem => item.MA_DIEU_CHUYEN)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.THIETBI.MATB)
+                            @Html.DisplayFor(modelItem => item.MATB)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NGAY_CHUYEN)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DON_VI1.TEN_DON_VI)
-                        </td>
                         @*<td>
-            @Html.DisplayFor(modelItem => item.MAND_NHAN)
-        </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GHI_CHU)
-                        </td>
+                            @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
+                        </td>*@
                     </tr>
                         }
                     </table>
@@ -85,12 +66,12 @@
                                 <td id="TENTB"></td>
                             </tr>
                             <tr>
-                                <td>Thời gian chuyển:</td>
-                                <td id="NGAY_CHUYEN"></td>
+                                <td>Thời gian thực hiện:</td>
+                                <td id="NGAY_THUC_HIEN"></td>
                             </tr>
                             <tr>
-                                <td>Đơn vị QL:</td>
-                                <td id="DV_QL"></td>
+                                <td>Đơn vị thực hiện:</td>
+                                <td id="DV_THUC_HIEN"></td>
                             </tr>
                             <tr>
                                 <td>Đơn vị nhận:</td>
@@ -109,13 +90,12 @@
                             @if (ViewBag.Them != null)
                             {
                                 <button class="da-nhan" name="XAC_NHAN" value="xac_nhan">XÁC NHẬN</button>
-                                <button class="luu" id="huy-xn">HỦY</button>
                             }
+                            <button class="luu" id="huy-xn">HỦY</button>
                         </div>
                     </div>
 
                     <div hidden="hidden">
-                        <input name="MA_DIEU_CHUYEN" />
                         <input name="MATB" />
                     </div>
                 </div>
@@ -139,18 +119,16 @@
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinDieuChuyen",
-            data: { ma_DIEU_CHUYEN: row },
+            data: { mATB: row },
             success: function (data) {
-                $("#MA_DIEU_CHUYEN").html(data.MA_DIEU_CHUYEN);
                 $("#MATB").html(data.MATB);
                 $("#TENTB").html(data.TENTB);
-                $("#NGAY_CHUYEN").html(data.NGAY_CHUYEN);
-                $("#DV_QL").html(data.DV_QL);
+                $("#NGAY_THUC_HIEN").html(data.NGAY_THUC_HIEN);
+                $("#DV_THUC_HIEN").html(data.DV_THUC_HIEN);
                 $("#DV_NHAN").html(data.DV_NHAN);
                 $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
                 $("#GHI_CHU").html(data.GHI_CHU);
 
-                document.getElementsByName("MA_DIEU_CHUYEN")[0].value = data.MA_DIEU_CHUYEN;
                 document.getElementsByName("MATB")[0].value = data.MATB;
             }
         });

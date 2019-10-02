@@ -31,39 +31,50 @@
                 <tr>
                     <th>Mã TB</th>
                     <th>Tên TB</th>
-                    <th>Thời gian chuyển</th>
-                    <th>ĐVQL</th>
+                    <th>ĐV thực hiện</th>
                     <th>ĐV nhận</th>
-                    @*<th>Người nhận</th>*@
-                    <th>Thời gian xác nhận</th>
                     <th>Ghi chú</th>
+                    <th>Người xác nhận</th>
+                    <th>Thời gian xác nhận</th>
                 </tr>
                 @foreach (var item in Model)
                 {
                     <tr class="xn">
                         <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)
+                            @Html.DisplayFor(modelItem => item.MATB)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                            @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
                         </td>
+                        @if(item.MA_XUAT_KHO != null)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.XUAT_KHO.DON_VI.TEN_DON_VI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.XUAT_KHO.DON_VI1.TEN_DON_VI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.XUAT_KHO.GHI_CHU)
+                            </td>
+                        }
+                        @if(item.MA_DIEU_CHUYEN != null)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI.TEN_DON_VI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.GHI_CHU)
+                            </td>
+                        }
                         <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.NGAY_CHUYEN)
+                            @Html.DisplayFor(modelItem => item.MAND_XAC_NHAN)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI.TEN_DON_VI)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI)
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.MANS_NHAN)
-                        </td>*@
                         <td>
                             @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.GHI_CHU)
                         </td>
                     </tr>
                 }

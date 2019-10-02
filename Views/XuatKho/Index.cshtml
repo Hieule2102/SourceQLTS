@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Index";
+    var a = ViewBag.MATB_XK;
 }
 
 <main>
@@ -28,7 +29,14 @@
                     </h4>
                     <div class="form-group">
                         <label for="">Mã thiết bị:</label>
-                        <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
+                        @if (ViewBag.MATB_XK != null)
+                        {
+                            <input class="form-control" id="MATB" name="MATB" value=@ViewBag.MATB_XK readonly />
+                        }
+                        else
+                        {
+                            <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
+                        }
                     </div>
                     <div class="form-group">
                         <label for="">Tên thiết bị:</label>
@@ -38,6 +46,15 @@
                     <div class="form-group">
                         <label for="">ĐVQL:</label>
                         <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người QL:</label>
+                        <input class="form-control"
+                               id="MAND_QL"
+                               name="MAND_QL"
+                               aria-describedby="emailHelp"
+                               placeholder="" 
+                               readonly />
                     </div>
                     <div class="form-group">
                         <label for="">Người xuất:</label>
@@ -73,8 +90,8 @@
                 @if (ViewBag.Them != null)
                 {
                     <button class="luu" name="SAVE" value="save">LƯU</button>
-                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
                 }
+                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
             </div>
         }
     </section>
@@ -82,6 +99,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        var maTB = $('#MATB').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_ThongTinTB",
+            data: { maTB: maTB },
+            success: function (data) {
+                $("#TENTB").val(data.TENTB);
+                $("#MADV_QL").val(data.TEN_DON_VI);
+                $("#MAND_QL").val(data.TEN_ND);
+            }
+        });
         $.ajax({
             type: "GET",
             url: "/Script/get_MATB_XUAT_KHO",
@@ -115,8 +143,9 @@
             url: "/Script/get_ThongTinTB",
             data: { maTB: maTB },
             success: function (data) {
-                $("#TENTB").val(data.tenTB);
-                $("#MADV_QL").val(data.tenDonVi);
+                $("#TENTB").val(data.TENTB);
+                $("#MADV_QL").val(data.TEN_DON_VI);
+                $("#MAND_QL").val(data.TEN_ND);
             }
         });
     };

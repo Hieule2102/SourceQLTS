@@ -130,7 +130,6 @@
                             <div class="img-container">
                                 <img id="img" alt="hinh-anh-thiet-bi" />
                             </div>
-                            <input class="ten-tb" id="MATB" name="MATB" hidden="hidden"/>
                             <p class="ten-tb" id="TENTB"></p>
                         </div>
                         <h4 class="sub-title">Thông số kỹ thuật</h4>
@@ -158,8 +157,20 @@
 
                         <button id="chct">Cấu hình chi tiết</button>
                         <div class="xk-dc">
-                            <button onclick="XuatKho()">Xuất kho</button>
-                            <button onclick="DieuChuyen()">Điều chuyển</button>
+                            @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <input class="ten-tb" id="MATB_XK" name="MATB_XK" hidden="hidden" />
+                                <button>Xuất kho</button>
+                            }
+                            @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <input class="ten-tb" id="MATB_DC" name="MATB_DC" hidden="hidden" />
+                                <button>Điều chuyển</button>
+                            }
                         </div>
                     </div>
 
@@ -271,7 +282,8 @@
             url: "/Script/get_CauHinh",
             data: { maTB: row },
             success: function (data) {
-                $("#MATB").val(data.MATB);
+                $("#MATB_DC").val(data.MATB);
+                $("#MATB_XK").val(data.MATB);
                 $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
                 if (data.MA_NHOMTB == "PC") {
@@ -390,7 +402,7 @@
     function XuatKho() {
         var mATB = $('#MATB').val();
 
-        window.location = '@Url.Action("Details", "DieuChuyenThietBi")' + mATB;
+        window.location = '@Url.Action("Index", "DieuChuyenThietBi")' + mATB;
         
     };
 </script>
