@@ -4,136 +4,136 @@
     ViewBag.Title = "Index";
 }
 
-    <main>
-        <div class="container link">
-            <p>Trang chủ > Chức năng > Nhập kho</p>
-            <hr />
-        </div>
-        @using (Html.BeginForm("Index", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-    <section class="container" id="nhap-kho">
-        <h1 class="title">NHẬP KHO</h1>
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <p id="tb-sm">@ViewBag.ErrorMessage</p>
-        }
-        <div class="form-nhap-kho">
-            <div class="them-hinh-anh">
-                <h4 class="sub-title">
-                    Thêm hình ảnh
-                </h4>
-                <div class="img-container">
-                    <img src="" alt="" />
-                </div>
-                <input type="file" name="HINH_ANH" />
-            </div>
-            <div class="thong-tin-chung">
-
-                <h4 class="sub-title">
-                    Thông tin chung
-                </h4>
-                <div class="form-group">
-                    <label for="">Nhóm thiết bị: </label>
-                    @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
-                    <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="Fill_LoaiTB()"></select>
-                </div>
-                <div class="form-group">
-                    <label for="">Loại thiết bị: </label>
-                    <select class="form-control" id="MA_LOAITB" name="MA_LOAITB"></select>
-                </div>
-
-                <div class="form-group">
-                    <label for="">Tên thiết bị:</label>
-                    <input type="text" name="TENTB" />
-                </div>
-                <div class="form-group">
-                    <label for="">Số serial:</label>
-                    <input type="text" name="SO_SERIAL" />
-                </div>
-                <div class="form-group">
-                    <label for="">Giá tiền:</label>
-                    <input type="text" name="GIA_TIEN" />
-                </div>
-                <div class="form-group">
-                    <label for="">THBH:</label>
-                    <input type="text" name="THOI_HAN_BAO_HANH" />
-                </div>
-                <div class="form-group">
-                    <label for="">Ngày mua:</label>
-                    <input type="date" name="NGAY_MUA" />
-                </div>
-                @*<div class="form-group">
-                    <label for="">Ngày nhập:</label>
-                    <input type="text" name="user-name" />
-                </div>*@
-                <div class="form-group">
-                    <label for="">Đơn vị mua:</label>
-                    @*@Html.DropDownList("MA_DON_VI", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
-                    <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
-                </div>
-                <div class="form-group">
-                    <label for="">Nhà cung cấp:</label>
-                    @*@Html.DropDownList("MA_NCC", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
-                    <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
-                </div>
-            </div>
-            <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
-                <h4 class="sub-title">
-                    Thông số kỹ thuật
-                </h4>
-                <div id="first" class="form-group">
-                    <label id="label1"></label>
-                    <select class="form-control"
-                            id="thong_so1"
-                            name="thong_so1"></select>
-                    <input type="text" id="input_thong_so1" name="input_thong_so1" />
-                </div>
-                <div id="second" class="form-group">
-                    <label id="label2"></label>
-                    <select class="form-control"
-                            id="thong_so2"
-                            name="thong_so2"></select>
-                </div>
-                <div id="third" class="form-group">
-                    <label id="label3"></label>
-                    <select class="form-control"
-                            id="thong_so3"
-                            name="thong_so3"></select>
-                    <input type="text" id="input_thong_so3" name="input_thong_so3" />
-                </div>
-                <div id="fourth" class="form-group">
-                    <label id="label4"></label>
-                    <select class="form-control"
-                            id="thong_so4"
-                            name="thong_so4"></select>
-                    <input type="text" id="input_thong_so4" name="input_thong_so4" />
-                </div>
-                <div id="fifth" class="form-group">
-                    <label id="label5"></label>
-                    <select class="form-control"
-                            id="thong_so5"
-                            name="thong_so5"></select>
-                </div>
-                <div id="sixth" class="form-group">
-                    <label id="label6"></label>
-                    <select class="form-control"
-                            id="thong_so6"
-                            name="thong_so6"></select>
-                </div>
-            </div>
-        </div>
-        <div class="submit">
-            @if (ViewBag.Them != null)
+<main>
+    <div class="container link">
+        <p>Trang chủ > Chức năng > Nhập kho</p>
+        <hr />
+    </div>
+    @using (Html.BeginForm("Index", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <section class="container" id="nhap-kho">
+            <h1 class="title">NHẬP KHO</h1>
+            @if (ViewBag.ErrorMessage != null)
             {
-                <button type="submit" id="SAVE" name="SAVE" value="save" class="luu">THÊM</button>
-                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                <p id="tb-sm">@ViewBag.ErrorMessage</p>
             }
-        </div>
-    </section>
-        }
-    </main>
+            <div class="form-nhap-kho">
+                <div class="them-hinh-anh">
+                    <h4 class="sub-title">
+                        Thêm hình ảnh
+                    </h4>
+                    <div class="img-container">
+                        <img src="" alt="" />
+                    </div>
+                    <input type="file" name="HINH_ANH" />
+                </div>
+                <div class="thong-tin-chung">
+
+                    <h4 class="sub-title">
+                        Thông tin chung
+                    </h4>
+                    <div class="form-group">
+                        <label for="">Nhóm thiết bị: </label>
+                        @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
+                        <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="Fill_LoaiTB()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Loại thiết bị: </label>
+                        <select class="form-control" id="MA_LOAITB" name="MA_LOAITB"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Tên thiết bị:</label>
+                        <input type="text" name="TENTB" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Số serial:</label>
+                        <input type="text" name="SO_SERIAL" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Giá tiền:</label>
+                        <input type="text" name="GIA_TIEN" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">THBH:</label>
+                        <input type="text" name="THOI_HAN_BAO_HANH" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Ngày mua:</label>
+                        <input type="date" name="NGAY_MUA" />
+                    </div>
+                    @*<div class="form-group">
+                            <label for="">Ngày nhập:</label>
+                            <input type="text" name="user-name" />
+                        </div>*@
+                    <div class="form-group">
+                        <label for="">Đơn vị mua:</label>
+                        @*@Html.DropDownList("MA_DON_VI", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
+                        <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Nhà cung cấp:</label>
+                        @*@Html.DropDownList("MA_NCC", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
+                        <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
+                    </div>
+                </div>
+                <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
+                    <h4 class="sub-title">
+                        Thông số kỹ thuật
+                    </h4>
+                    <div id="first" class="form-group">
+                        <label id="label1"></label>
+                        <select class="form-control"
+                                id="thong_so1"
+                                name="thong_so1"></select>
+                        <input type="text" id="input_thong_so1" name="input_thong_so1" />
+                    </div>
+                    <div id="second" class="form-group">
+                        <label id="label2"></label>
+                        <select class="form-control"
+                                id="thong_so2"
+                                name="thong_so2"></select>
+                    </div>
+                    <div id="third" class="form-group">
+                        <label id="label3"></label>
+                        <select class="form-control"
+                                id="thong_so3"
+                                name="thong_so3"></select>
+                        <input type="text" id="input_thong_so3" name="input_thong_so3" />
+                    </div>
+                    <div id="fourth" class="form-group">
+                        <label id="label4"></label>
+                        <select class="form-control"
+                                id="thong_so4"
+                                name="thong_so4"></select>
+                        <input type="text" id="input_thong_so4" name="input_thong_so4" />
+                    </div>
+                    <div id="fifth" class="form-group">
+                        <label id="label5"></label>
+                        <select class="form-control"
+                                id="thong_so5"
+                                name="thong_so5"></select>
+                    </div>
+                    <div id="sixth" class="form-group">
+                        <label id="label6"></label>
+                        <select class="form-control"
+                                id="thong_so6"
+                                name="thong_so6"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="submit">
+                @if (ViewBag.Them != null)
+                {
+                    <button type="submit" id="SAVE" name="SAVE" value="save" class="luu">THÊM</button>
+                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                }
+            </div>
+        </section>
+    }
+</main>
 
 <script type="text/javascript" src="~/Scripts/main.js"></script>
 
@@ -219,7 +219,7 @@
                     document.getElementById("label5").innerHTML = "VGA:";
                     document.getElementById("label6").innerHTML = "Hệ điều hành:";
 
-                    
+
 
                     $("#thong_so1").html("");
                     $("#thong_so2").html("");
@@ -289,7 +289,7 @@
                     //var options3 = '<option value="null"></option>';
 
                     for (var i = 0; i < data.LOAI_MUC.length; i++) {
-                       options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
+                        options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
                     }
 
                     $("#thong_so2").html(options2);

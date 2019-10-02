@@ -39,17 +39,17 @@
                         </tr>
                         @foreach (var item in Model)
                         {
-                    <tr class="xn" onclick="Edit(event, '@item.MATB')">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MATB)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
-                        </td>*@
-                    </tr>
+                            <tr class="xn" onclick="Edit(event, '@item.MATB')">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MATB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
+                                </td>*@
+                            </tr>
                         }
                     </table>
                 </div>

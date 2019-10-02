@@ -5,67 +5,67 @@
 }
 
 
-    <main>
-        <div class="container link">
-            <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
-            <hr />
-            <h2>@ViewBag.HINH_ANH</h2>
-        </div>
-        <section class="container" id="ds-tb">
-            @using (Html.BeginForm("Index", "DanhSachThietBi", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
-                <h1 class="title">DANH SÁCH THIẾT BỊ</h1>
-                <div class="search">
-                    <input type="text"
-                           name="searchString"
-                           class="placeholder"
-                           placeholder="Nhập tên thiết bị" />
-                    <button type="submit" class="btn-search">
-                        <span><i class="fas fa-search"></i></span>
-                    </button>
-                </div>
-                <div class="loc">
-                    <h4><i class="fas fa-filter"></i></h4>
-                    <div class="div-filter">
-                        <div class="filter1">
-                            <div class="filter">
-                                <label for="">Nhóm TB</label>
-                                @Html.DropDownList("MA_NHOMTB", null, "Tất cả", new
-                                    {
-                                        @class = "form-control",
-                                        @placeholder = "",
-                                        @onchange = @"form.submit()"
-                                    })
-                                @*<select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="form.submit()"></select>*@
-                            </div>
-                            <div class="filter">
-                                <label for="">Loại TB</label>
-                                @Html.DropDownList("MA_LOAITB", null, "Tất cả", new
-                                    {
-                                        @class = "form-control",
-                                        @placeholder = "",
-                                        @onchange = @"form.submit()"
-                                    })
-                                @*<select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="form.submit()"></select>*@
-                            </div>
+<main>
+    <div class="container link">
+        <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
+        <hr />
+        <h2>@ViewBag.HINH_ANH</h2>
+    </div>
+    <section class="container" id="ds-tb">
+        @using (Html.BeginForm("Index", "DanhSachThietBi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <h1 class="title">DANH SÁCH THIẾT BỊ</h1>
+            <div class="search">
+                <input type="text"
+                       name="searchString"
+                       class="placeholder"
+                       placeholder="Nhập tên thiết bị" />
+                <button type="submit" class="btn-search">
+                    <span><i class="fas fa-search"></i></span>
+                </button>
+            </div>
+            <div class="loc">
+                <h4><i class="fas fa-filter"></i></h4>
+                <div class="div-filter">
+                    <div class="filter1">
+                        <div class="filter">
+                            <label for="">Nhóm TB</label>
+                            @Html.DropDownList("MA_NHOMTB", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="form.submit()"></select>*@
                         </div>
-                        <div class="filter2">
-                            <div class="filter">
-                                <label for="">Đơn vị</label>
-                                @Html.DropDownList("MA_DON_VI", null, "Tất cả", new
-                                    {
-                                        @class = "form-control",
-                                        @placeholder = "",
-                                        @onchange = @"form.submit()"
-                                    })
-                                @*<select class="form-control" id="MA_DON_VI" name="MA_DON_VI" onchange="form.submit()"></select>*@
-                            </div>
+                        <div class="filter">
+                            <label for="">Loại TB</label>
+                            @Html.DropDownList("MA_LOAITB", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="form.submit()"></select>*@
+                        </div>
+                    </div>
+                    <div class="filter2">
+                        <div class="filter">
+                            <label for="">Đơn vị</label>
+                            @Html.DropDownList("MA_DON_VI", null, "Tất cả", new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = "",
+                                    @onchange = @"form.submit()"
+                                })
+                            @*<select class="form-control" id="MA_DON_VI" name="MA_DON_VI" onchange="form.submit()"></select>*@
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+        }
         <div class="div-dstb">
             <div class="ds-tb">
                 <table>
@@ -114,8 +114,8 @@
                                 @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
                             </td>
                             @*<td>
-                            @Html.DisplayFor(modelItem => item.MANS_QL)
-                        </td>*@
+                                    @Html.DisplayFor(modelItem => item.MANS_QL)
+                                </td>*@
                         </tr>
                     }
                 </table>
@@ -175,7 +175,7 @@
                     }
                 </div>
             </div>
-            
+
             <div class="cau-hinh-chi-tiet d-none">
                 <span class="close-cauhinh">
                     <i class="far fa-times-circle fa-2x"></i>
@@ -239,8 +239,8 @@
                 </div>
             </div>
         </div>
-        </section>
-    </main>
+    </section>
+</main>
 
 <script type="text/javascript">
     //$(document).ready(function () {
@@ -423,7 +423,7 @@
         var mATB = $('#MATB').val();
 
         window.location = '@Url.Action("Index", "DieuChuyenThietBi")' + mATB;
-        
+
     };
 </script>
 

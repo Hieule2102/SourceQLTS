@@ -11,8 +11,10 @@
             </div>
             <div class="dang-nhap">
                 <h4>Đăng nhập</h4>
-                @using (Html.BeginForm("Index", "DangNhap"))
+                @using (Html.BeginForm("Index", "DangNhap", FormMethod.Post))
                 {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
                     <form action="">
                         <div class="form-group-dn">
                             <label for="">Tài khoản: </label>
