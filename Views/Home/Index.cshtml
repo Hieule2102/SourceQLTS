@@ -6,10 +6,11 @@
 
 <main>
     <div class="container link">
-        <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
+        <p>Trang chủ</p>
         <hr />
     </div>
     <section class="container" id="ds-tb">
+        <h4 class="sub-title">Danh sách thiết bị</h4>
         <div class="div-dstb">
             <div class="ds-tb">
                 <table>
@@ -57,14 +58,14 @@
                                 @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
                             </td>
                             @*<td>
-                                    @Html.DisplayFor(modelItem => item.MANS_QL)
-                                </td>*@
+                            @Html.DisplayFor(modelItem => item.MANS_QL)
+                        </td>*@
                         </tr>
                     }
                 </table>
             </div>
 
-            <div class="div-cauhinh">
+            <div class="div-cauhinh d-none">
                 <div class="cau-hinh">
                     <span class="close-cauhinh">
                         <i class="far fa-times-circle fa-2x"></i>
@@ -101,11 +102,14 @@
                     <button id="chct">Cấu hình chi tiết</button>
                 </div>
 
-                <div class="cau-hinh-chi-tiet">
-                    <div class="cau-hinh">
-                        <span class="close-cauhinh">
-                            <i class="far fa-times-circle fa-2x"></i>
-                        </span>
+
+            </div>
+            <div class="cau-hinh-chi-tiet d-none">
+                <span class="close-cauhinh">
+                    <i class="far fa-times-circle fa-2x"></i>
+                </span>
+                <div class="div-chct">
+                    <div class="chct">
                         <div class="img">
                             <div class="img-container">
                                 <img id="img_ct" alt="hinh-anh-thiet-bi" />
@@ -143,6 +147,7 @@
                             </table>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
