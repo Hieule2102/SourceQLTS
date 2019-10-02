@@ -24,11 +24,12 @@ li {
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 #tb-sm {
     color: red;
+    margin-bottom: 10px;
 }
 
 header {
@@ -39,7 +40,7 @@ header {
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.45);
     position: relative;
     position: fixed;
-    z-index: 99;
+    z-index: 2;
 }
 
     header .navb {
@@ -72,6 +73,15 @@ header {
                 display: flex;
             }
 
+                header .navbar .nav .nav-c .inner {
+                    overflow: hidden;
+                    display: none;
+                }
+
+                    header .navbar .nav .nav-c .inner.show {
+                        /*display: block;*/
+                    }
+
                 header .navbar .nav .nav-c .c1 {
                     position: relative;
                     color: white;
@@ -103,8 +113,8 @@ header {
                     top: 32px;
                     left: 18%;
                     display: none;
-                    -webkit-transition: all 1s linear;
-                    transition: all 1s linear;
+                    -webkit-transition: all .5s ease;
+                    transition: all .5s ease;
                 }
 
                     header .navbar .nav .nav-c .c2 a {
@@ -193,39 +203,58 @@ main {
 }
 
     main #login {
-        display: none;
-    }
-
-    main .login-show {
-        display: -webkit-box !important;
-        display: -ms-flexbox !important;
-        display: flex !important;
+        margin-top: 140px;
+        padding-bottom: 70px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
         width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.637);
-        position: fixed;
-        top: 0;
-        left: 0;
+        overflow: hidden;
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
+        text-align: center;
     }
 
-        main .login-show .dang-nhap {
+        main #login .home {
+            text-align: center;
+        }
+
+            main #login .home h2 {
+                margin-top: 30px;
+                font-family: "Oswald", sans-serif;
+                font-size: 2em;
+            }
+
+            main #login .home h1 {
+                margin-top: 15px;
+                margin-bottom: 30px;
+                font-family: "Oswald", sans-serif;
+                font-size: 2.2em;
+                color: #0f848d;
+            }
+
+        main #login .dang-nhap {
             width: 450px;
             min-height: 370px;
             margin: auto;
             background-color: #daf1f3;
+            -webkit-box-shadow: 5px 10px 8px #888888;
+            box-shadow: 5px 10px 8px #888888;
             border-radius: 5px;
             position: relative;
             text-align: center;
         }
 
-            main .login-show .dang-nhap h4 {
+            main #login .dang-nhap h4 {
                 font-size: 1.6em;
                 color: #ffffff;
                 display: inline-block;
-                font-family: 'Oswald', sans-serif;
+                font-family: "Oswald", sans-serif;
                 font-weight: 500;
                 width: 100%;
                 height: 60px;
@@ -234,7 +263,7 @@ main {
                 margin-bottom: 2rem;
             }
 
-            main .login-show .dang-nhap .form-group-dn {
+            main #login .dang-nhap .form-group-dn {
                 display: -webkit-box;
                 display: -ms-flexbox;
                 display: flex;
@@ -248,22 +277,22 @@ main {
                 position: relative;
             }
 
-                main .login-show .dang-nhap .form-group-dn label {
+                main #login .dang-nhap .form-group-dn label {
                     font-size: 1em;
                     margin-bottom: 5px;
                     text-align: left;
                     color: black;
-                    font-family: 'Oswald', sans-serif;
+                    font-family: "Oswald", sans-serif;
                 }
 
-                main .login-show .dang-nhap .form-group-dn input {
+                main #login .dang-nhap .form-group-dn input {
                     height: 1.9rem;
                     width: 100%;
                     font-size: 1rem;
                 }
 
-            main .login-show .dang-nhap button {
-                font-family: 'Oswald', sans-serif;
+            main #login .dang-nhap button {
+                font-family: "Oswald", sans-serif;
                 width: 70%;
                 height: 40px;
                 line-height: 40px;
@@ -278,14 +307,14 @@ main {
                 cursor: pointer;
             }
 
-            main .login-show .dang-nhap .login-close {
+            main #login .dang-nhap .login-close {
                 position: absolute;
                 right: -20px;
                 top: -20px;
                 cursor: pointer;
             }
 
-                main .login-show .dang-nhap .login-close i {
+                main #login .dang-nhap .login-close i {
                     color: #110f10;
                 }
 
@@ -294,7 +323,7 @@ main {
     }
 
         main .link p {
-            font-size: .9em;
+            font-size: 0.9em;
         }
 
     main .title {
@@ -323,56 +352,68 @@ main {
         justify-content: flex-end;
     }
 
-    main button.da-nhan {
-        padding: 0.6rem 1.5rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        background-color: #d73347;
-        color: white;
-        border: none;
+    main button {
+        font-family: inherit;
+        border-radius: 5px;
         font-size: 1em;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
+        font-weight: 500;
     }
 
-    main button.luu {
-        padding: 0.6rem 2rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        background-color: #0f848d;
-        color: white;
-        border: none;
-        font-size: 1em;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
-    }
+        main button.da-nhan {
+            padding: 0.5rem 1.5rem;
+            margin-top: 1rem;
+            color: #d73347;
+            background-color: #fff;
+            border: 1.4px solid #d73347 !important;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
 
-    main button.reset {
-        padding: 0.6rem 1.2rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        background-color: #a5a5a5;
-        color: white;
-        border: none;
-        font-size: 1em;
-        font-weight: 200;
-        cursor: pointer;
-    }
+            main button.da-nhan:hover {
+                background-color: #d73347;
+                color: white;
+            }
 
-    main button.them, main button.sua {
-        padding: 0.6rem 2rem;
-        margin-top: 1rem;
-        border-radius: 8px;
-        background-color: #0f848d;
-        color: white;
-        border: none;
-        font-size: 1em;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
-    }
+        main button.reset {
+            padding: 0.5rem 1.5rem;
+            margin-top: 1rem;
+            background-color: #fff;
+            color: #353b3b;
+            border: 1.4px solid #353b3b;
+            cursor: pointer;
+        }
+
+            main button.reset:hover {
+                background-color: #a5a5a5;
+                color: white;
+                border: 1.4px solid #a5a5a5;
+            }
+
+        main button.luu,
+        main button.them,
+        main button.sua {
+            padding: 0.5rem 2rem;
+            margin-top: 1rem;
+            border: 1.4px solid #0f848d;
+            color: #0f848d;
+            background-color: #fff;
+            font-family: inherit;
+            cursor: pointer;
+            -webkit-transition: all 300ms linear;
+            transition: all 300ms linear;
+        }
+
+            main button.luu:hover,
+            main button.them:hover,
+            main button.sua:hover {
+                background-color: #0f848d;
+                color: white;
+            }
+
+        main button.luu {
+            margin-right: 10px;
+        }
 
     main table {
         border-collapse: collapse;
@@ -380,7 +421,7 @@ main {
     }
 
         main table tr:hover {
-            background-color: #C1DFF0;
+            background-color: #c1dff0;
         }
 
             main table tr:hover span {
@@ -388,7 +429,7 @@ main {
             }
 
         main table .active {
-            background-color: #C1DFF0;
+            background-color: #c1dff0;
         }
 
         main table td,
@@ -446,7 +487,7 @@ main {
 
         main .form-group label {
             margin-bottom: 7px;
-            font-size: .9em;
+            font-size: 0.9em;
         }
 
         main .form-group input,
@@ -473,20 +514,17 @@ main {
         }
 
         main .search .btn-search {
-            padding: 0.5rem 1.5rem;
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             background-color: #0f848d;
             color: white;
             border: none;
             font-size: 0.9em;
             font-weight: 200;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 0px;
         }
-
-            main .search .btn-search i {
-                display: none;
-            }
 
     main .loc {
         width: 100%;
@@ -540,23 +578,6 @@ main {
                     margin-left: 5px;
                     height: 25px;
                 }
-
-    main .home {
-        text-align: center;
-    }
-
-        main .home h2 {
-            margin-top: 150px;
-            font-family: "Oswald", sans-serif;
-            font-size: 2em;
-        }
-
-        main .home h1 {
-            margin-top: 30px;
-            margin-bottom: 150px;
-            font-family: "Oswald", sans-serif;
-            font-size: 2.2em;
-        }
 
     main #chuc-nang {
         margin-top: 50px;
@@ -908,22 +929,27 @@ main {
 
                 main #don-vi .div-don-vi .ds-dv th:nth-child(1),
                 main #don-vi .div-don-vi .ds-dv td:nth-child(1) {
-                    width: 10%;
+                    width: 8%;
                 }
 
                 main #don-vi .div-don-vi .ds-dv th:nth-child(2),
                 main #don-vi .div-don-vi .ds-dv td:nth-child(2) {
-                    width: 30%;
+                    width: 24%;
                 }
 
                 main #don-vi .div-don-vi .ds-dv th:nth-child(3),
                 main #don-vi .div-don-vi .ds-dv td:nth-child(3) {
-                    width: 30%;
+                    width: 24%;
                 }
 
                 main #don-vi .div-don-vi .ds-dv th:nth-child(4),
                 main #don-vi .div-don-vi .ds-dv td:nth-child(4) {
-                    width: 15%;
+                    width: 23%;
+                }
+
+                main #don-vi .div-don-vi .ds-dv th:nth-child(5),
+                main #don-vi .div-don-vi .ds-dv td:nth-child(5) {
+                    width: 11%;
                 }
 
     main #nha-cc {
@@ -949,12 +975,12 @@ main {
 
                 main #nha-cc .div-ncc .ds-ncc th:nth-child(1),
                 main #nha-cc .div-ncc .ds-ncc td:nth-child(1) {
-                    width: 10%;
+                    width: 8%;
                 }
 
                 main #nha-cc .div-ncc .ds-ncc th:nth-child(2),
                 main #nha-cc .div-ncc .ds-ncc td:nth-child(2) {
-                    width: 28%;
+                    width: 25%;
                 }
 
                 main #nha-cc .div-ncc .ds-ncc th:nth-child(3),
@@ -964,12 +990,12 @@ main {
 
                 main #nha-cc .div-ncc .ds-ncc th:nth-child(4),
                 main #nha-cc .div-ncc .ds-ncc td:nth-child(4) {
-                    width: 10%;
+                    width: 11%;
                 }
 
                 main #nha-cc .div-ncc .ds-ncc th:nth-child(5),
                 main #nha-cc .div-ncc .ds-ncc td:nth-child(5) {
-                    width: 10%;
+                    width: 11%;
                 }
 
     main #ds-tb {
@@ -981,10 +1007,12 @@ main {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
+            overflow: hidden;
         }
 
             main #ds-tb .div-dstb .ds-tb {
                 width: 77%;
+                margin-right: 10px;
             }
 
                 main #ds-tb .div-dstb .ds-tb th:nth-child(1),
@@ -1032,15 +1060,48 @@ main {
                     width: 13%;
                 }
 
+            main #ds-tb .div-dstb .xk-dc {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                margin-top: 15px;
+            }
+
+                main #ds-tb .div-dstb .xk-dc button {
+                    width: 80%;
+                    margin-bottom: 15px;
+                    border: 1.4px solid #0f848d;
+                    color: #0f848d;
+                    font-weight: 500;
+                    padding: 10px;
+                    border-radius: 5px;
+                    background-color: #fff;
+                    font-size: 1em;
+                    font-family: inherit;
+                    cursor: pointer;
+                    -webkit-transition: all 300ms linear;
+                    transition: all 300ms linear;
+                }
+
+                    main #ds-tb .div-dstb .xk-dc button:hover {
+                        background-color: #0f848d;
+                        color: white;
+                    }
+
             main #ds-tb .div-dstb .div-cauhinh {
                 width: 23%;
             }
 
                 main #ds-tb .div-dstb .div-cauhinh .cau-hinh {
-                    margin-left: 10px;
                     padding: 10px 10px;
                     border: 1px solid #555555;
-                    margin-bottom: 30px;
                     text-align: center;
                 }
 
@@ -1054,8 +1115,8 @@ main {
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .img-container {
                             border: 1px solid #555555;
-                            width: 220px;
-                            min-height: 150px;
+                            width: 100%;
+                            min-height: 100px;
                             margin: auto;
                             margin-bottom: 10px;
                         }
@@ -1066,7 +1127,13 @@ main {
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .ten-tb {
                             margin-bottom: 20px;
+                            font-size: 1em;
+                            font-weight: 500;
                         }
+
+                    main #ds-tb .div-dstb .div-cauhinh .cau-hinh h4 {
+                        color: #d73347;
+                    }
 
                     main #ds-tb .div-dstb .div-cauhinh .cau-hinh .div-thong-so {
                         margin-bottom: 30px;
@@ -1082,22 +1149,26 @@ main {
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .div-thong-so td {
                             border: none;
-                            border-bottom: 1px solid gray;
+                            border-bottom: 1px solid #d4d4d4;
                         }
 
-                    main #ds-tb .div-dstb .div-cauhinh .cau-hinh button {
+                            main #ds-tb .div-dstb .div-cauhinh .cau-hinh .div-thong-so td:nth-of-type(2) {
+                                color: #0f848d;
+                            }
+
+                    main #ds-tb .div-dstb .div-cauhinh .cau-hinh #chct {
                         margin-bottom: 20px;
-                        padding: 5px 15px;
-                        border: 1px solid #555555;
+                        width: 90%;
+                        padding: 5px;
+                        border: 1.2px solid #555555;
                         background-color: white;
+                        font-family: "Oswald", sans-serif;
+                        border-radius: 0px;
+                        font-weight: 200;
                         cursor: pointer;
                     }
 
             main #ds-tb .div-dstb .cau-hinh-chi-tiet {
-                display: none;
-            }
-
-            main #ds-tb .div-dstb .cau-hinh-chi-tiet-show {
                 display: block;
                 position: absolute;
                 position: fixed;
@@ -1106,12 +1177,22 @@ main {
                 top: 0;
                 left: 0;
                 background-color: rgba(0, 0, 0, 0.6);
+                z-index: 3;
             }
 
-                main #ds-tb .div-dstb .cau-hinh-chi-tiet-show .cau-hinh {
+                main #ds-tb .div-dstb .cau-hinh-chi-tiet .close-cauhinh {
+                    display: block;
                     position: absolute;
-                    position: relative;
-                    width: 400px;
+                    right: 5px;
+                    top: 5px;
+                    cursor: pointer;
+                    color: white;
+                    z-index: 4;
+                }
+
+                main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct {
+                    position: absolute;
+                    width: 50%;
                     padding: 20px 40px;
                     left: 50%;
                     top: 50%;
@@ -1119,23 +1200,109 @@ main {
                     transform: translate(-50%, -50%);
                     border: none;
                     background-color: #fff;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    justify-content: center;
                 }
 
-                    main #ds-tb .div-dstb .cau-hinh-chi-tiet-show .cau-hinh span {
-                        display: block;
-                        position: absolute;
-                        right: -20px;
-                        top: -20px;
-                        cursor: pointer;
+                    main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct {
+                        padding: 10px 10px;
+                        border: 1px solid #555555;
+                        width: 80%;
+                        border: none;
+                        text-align: center;
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-orient: vertical;
+                        -webkit-box-direction: normal;
+                        -ms-flex-direction: column;
+                        flex-direction: column;
+                        -webkit-box-align: center;
+                        -ms-flex-align: center;
+                        align-items: center;
                     }
 
-                    main #ds-tb .div-dstb .cau-hinh-chi-tiet-show .cau-hinh .div-thong-so tr:hover {
-                        background-color: inherit;
+                        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct span {
+                            display: none;
+                        }
+
+                        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img {
+                            text-align: center;
+                            width: 70%;
+                        }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .img-container {
+                                border: 1px solid #555555;
+                                width: 100%;
+                                min-height: 100px;
+                                margin: auto;
+                                margin-bottom: 10px;
+                            }
+
+                                main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .img-container img {
+                                    width: 100%;
+                                }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .ten-tb {
+                                margin-bottom: 20px;
+                                font-size: 1em;
+                                font-weight: 500;
+                            }
+
+                        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct h4 {
+                            color: #d73347;
+                        }
+
+                        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so {
+                            width: 100%;
+                            margin-bottom: 30px;
+                        }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so tr:hover {
+                                background-color: inherit;
+                            }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so tr td {
+                                cursor: default;
+                            }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so td {
+                                border: none;
+                                border-bottom: 1px solid #d4d4d4;
+                            }
+
+                                main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so td:nth-of-type(2) {
+                                    color: #0f848d;
+                                }
+
+                    main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .xk-dc {
+                        width: 100%;
+                        margin-top: 0px;
                     }
 
-                    main #ds-tb .div-dstb .cau-hinh-chi-tiet-show .cau-hinh .div-thong-so tr td {
-                        cursor: default;
-                    }
+                        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .xk-dc button {
+                            width: 70%;
+                            border: 1.4px solid #0f848d;
+                            color: #0f848d;
+                            font-weight: 500;
+                            padding: 10px;
+                            border-radius: 5px;
+                            background-color: #fff;
+                            font-size: 1em;
+                            font-family: inherit;
+                            cursor: pointer;
+                            -webkit-transition: all 300ms linear;
+                            transition: all 300ms linear;
+                        }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .xk-dc button:hover {
+                                background-color: #0f848d;
+                                color: white;
+                            }
 
     main #tk-tb {
         margin-top: 50px;
@@ -1374,7 +1541,7 @@ main {
             main #phan-quyen .phan-quyen a,
             main #phan-quyen .phan-quyen span {
                 color: #353b3b;
-                font-size: .9em;
+                font-size: 0.9em;
                 font-weight: 500;
                 cursor: default;
             }
@@ -1409,10 +1576,11 @@ main {
                             border: 2px solid gray;
                             background: white;
                             border-radius: 4px;
+                            z-index: 0;
                         }
 
                             main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck label:after {
-                                content: '';
+                                content: "";
                                 width: 10px;
                                 height: 5px;
                                 position: absolute;
@@ -1431,33 +1599,33 @@ main {
                                 opacity: 0;
                             }
 
-                        main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox] {
+                        main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"] {
                             visibility: hidden;
                         }
 
-                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox]:checked + label {
+                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"]:checked + label {
                                 background: #d73347;
                                 border: none;
                             }
 
-                                main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox]:checked + label:after {
+                                main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"]:checked + label:after {
                                     opacity: 1;
                                 }
 
-                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox].checkbox2 + label {
+                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"].checkbox2 + label {
                                 background: #67cead;
                             }
 
-                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox].checkbox2:checked + label {
+                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"].checkbox2:checked + label {
                                 background: #329d7b;
                             }
 
-                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox].checkbox3 + label {
+                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"].checkbox3 + label {
                                 background: #eeccff;
                             }
 
-                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type=checkbox].checkbox3:checked + label {
-                                background: #CC66FF;
+                            main #phan-quyen .phan-quyen .bang-pq .rowc1 .squaredcheck input[type="checkbox"].checkbox3:checked + label {
+                                background: #cc66ff;
                             }
 
                     main #phan-quyen .phan-quyen .bang-pq .rowc1 .menuc1 {
@@ -1668,7 +1836,8 @@ footer {
                         display: block;
                         width: 100%;
                         background-color: #daf1f3;
-                        border-bottom: 3px solid white;
+                        border-bottom: 2px solid white;
+                        border-top: 2px solid white;
                         padding: 0;
                         position: relative;
                     }
@@ -1686,27 +1855,34 @@ footer {
                             header .navbar-show .nav .nav-c .menuc1 .c1 span {
                                 position: absolute;
                                 display: inline-block;
-                                bottom: 45%;
+                                bottom: 10px;
                                 -webkit-transform: translateX(0);
                                 transform: translateX(0);
                                 left: 90%;
                                 color: gray;
+                                -webkit-transition: all .5s ease-in-out;
+                                transition: all .5s ease-in-out;
                             }
+
+                        header .navbar-show .nav .nav-c .menuc1 .inner {
+                            display: none;
+                            overflow: hidden;
+                        }
 
                         header .navbar-show .nav .nav-c .menuc1 .c2 {
                             display: none;
                             width: inherit;
-                            position: absolute;
-                            bottom: 0;
-                            left: 0;
+                            position: initial;
+                            margin-left: 5px;
                             z-index: 2;
                         }
 
                             header .navbar-show .nav .nav-c .menuc1 .c2 li {
                                 display: inline-block;
                                 width: inherit;
-                                background-color: #daf1f3;
+                                background-color: #eafdff;
                                 border-bottom: 2px solid white;
+                                border-top: 2px solid white;
                             }
 
                                 header .navbar-show .nav .nav-c .menuc1 .c2 li a {
@@ -1727,12 +1903,13 @@ footer {
                                 -webkit-box-direction: normal !important;
                                 -ms-flex-direction: column !important;
                                 flex-direction: column !important;
-                                margin-top: 12px;
                             }
 
-                    header .navbar-show .nav .nav-c li:nth-child(5) > .c2 {
-                        left: 0% !important;
-                    }
+                            header .navbar-show .nav .nav-c .menuc1:hover .c1 > span {
+                                -webkit-transform: rotate(180deg);
+                                transform: rotate(180deg);
+                                bottom: 5px;
+                            }
 
         header .nav-icon {
             position: absolute;
@@ -1886,6 +2063,24 @@ footer {
                 -ms-flex-pack: justify;
                 justify-content: space-between;
             }
+
+    main button.da-nhan {
+        color: white;
+        background-color: #d73347;
+    }
+
+    main button.them,
+    main button.luu,
+    main button.sua {
+        color: white;
+        background-color: #0f848d;
+    }
+
+    main button.reset {
+        color: white;
+        background-color: #a5a5a5;
+        border: 1.4px solid #a5a5a5;
+    }
 
     main #chuc-nang {
         margin-top: 50px;
@@ -2108,8 +2303,10 @@ footer {
 
         main #ds-tb .div-dstb .div-cauhinh {
             display: none;
-            width: 100%;
-            height: 100vh;
+        }
+
+        main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct {
+            width: 80%;
         }
 
     main #nk-tb .loc .filter {
@@ -2236,54 +2433,23 @@ footer {
         }
 
     .submit button.da-nhan {
-        padding: 0.6rem 1rem !important;
+        padding: 0.4rem 1rem !important;
         margin-top: 1rem;
-        border-radius: 5px !important;
-        background-color: #d73347;
-        color: white;
-        border: none;
         font-size: 0.8em !important;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
     }
 
-    .submit button.luu {
-        padding: 0.6rem 1.4rem !important;
-        margin-top: 1rem;
+    .submit button.luu,
+    .submit button.them,
+    .submit button.sua {
+        padding: 0.4rem 1.4rem !important;
         border-radius: 6px !important;
-        background-color: #0f848d;
-        color: white;
-        border: none;
         font-size: 0.8em !important;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
     }
 
     .submit button.reset {
-        padding: 0.6rem 1rem !important;
-        margin-top: 1rem;
+        padding: 0.4rem 1rem !important;
         border-radius: 6px !important;
-        background-color: #a5a5a5;
-        color: white;
-        border: none;
         font-size: 0.8em !important;
-        font-weight: 200;
-        cursor: pointer;
-    }
-
-    button.them {
-        padding: 0.6rem 1.4rem !important;
-        margin-top: 1rem;
-        border-radius: 6px !important;
-        background-color: #0f848d;
-        color: white;
-        border: none;
-        font-size: 0.8em !important;
-        font-weight: 200;
-        cursor: pointer;
-        margin-right: 10px;
     }
 
     table td,
@@ -2305,21 +2471,6 @@ footer {
             width: 50% !important;
             height: 22px !important;
         }
-
-        .search .btn-search {
-            padding: 8px !important;
-            margin-left: 5px !important;
-            border-radius: 50% !important;
-        }
-
-            .search .btn-search i {
-                display: block !important;
-                font-size: 0.8em !important;
-            }
-
-            .search .btn-search span {
-                display: none !important;
-            }
 
     .loc {
         display: block !important;
@@ -2370,6 +2521,14 @@ footer {
     #login .dang-nhap {
         width: 90% !important;
     }
+
+        #login .dang-nhap .home h2 {
+            font-size: 1.7em !important;
+        }
+
+        #login .dang-nhap .home h1 {
+            font-size: 1.9em !important;
+        }
 
         #login .dang-nhap .form-group label {
             font-size: 0.9em !important;
@@ -2550,6 +2709,34 @@ footer {
         font-size: 0.7em !important;
     }
 
+    #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct {
+        width: 90% !important;
+    }
+
+        #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct {
+            width: 100% !important;
+        }
+
+    #ds-tb .div-dstb {
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
+    }
+
+        #ds-tb .div-dstb .ds-tb {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #ds-tb .div-dstb .div-cauhinh {
+            display: none;
+        }
+
+        #ds-tb .div-dstb .cau-hinh-chi-tiet-show .div-chct {
+            width: 80%;
+        }
+
     #nguoi-dung .div-nd .them-nd {
         width: 80% !important;
     }
@@ -2581,38 +2768,7 @@ footer {
                 }
 
     #phan-quyen a {
-        font-size: .8em;
+        font-size: 0.8em;
     }
-}
-
-/*----- Accordion -----*/
-.accordion,
-.accordion * {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-/*----- Section Titles -----*/
-.accordion-section-title {
-    width: 100%;
-    padding: 15px;
-    display: inline-block;
-    -webkit-transition: all linear 0.15s;
-    transition: all linear 0.15s;
-}
-
-    .accordion-section-title.active,
-    .accordion-section-title:hover {
-        /* Type */
-        text-decoration: none;
-    }
-
-.accordion-section:last-child .accordion-section-title {
-    border-bottom: none;
-}
-
-/*----- Section Content -----*/
-.accordion-section-content {
-    display: none;
 }
 /*# sourceMappingURL=main.css.map */
