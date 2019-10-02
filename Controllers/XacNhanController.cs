@@ -21,8 +21,8 @@ namespace Source.Controllers
             if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 18 &&
-                                                         a.MA_QUYEN == 1 &&
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
+                                                         a.MA_QUYEN == 5 &&
                                                          a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
             }
@@ -31,9 +31,8 @@ namespace Source.Controllers
                 return HttpNotFound("You have no accesss permissions at this");
             }
 
-            var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
-            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
-            return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
+            var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
+            return View(await xAC_NHAN.ToListAsync());
         }
 
         [HttpPost]
@@ -41,23 +40,31 @@ namespace Source.Controllers
         public async Task<ActionResult> Index(string XAC_NHAN, FormCollection form, string SEARCH_STRING)
         {
             var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 18 &&
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
-
-            var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(a => a.MA_DIEU_CHUYEN).ToList();
-            var dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => !xAC_NHAN_DIEU_CHUYEN.Contains(a.MA_DIEU_CHUYEN));
+            var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(a => a.THIETBI.TENTB.Contains(SEARCH_STRING));
+                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.THIETBI.TENTB.Contains(SEARCH_STRING));
             }
             else if (!String.IsNullOrEmpty(XAC_NHAN))
             {
                 //Thêm vào xác nhận điều chuyển
-                XAC_NHAN_DIEU_CHUYEN create_XAC_NHAN_DIEU_CHUYEN = new XAC_NHAN_DIEU_CHUYEN();
-                create_XAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN = Int32.Parse(form["MA_DIEU_CHUYEN"]);
-                //a.MAND_XAC_NHAN = Session["TEN_DANG_NHAP"].ToString();
-                create_XAC_NHAN_DIEU_CHUYEN.THOI_GIAN_XAC_NHAN = DateTime.Now;
+                var temp = Int32.Parse(form["MATB"]);
+                //Thay đổi trạng thái thiết bị
+                var tHIETBI = db.THIETBIs.Where(a => a.MATB == temp).FirstOrDefault();
+                tHIETBI.TINH_TRANG = "Đang sử dụng";
+
+                XAC_NHAN_DIEU_CHUYEN xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MATB == temp).FirstOrDefault();
+
+                var MAND_XAC_NHAN = Session["TEN_DANG_NHAP"].ToString();
+                xAC_NHAN.MAND_XAC_NHAN = (from p in db.NGUOI_DUNG
+                                          where p.TEN_DANG_NHAP == MAND_XAC_NHAN
+                                          select p.MA_ND).FirstOrDefault();
+
+                xAC_NHAN.THOI_GIAN_XAC_NHAN = DateTime.Now;
+                xAC_NHAN.XAC_NHAN = true;
 
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
@@ -67,18 +74,18 @@ namespace Source.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    db.XAC_NHAN_DIEU_CHUYEN.Add(create_XAC_NHAN_DIEU_CHUYEN);
+                    db.Entry(tHIETBI).State = EntityState.Modified;
+                    db.Entry(xAC_NHAN).State = EntityState.Modified;
                     db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                     await db.SaveChangesAsync();
 
                     ViewBag.ErrorMessage = "Xác nhận thành công";
                 }
-                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Select(b => b.MA_DIEU_CHUYEN).ToList();
-                dIEU_CHUYEN_THIET_BI = db.DIEU_CHUYEN_THIET_BI.Where(b => !xAC_NHAN_DIEU_CHUYEN.Contains(b.MA_DIEU_CHUYEN));
+                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             }
 
             
-            return View(await dIEU_CHUYEN_THIET_BI.ToListAsync());
+            return View(await xAC_NHAN_DIEU_CHUYEN.ToListAsync());
         }
 
         // GET: XacNhan/Details/5
@@ -116,8 +123,6 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_QL", xAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN);
             return View(xAC_NHAN_DIEU_CHUYEN);
         }
 
@@ -133,7 +138,6 @@ namespace Source.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_QL", xAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN);
             return View(xAC_NHAN_DIEU_CHUYEN);
         }
 
@@ -150,7 +154,6 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_QL", xAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN);
             return View(xAC_NHAN_DIEU_CHUYEN);
         }
 

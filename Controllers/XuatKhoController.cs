@@ -26,8 +26,7 @@ namespace Source.Controllers
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
                                                          a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
-
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();  
             }
             else
             {
@@ -39,73 +38,90 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(FormCollection form, string SAVE)
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_XK)
         {
             var pHAN_QUYEN = Session["NHOM_ND"].ToString();
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-            if (String.IsNullOrEmpty(form["maTB"]))
+            
+            if (!String.IsNullOrEmpty(SAVE))
             {
-                ViewBag.ErrorMessage = "Xin chọn thiết bị";
-            }
-            else if(String.IsNullOrEmpty(form["MADV_NHAN"]))
-            {
-                ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
-            }
-            else if (!String.IsNullOrEmpty(SAVE))
-            {
-                //Tạo xuất kho
-                var xuat_kho = new XUAT_KHO();
-                xuat_kho.MATB = Int32.Parse(form["maTB"]);
-
-                var temp = form["MADV_QL"].ToString();
-                xuat_kho.MADV_XUAT = (from p in db.DON_VI
-                                             where p.TEN_DON_VI == temp
-                                             select p.MA_DON_VI).FirstOrDefault();
-
-                temp = Session["TEN_DANG_NHAP"].ToString();
-                xuat_kho.MAND_XUAT = (from p in db.NGUOI_DUNG
-                                      where p.TEN_DANG_NHAP == temp
-                                      select p.MA_ND).FirstOrDefault();
-
-                temp = form["MADV_NHAN"].ToString();
-                xuat_kho.MADV_NHAN = (from p in db.DON_VI
-                                             where p.TEN_DON_VI == temp
-                                             select p.MA_DON_VI).FirstOrDefault();
-
-                temp = form["MAND_NHAN"].ToString();
-                xuat_kho.MAND_NHAN = (from p in db.NGUOI_DUNG
-                                      where p.TEN_ND == temp
-                                      select p.MA_ND).FirstOrDefault();
-
-                xuat_kho.GHI_CHU = form["GHI_CHU"];
-                xuat_kho.NGAY_XUAT = DateTime.Now;
-
-                //Thay đổi trạng thái thiết bị
-                var mATB = Int32.Parse(form["maTB"]);
-                var tHIETBI = (from a in db.THIETBIs
-                               where a.MATB == mATB
-                               select a).FirstOrDefault();
-                tHIETBI.TINH_TRANG = "Đang điều chuyển";
-
-
-                //Thêm vào nhật ký thiết bị
-                NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
-                nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
-
-                if (ModelState.IsValid)
+                if (String.IsNullOrEmpty(form["MATB"]))
                 {
-                    db.Entry(tHIETBI).State = EntityState.Modified;
-                    db.XUAT_KHO.Add(xuat_kho);
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
-                    await db.SaveChangesAsync();
-
-                    ViewBag.ErrorMessage = "Thêm thành công";
+                    ViewBag.ErrorMessage = "Xin chọn thiết bị";
                 }
+                else if (String.IsNullOrEmpty(form["MADV_NHAN"]))
+                {
+                    ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
+                }
+                else
+                {
+                    //Tạo xuất kho
+                    var xuat_kho = new XUAT_KHO();
+                    xuat_kho.MATB = Int32.Parse(form["maTB"]);
+
+                    var temp = form["MADV_QL"].ToString();
+                    xuat_kho.MADV_XUAT = (from p in db.DON_VI
+                                          where p.TEN_DON_VI == temp
+                                          select p.MA_DON_VI).FirstOrDefault();
+
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    xuat_kho.MAND_XUAT = (from p in db.NGUOI_DUNG
+                                          where p.TEN_DANG_NHAP == temp
+                                          select p.MA_ND).FirstOrDefault();
+
+                    temp = form["MADV_NHAN"].ToString();
+                    xuat_kho.MADV_NHAN = (from p in db.DON_VI
+                                          where p.TEN_DON_VI == temp
+                                          select p.MA_DON_VI).FirstOrDefault();
+
+                    temp = form["MAND_NHAN"].ToString();
+                    xuat_kho.MAND_NHAN = (from p in db.NGUOI_DUNG
+                                          where p.TEN_ND == temp
+                                          select p.MA_ND).FirstOrDefault();
+
+                    xuat_kho.GHI_CHU = form["GHI_CHU"];
+                    xuat_kho.NGAY_XUAT = DateTime.Now;
+
+                    //Thay đổi trạng thái thiết bị
+                    var mATB = Int32.Parse(form["maTB"]);
+                    var tHIETBI = (from a in db.THIETBIs
+                                   where a.MATB == mATB
+                                   select a).FirstOrDefault();
+                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
+
+                    //Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.MATB = Int32.Parse(form["MATB"]);
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
+                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+
+                    if (ModelState.IsValid)
+                    {
+                        db.Entry(tHIETBI).State = EntityState.Modified;
+                        db.XUAT_KHO.Add(xuat_kho);
+                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                        await db.SaveChangesAsync();
+
+                        ViewBag.ErrorMessage = "Thêm thành công";
+                    }
+
+                    //Thêm vào xác nhận
+                    var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
+                    xAC_NHAN.MATB = mATB;
+                    xAC_NHAN.XAC_NHAN = false;
+                    xAC_NHAN.MA_XUAT_KHO = (from a in db.XUAT_KHO
+                                            where a.MATB == mATB
+                                            select a.MA_XUAT_KHO).FirstOrDefault();
+
+                    db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
+                }
+            }
+            else if(!String.IsNullOrEmpty(MATB_XK))
+            {
+                ViewBag.MATB_XK = MATB_XK;
             }
             return View();
         }

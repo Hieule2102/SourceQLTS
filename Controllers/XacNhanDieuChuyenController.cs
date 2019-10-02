@@ -28,7 +28,7 @@ namespace Source.Controllers
                 return HttpNotFound("You have no accesss permissions at this");
             }
 
-            var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Include(x => x.DIEU_CHUYEN_THIET_BI);
+            var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == true);
             return View(await xac_nhan_dieu_chuyen.ToListAsync());
         }
 
@@ -36,11 +36,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string SEARCH_STRING)
         {
-            var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Include(x => x.DIEU_CHUYEN_THIET_BI);
+            var xac_nhan_dieu_chuyen = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == true);
 
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));
+                xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.THIETBI.TENTB.Contains(SEARCH_STRING));
             }
             return View(await xac_nhan_dieu_chuyen.ToListAsync());
         }
@@ -80,8 +80,6 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_THEO_DOI", xac_nhan_dieu_chuyen.MA_DIEU_CHUYEN);
             return View(xac_nhan_dieu_chuyen);
         }
 
@@ -97,7 +95,6 @@ namespace Source.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_THEO_DOI", xac_nhan_dieu_chuyen.MA_DIEU_CHUYEN);
             return View(xac_nhan_dieu_chuyen);
         }
 
@@ -114,7 +111,6 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MANS_THEO_DOI", xac_nhan_dieu_chuyen.MA_DIEU_CHUYEN);
             return View(xac_nhan_dieu_chuyen);
         }
 

@@ -64,7 +64,7 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(string searchString, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB, int? id)
+        public async Task<ActionResult> Index(string searchString, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB)
         {
             //Đơn vị
             var dsTenDonVi = new List<string>();

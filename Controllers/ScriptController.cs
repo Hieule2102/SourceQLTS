@@ -24,18 +24,13 @@ namespace Source.Controllers
             if (!String.IsNullOrEmpty(maTB))
             {
                 int temp = Int32.Parse(maTB);
-                var tenTB = (from d in db.THIETBIs
-                             where d.MATB == temp
-                             select d.TENTB).FirstOrDefault();
 
-                var tenDonVi = (from d in db.THIETBIs
-                             where d.MATB == temp
-                             select d.DON_VI.TEN_DON_VI).FirstOrDefault();
-
-                var thet_Bi = db.THIETBIs.Select(x => new
+                var thet_Bi = db.THIETBIs.Where(a => a.MATB == temp)
+                                         .Select(x => new
                                                 {
-                                                    tenTB,
-                                                    tenDonVi
+                                                    x.TENTB,
+                                                    x.DON_VI.TEN_DON_VI,
+                                                    x.NGUOI_DUNG.TEN_ND
                                                 }).FirstOrDefault();
 
                 return Json(thet_Bi, JsonRequestBehavior.AllowGet);
@@ -282,27 +277,44 @@ namespace Source.Controllers
         }
 
         [HttpGet]
-        public ActionResult get_ThongTinDieuChuyen(string ma_DIEU_CHUYEN)
+        public ActionResult get_ThongTinDieuChuyen(string mATB)
         {
             //Tìm tên thiết bị
-            if (!String.IsNullOrEmpty(ma_DIEU_CHUYEN))
+            if (!String.IsNullOrEmpty(mATB))
             {
-                int temp = Int32.Parse(ma_DIEU_CHUYEN);
-                var NGAY_CHUYEN = String.Format("MM/dd/yyyy");
-                var dIEUCHUYEN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MA_DIEU_CHUYEN == temp)
-                                                        .Select(x => new
-                                                                {
-                                                                    x.MA_DIEU_CHUYEN,
-                                                                    x.MATB,
-                                                                    x.THIETBI.TENTB,
-                                                                    NGAY_CHUYEN = x.NGAY_CHUYEN.ToString(),
-                                                                    DV_QL = x.DON_VI.TEN_DON_VI,
-                                                                    DV_NHAN = x.DON_VI1.TEN_DON_VI,
-                                                                    x.MAND_THUC_HIEN,
-                                                                    x.GHI_CHU
-                                                                }).FirstOrDefault();
+                int temp = Int32.Parse(mATB);
+                var NGAY_THUC_HIEN = String.Format("MM/dd/yyyy");
 
-                return Json(dIEUCHUYEN, JsonRequestBehavior.AllowGet);
+                if (db.XUAT_KHO.FirstOrDefault(a => a.MATB == temp) != null)
+                {
+                    var xAC_NHAN = db.XUAT_KHO.Where(x => x.MATB == temp)
+                                              .Select(x => new
+                                              {
+                                                  x.MATB,
+                                                  x.THIETBI.TENTB,
+                                                  NGAY_THUC_HIEN = x.NGAY_XUAT.ToString(),
+                                                  DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
+                                                  DV_NHAN = x.DON_VI1.TEN_DON_VI,
+                                                  MAND_THUC_HIEN = x.MAND_XUAT,
+                                                  x.GHI_CHU
+                                              }).FirstOrDefault();
+                    return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
+                }
+                else if (db.DIEU_CHUYEN_THIET_BI.FirstOrDefault(a => a.MATB == temp) != null)
+                {
+                    var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MA_DIEU_CHUYEN == temp)
+                                                        .Select(x => new
+                                                        {
+                                                            x.MATB,
+                                                            x.THIETBI.TENTB,
+                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN.ToString(),
+                                                            DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
+                                                            DV_NHAN = x.DON_VI1.TEN_DON_VI,
+                                                            MAND_THUC_HIEN = x.MAND_DIEU_CHUYEN,
+                                                            x.GHI_CHU
+                                                        }).FirstOrDefault();
+                    return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
+                }
             }
             return null;
         }
@@ -496,8 +508,9 @@ namespace Source.Controllers
         public ActionResult get_MATB_XUAT_KHO()
         {
             var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
+            var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
 
-            var xUATKHO = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB))
+            var xUATKHO = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB) && !maTB_DIEU_CHUYEN.Contains(x.MATB))
                                      .Select(x => new
                                      {
                                          x.MATB,
@@ -510,8 +523,9 @@ namespace Source.Controllers
         public ActionResult get_MATB_DIEU_CHUYEN()
         {
             var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
+            var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
 
-            var dIEUCHUYEN = db.XUAT_KHO.Where(x => !maTB_DIEU_CHUYEN.Contains(x.MATB))
+            var dIEUCHUYEN = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB) && !maTB_DIEU_CHUYEN.Contains(x.MATB))
                                         .Select(x => new
                                         {
                                             x.MATB,

@@ -39,84 +39,102 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(FormCollection form, string SAVE)
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_DC)
         {
             var pHAN_QUYEN = Session["NHOM_ND"].ToString();
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-            if (String.IsNullOrEmpty(form["maTB"]))
+            if (!String.IsNullOrEmpty(SAVE))
             {
-                ViewBag.ErrorMessage = "Xin chọn thiết bị";
-            }
-            else if (String.IsNullOrEmpty(form["MADV_NHAN"]))
-            {
-                ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
-            }
-            else if (!String.IsNullOrEmpty(SAVE))
-            {
-                //Tạo điều chuyển thiết bị
-                var dieu_chuyen_thiet_bi = new DIEU_CHUYEN_THIET_BI();
-                dieu_chuyen_thiet_bi.MATB = Int32.Parse(form["maTB"]);
-
-                var temp = form["MADV_QL"].ToString();
-                dieu_chuyen_thiet_bi.MADV_QL = (from p in db.DON_VI
-                                                       where p.TEN_DON_VI == temp
-                                                       select p.MA_DON_VI).FirstOrDefault();
-                temp = form["MADV_NHAN"].ToString();
-                dieu_chuyen_thiet_bi.MADV_NHAN = (from p in db.DON_VI
-                                                         where p.TEN_DON_VI == temp
-                                                         select p.MA_DON_VI).FirstOrDefault();
-                temp = form["MAND_NHAN"].ToString();
-                dieu_chuyen_thiet_bi.MAND_NHAN = (from p in db.NGUOI_DUNG
-                                                  where p.TEN_ND == temp
-                                                  select p.MA_ND).FirstOrDefault();
-
-                temp = Session["TEN_DANG_NHAP"].ToString();
-                dieu_chuyen_thiet_bi.MAND_THUC_HIEN = (from p in db.NGUOI_DUNG
-                                                      where p.TEN_DANG_NHAP == temp
-                                                      select p.MA_ND).FirstOrDefault();
-                dieu_chuyen_thiet_bi.MAND_THUC_HIEN = "temp";
-                dieu_chuyen_thiet_bi.NGAY_CHUYEN = DateTime.Now;
-                dieu_chuyen_thiet_bi.GHI_CHU = form["GHI_CHU"];
-
-                //Thay đổi trạng thái thiết bị
-                var mATB = Int32.Parse(form["maTB"]);
-                var tHIETBI = (from a in db.THIETBIs
-                               where a.MATB == mATB
-                               select a).FirstOrDefault();
-                tHIETBI.TINH_TRANG = "Đang điều chuyển";
-
-                //Thêm vào nhật ký thiết bị
-                NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
-                nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
-
-                if (ModelState.IsValid)
+                if (String.IsNullOrEmpty(form["maTB"]))
                 {
-                    db.Entry(tHIETBI).State = EntityState.Modified;
-                    db.DIEU_CHUYEN_THIET_BI.Add(dieu_chuyen_thiet_bi);
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
-                    await db.SaveChangesAsync();
-
-                    ViewBag.ErrorMessage = "Thêm thành công";
+                    ViewBag.ErrorMessage = "Xin chọn thiết bị";
                 }
-            }
+                else if (String.IsNullOrEmpty(form["MADV_NHAN"]))
+                {
+                    ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
+                }
+                else
+                {
+                    //Tạo điều chuyển thiết bị
+                    var dieu_chuyen_thiet_bi = new DIEU_CHUYEN_THIET_BI();
+                    dieu_chuyen_thiet_bi.MATB = Int32.Parse(form["maTB"]);
 
+                    var temp = form["MADV_QL"].ToString();
+                    dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN = (from p in db.DON_VI
+                                                             where p.TEN_DON_VI == temp
+                                                             select p.MA_DON_VI).FirstOrDefault();
+                    temp = form["MADV_NHAN"].ToString();
+                    dieu_chuyen_thiet_bi.MADV_NHAN = (from p in db.DON_VI
+                                                      where p.TEN_DON_VI == temp
+                                                      select p.MA_DON_VI).FirstOrDefault();
+                    temp = form["MAND_NHAN"].ToString();
+                    dieu_chuyen_thiet_bi.MAND_NHAN = (from p in db.NGUOI_DUNG
+                                                      where p.TEN_ND == temp
+                                                      select p.MA_ND).FirstOrDefault();
+
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    dieu_chuyen_thiet_bi.MAND_DIEU_CHUYEN = (from p in db.NGUOI_DUNG
+                                                             where p.TEN_DANG_NHAP == temp
+                                                             select p.MA_ND).FirstOrDefault();
+
+                    dieu_chuyen_thiet_bi.NGAY_CHUYEN = DateTime.Now;
+                    dieu_chuyen_thiet_bi.GHI_CHU = form["GHI_CHU"];
+
+                    //Thay đổi trạng thái thiết bị
+                    var mATB = Int32.Parse(form["maTB"]);
+                    var tHIETBI = (from a in db.THIETBIs
+                                   where a.MATB == mATB
+                                   select a).FirstOrDefault();
+                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
+
+                    //Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
+                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+
+                    if (ModelState.IsValid)
+                    {
+                        db.Entry(tHIETBI).State = EntityState.Modified;
+                        db.DIEU_CHUYEN_THIET_BI.Add(dieu_chuyen_thiet_bi);
+                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                        await db.SaveChangesAsync();
+
+                        ViewBag.ErrorMessage = "Thêm thành công";
+                    }
+
+                    //Thêm vào xác nhận
+                    var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
+                    xAC_NHAN.MATB = mATB;
+                    xAC_NHAN.XAC_NHAN = false;
+                    xAC_NHAN.MA_XUAT_KHO = (from a in db.DIEU_CHUYEN_THIET_BI
+                                            where a.MATB == mATB
+                                            select a.MA_DIEU_CHUYEN).FirstOrDefault();
+
+                    db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
+                }                
+            }
+            else if (!String.IsNullOrEmpty(MATB_DC))
+            {
+                ViewBag.MATB_DC = MATB_DC;
+            }
             return View();
         }
 
-        // GET: /DieuChuyenThietBi/Details/5
-        //public async Task<ActionResult> Details(FormCollection form, int? mATB)
-        //{
-        //    if(!String.IsNullOrEmpty(mATB))
-        //    {
-        //        form["MATB"] = mATB;
-        //    }
-        //    return RedirectToAction("Index");
-        //}
+        //GET: /DieuChuyenThietBi/Details/5
+        public async Task<ActionResult> Details(string MATB_DC)
+        {
+            if (!String.IsNullOrEmpty(MATB_DC))
+            {
+                var temp = Int32.Parse(MATB_DC);
+                THIETBI tHIET_BI = await db.THIETBIs.FindAsync(temp);
+                return View(tHIET_BI);
+            }
+            return View();
+        }
 
         // GET: /DieuChuyenThietBi/Create
         public ActionResult Create()
@@ -141,7 +159,7 @@ namespace Source.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_QL);
+            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN);
             ViewBag.MADV_NHAN = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_NHAN);
             ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", dieu_chuyen_thiet_bi.MATB);
             return View(dieu_chuyen_thiet_bi);
@@ -159,7 +177,7 @@ namespace Source.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_QL);
+            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN);
             ViewBag.MADV_NHAN = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_NHAN);
             ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", dieu_chuyen_thiet_bi.MATB);
             return View(dieu_chuyen_thiet_bi);
@@ -178,7 +196,7 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_QL);
+            ViewBag.MADV_QL = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN);
             ViewBag.MADV_NHAN = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", dieu_chuyen_thiet_bi.MADV_NHAN);
             ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", dieu_chuyen_thiet_bi.MATB);
             return View(dieu_chuyen_thiet_bi);
