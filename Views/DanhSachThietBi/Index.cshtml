@@ -223,14 +223,14 @@
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true)
-                                <input class="ten-tb" id="MATB_XK" name="MATB_XK" hidden="hidden" />
+                                <input class="ten-tb" id="MATB_XK_ct" name="MATB_XK_ct" hidden="hidden" />
                                 <button>Xuất kho</button>
                             }
                             @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true)
-                                <input class="ten-tb" id="MATB_DC" name="MATB_DC" hidden="hidden" />
+                                <input class="ten-tb" id="MATB_DC_ct" name="MATB_DC_ct" hidden="hidden" />
                                 <button>Điều chuyển</button>
                             }
                         </div>
@@ -304,6 +304,8 @@
             success: function (data) {
                 $("#MATB_DC").val(data.MATB);
                 $("#MATB_XK").val(data.MATB);
+                $("#MATB_DC_ct").val(data.MATB);
+                $("#MATB_XK_ct").val(data.MATB);
                 $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
                 if (data.MA_NHOMTB == "PC") {
@@ -417,13 +419,6 @@
 
             }
         });
-    };
-
-    function XuatKho() {
-        var mATB = $('#MATB').val();
-
-        window.location = '@Url.Action("Index", "DieuChuyenThietBi")' + mATB;
-
     };
 </script>
 
