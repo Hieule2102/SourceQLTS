@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -104,7 +103,7 @@ namespace Source.Controllers
 
                 //Tạo cấu hình
                 var cau_Hinh = new CAU_HINH();
-                if(nhomTB == "PC")
+                if (nhomTB == "PC")
                 {
                     if (!String.IsNullOrEmpty(form["thong_so1"]))
                     {
@@ -154,7 +153,7 @@ namespace Source.Controllers
                                                  select p.MA_HDH).First();
                     }
                 }
-                else if(nhomTB == "PR")
+                else if (nhomTB == "PR")
                 {
                     if (!String.IsNullOrEmpty(form["thong_so1"]))
                     {
@@ -194,8 +193,8 @@ namespace Source.Controllers
 
                 temp = Session["TEN_DANG_NHAP"].ToString();
                 nhap_Kho_Create.MAND_NHAP = (from p in db.NGUOI_DUNG
-                                      where p.TEN_DANG_NHAP == temp
-                                      select p.MA_ND).FirstOrDefault();
+                                             where p.TEN_DANG_NHAP == temp
+                                             select p.MA_ND).FirstOrDefault();
 
                 //Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();

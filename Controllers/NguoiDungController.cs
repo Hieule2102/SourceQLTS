@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Source.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -92,7 +91,7 @@ namespace Source.Controllers
             if (!String.IsNullOrEmpty(SAVE))
             {
                 var temp = form["MA_ND"].ToString();
-                if (String.IsNullOrEmpty(form["MA_NHOM"]) || String.IsNullOrEmpty(form["MA_DON_VI"]) 
+                if (String.IsNullOrEmpty(form["MA_NHOM"]) || String.IsNullOrEmpty(form["MA_DON_VI"])
                    || String.IsNullOrEmpty(form["MA_ND"]) || String.IsNullOrEmpty(form["TEN_ND"]))
                 {
                     ViewBag.ErrorMessage = "Xin nhập đầy đủ thông tin";
@@ -121,8 +120,8 @@ namespace Source.Controllers
 
                     temp = form["MA_NHOM"].ToString();
                     create_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                           where a.TEN_NHOM == temp
-                                           select a.MA_NHOM).FirstOrDefault();
+                                              where a.TEN_NHOM == temp
+                                              select a.MA_NHOM).FirstOrDefault();
 
                     if (ModelState.IsValid)
                     {
@@ -148,14 +147,14 @@ namespace Source.Controllers
 
                 temp = form["MA_DON_VI"].ToString();
                 edit_ND.MA_DON_VI = (from a in db.DON_VI
-                                       where a.TEN_DON_VI == temp
-                                       select a.MA_DON_VI).FirstOrDefault();
+                                     where a.TEN_DON_VI == temp
+                                     select a.MA_DON_VI).FirstOrDefault();
 
                 //Sửa nhóm người dùng
                 temp = form["MA_NHOM"].ToString();
                 edit_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                          where a.TEN_NHOM == temp
-                                          select a.MA_NHOM).FirstOrDefault();
+                                        where a.TEN_NHOM == temp
+                                        select a.MA_NHOM).FirstOrDefault();
 
                 if (ModelState.IsValid)
                 {

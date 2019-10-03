@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -84,7 +82,7 @@ namespace Source.Controllers
                 xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             }
 
-            
+
             return View(await xAC_NHAN_DIEU_CHUYEN.ToListAsync());
         }
 

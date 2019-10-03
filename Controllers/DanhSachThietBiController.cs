@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Source.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
-using System.Web.Routing;
 
 namespace Source.Controllers
 {
@@ -19,6 +17,7 @@ namespace Source.Controllers
         // GET: /DanhSachThietBi/
         public async Task<ActionResult> Index()
         {
+
             if (Session["BAO_CAO"] != null)
             {
                 var temp = Session["NHOM_ND"].ToString();
@@ -78,7 +77,7 @@ namespace Source.Controllers
             var qLOAITB = (from d in db.LOAI_THIETBI
                            orderby d.TEN_LOAI
                            select d.TEN_LOAI);
-            
+
 
             //Nhóm thiết bị
             var dsNhomTB = new List<string>();

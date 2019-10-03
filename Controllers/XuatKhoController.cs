@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -26,7 +24,7 @@ namespace Source.Controllers
                 var pHAN_QUYEN = Session["NHOM_ND"].ToString();
                 ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
                                                          a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();  
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
             }
             else
             {
@@ -38,14 +36,14 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_XK)
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_XK, string MATB_XK_ct)
         {
             var pHAN_QUYEN = Session["NHOM_ND"].ToString();
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
 
-            
+
             if (!String.IsNullOrEmpty(SAVE))
             {
                 if (String.IsNullOrEmpty(form["MATB"]))
@@ -119,9 +117,13 @@ namespace Source.Controllers
                     db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
                 }
             }
-            else if(!String.IsNullOrEmpty(MATB_XK))
+            else if (!String.IsNullOrEmpty(MATB_XK))
             {
                 ViewBag.MATB_XK = MATB_XK;
+            }
+            else if (!String.IsNullOrEmpty(MATB_XK_ct))
+            {
+                ViewBag.MATB_XK = MATB_XK_ct;
             }
             return View();
         }

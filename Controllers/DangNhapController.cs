@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -16,12 +14,18 @@ namespace Source.Controllers
         private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
 
         // GET: /DangNhap/
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(FormCollection form)
         {
-            var temp = form["TEN_DANG_NHAP"];
-
-            if (temp != null)
+            if (!String.IsNullOrEmpty(form["TEN_DANG_NHAP"].ToString()))
             {
+                var temp = form["TEN_DANG_NHAP"];
                 var temp1 = form["MAT_KHAU"];
                 if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == temp) == null || db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == temp1) == null)
                 {
@@ -62,7 +66,6 @@ namespace Source.Controllers
                 }
             }
             return View();
-
         }
 
         public ActionResult Logout()

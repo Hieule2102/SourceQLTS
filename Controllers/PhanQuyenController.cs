@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Source.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -60,7 +59,7 @@ namespace Source.Controllers
 
                     string[] checkedBox = form.GetValues("check");
                     //Tạo nhóm ND - chức năng
-                    if(pHANQUYEN.Count < 1)
+                    if (pHANQUYEN.Count < 1)
                     {
                         foreach (var item in checkedBox)
                         {
@@ -76,7 +75,7 @@ namespace Source.Controllers
                     }
                     else
                     {
-                        List<NHOM_ND_CHUCNANG> create_NHOM_ND_CHUCNANG = new List<NHOM_ND_CHUCNANG>();                       
+                        List<NHOM_ND_CHUCNANG> create_NHOM_ND_CHUCNANG = new List<NHOM_ND_CHUCNANG>();
                         foreach (var item in checkedBox)
                         {
                             string[] sPLIT = item.Split(new char[] { '.' });
@@ -96,18 +95,18 @@ namespace Source.Controllers
 
                         pHANQUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == temp).ToList();
 
-                        foreach(var itemA in pHANQUYEN)
+                        foreach (var itemA in pHANQUYEN)
                         {
                             bool flag = false;
                             foreach (var itemB in create_NHOM_ND_CHUCNANG)
                             {
-                                if(itemA.MA_CHUC_NANG == itemB.MA_CHUC_NANG && itemA.MA_QUYEN == itemB.MA_QUYEN)
+                                if (itemA.MA_CHUC_NANG == itemB.MA_CHUC_NANG && itemA.MA_QUYEN == itemB.MA_QUYEN)
                                 {
                                     flag = true;
                                     break;
                                 }
                             }
-                            if(flag == false)
+                            if (flag == false)
                             {
                                 db.NHOM_ND_CHUCNANG.Remove(itemA);
                                 await db.SaveChangesAsync();
@@ -147,7 +146,7 @@ namespace Source.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="MA_QUYEN,TEN_QUYEN")] PHAN_QUYEN phan_quyen)
+        public async Task<ActionResult> Create([Bind(Include = "MA_QUYEN,TEN_QUYEN")] PHAN_QUYEN phan_quyen)
         {
             if (ModelState.IsValid)
             {
@@ -179,7 +178,7 @@ namespace Source.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="MA_QUYEN,TEN_QUYEN")] PHAN_QUYEN phan_quyen)
+        public async Task<ActionResult> Edit([Bind(Include = "MA_QUYEN,TEN_QUYEN")] PHAN_QUYEN phan_quyen)
         {
             if (ModelState.IsValid)
             {

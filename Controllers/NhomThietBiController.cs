@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -77,7 +75,7 @@ namespace Source.Controllers
                     ViewBag.ErrorMessage = "Sửa thành công";
                 }
             }
-            
+
             return View(await db.NHOM_THIETBI.ToListAsync());
         }
 

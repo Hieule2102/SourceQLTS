@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Source.Controllers
@@ -27,11 +26,11 @@ namespace Source.Controllers
 
                 var thet_Bi = db.THIETBIs.Where(a => a.MATB == temp)
                                          .Select(x => new
-                                                {
-                                                    x.TENTB,
-                                                    x.DON_VI.TEN_DON_VI,
-                                                    x.NGUOI_DUNG.TEN_ND
-                                                }).FirstOrDefault();
+                                         {
+                                             x.TENTB,
+                                             x.DON_VI.TEN_DON_VI,
+                                             x.NGUOI_DUNG.TEN_ND
+                                         }).FirstOrDefault();
 
                 return Json(thet_Bi, JsonRequestBehavior.AllowGet);
             }
@@ -54,13 +53,13 @@ namespace Source.Controllers
 
                 var nguoi_Dung = db.NGUOI_DUNG.Where(a => a.MA_ND == ma_ND)
                                               .Select(x => new
-                                                {
-                                                    x.TEN_ND,
-                                                    x.DIEN_THOAI,
-                                                    x.DON_VI.TEN_DON_VI,
-                                                    x.EMAIL,
-                                                    nhom_ND
-                                                }).FirstOrDefault();
+                                              {
+                                                  x.TEN_ND,
+                                                  x.DIEN_THOAI,
+                                                  x.DON_VI.TEN_DON_VI,
+                                                  x.EMAIL,
+                                                  nhom_ND
+                                              }).FirstOrDefault();
                 return Json(nguoi_Dung, JsonRequestBehavior.AllowGet);
             }
 
@@ -302,7 +301,7 @@ namespace Source.Controllers
                 }
                 else if (db.DIEU_CHUYEN_THIET_BI.FirstOrDefault(a => a.MATB == temp) != null)
                 {
-                    var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MA_DIEU_CHUYEN == temp)
+                    var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MATB == temp)
                                                         .Select(x => new
                                                         {
                                                             x.MATB,

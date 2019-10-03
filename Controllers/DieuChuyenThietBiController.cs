@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Source.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Source.Models;
 
 namespace Source.Controllers
 {
@@ -39,7 +37,7 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_DC)
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_DC, string MATB_DC_ct)
         {
             var pHAN_QUYEN = Session["NHOM_ND"].ToString();
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
@@ -115,11 +113,15 @@ namespace Source.Controllers
                                             select a.MA_DIEU_CHUYEN).FirstOrDefault();
 
                     db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
-                }                
+                }
             }
             else if (!String.IsNullOrEmpty(MATB_DC))
             {
-                ViewBag.MATB_DC = MATB_DC;
+                ViewBag.MATB_DC = MATB_DC ;
+            }
+            else if (!String.IsNullOrEmpty(MATB_DC_ct))
+            {
+                ViewBag.MATB_DC = MATB_DC_ct;
             }
             return View();
         }
