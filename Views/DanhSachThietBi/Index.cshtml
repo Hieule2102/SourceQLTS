@@ -299,7 +299,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Script/get_CauHinh",
+            url: "/Script/get_CAU_HINH",
             data: { maTB: row },
             success: function (data) {
                 $("#MATB_DC").val(data.MATB);
@@ -395,7 +395,7 @@
         });
         $.ajax({
             type: "GET",
-            url: "/Script/get_HinhAnh",
+            url: "/Script/get_HINH_ANH",
             data: { maTB: row },
             success: function (data) {
                 //Thông số kỹ thuật

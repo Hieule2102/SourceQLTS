@@ -114,11 +114,27 @@
                             <div class="img-container">
                                 <img id="img_ct" alt="hinh-anh-thiet-bi" />
                             </div>
+                            <div class="small-container-div"">
+                                <div class="small-img-container">
+                                    <img id="img_ct1" width="50" height="50" alt="">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img_ct2" width="50" height="50" alt="">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img_ct3" width="50" height="50" alt="">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img_ct4" width="50" height="50" alt="">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img_ct5" width="50" height="50" alt="">
+                                </div>
+                            </div>
                             <p class="ten-tb" id="TENTB_ct"></p>
                         </div>
                         <h4 class="sub-title">Thông số kỹ thuật</h4>
                         <div class="div-thong-so">
-
                             <table>
                                 <tr>
                                     <td id="label1_ct"></td>
@@ -167,7 +183,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Script/get_CauHinh",
+            url: "/Script/get_CAU_HINH",
             data: { maTB: row },
             success: function (data) {
                 $("#TENTB").html(data.TENTB);
@@ -259,28 +275,55 @@
         });
         $.ajax({
             type: "GET",
-            url: "/Script/get_HinhAnh",
+            url: "/Script/get_HINH_ANH",
             data: { maTB: row },
             success: function (data) {
                 //Thông số kỹ thuật
                 var src = document.createAttribute("src");
                 var img = document.getElementById("img");
+                
+
                 //Thông số kỹ thuật chi tiết
-                var src_ct = document.createAttribute("src");
                 var img_ct = document.getElementById("img_ct");
+                var img_ct1 = document.getElementById("img_ct1");
+                var img_ct2 = document.getElementById("img_ct2");
+                var img_ct3 = document.getElementById("img_ct3");
+                var img_ct4 = document.getElementById("img_ct4");
+                var img_ct5 = document.getElementById("img_ct5");
+
+                var src_ct = document.createAttribute("src");
+                var src_ct1 = document.createAttribute("src");
+                var src_ct2 = document.createAttribute("src");
+                var src_ct3 = document.createAttribute("src");
+                var src_ct4 = document.createAttribute("src");
+                var src_ct5 = document.createAttribute("src");
 
                 if (data != null) {
-                    src.value = "Images/" + data;
-                    src_ct.value = "Images/" + data;
+                    src.value = "Images/" + data.HINH1;
+                    src_ct.value = "Images/" + data.HINH1;
+                    src_ct1.value = "Images/" + data.HINH2;
+                    src_ct2.value = "Images/" + data.HINH2;
+                    src_ct3.value = "Images/" + data.HINH3;
+                    src_ct4.value = "Images/" + data.HINH4;
+                    src_ct5.value = "Images/" + data.HINH5;
                 }
                 else {
                     src.value = "Images/alibaba";
                     src_ct.value = "Images/alibaba";
+                    src_ct1.value = "Images/alibaba";
+                    src_ct2.value = "Images/alibaba";
+                    src_ct3.value = "Images/alibaba";
+                    src_ct4.value = "Images/alibaba";
+                    src_ct5.value = "Images/alibaba";
                 }
 
                 img.setAttributeNode(src);
                 img_ct.setAttributeNode(src_ct);
-
+                img_ct1.setAttributeNode(src_ct1);
+                img_ct2.setAttributeNode(src_ct2);
+                img_ct3.setAttributeNode(src_ct3);
+                img_ct4.setAttributeNode(src_ct4);
+                img_ct5.setAttributeNode(src_ct5);
             }
         });
     }

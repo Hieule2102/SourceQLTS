@@ -25,9 +25,14 @@
                         Thêm hình ảnh
                     </h4>
                     <div class="img-container">
-                        <img src="" alt="" />
+                        <img id="blah" src="#" alt="your image" />
                     </div>
-                    <input type="file" name="HINH_ANH" />
+
+                    <div class="row" id="image_preview"></div>
+
+                    <div>
+                        <input type="file" class="form-control" id="images" name="HINH_ANH" onchange="preview_images();" multiple />
+                    </div>
                 </div>
                 <div class="thong-tin-chung">
 
@@ -54,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Giá tiền:</label>
-                        <input type="text" name="GIA_TIEN" />
+                        <input type="number" name="GIA_TIEN" />
                     </div>
                     <div class="form-group">
                         <label for="">THBH:</label>
@@ -64,18 +69,12 @@
                         <label for="">Ngày mua:</label>
                         <input type="date" name="NGAY_MUA" />
                     </div>
-                    @*<div class="form-group">
-                            <label for="">Ngày nhập:</label>
-                            <input type="text" name="user-name" />
-                        </div>*@
                     <div class="form-group">
                         <label for="">Đơn vị mua:</label>
-                        @*@Html.DropDownList("MA_DON_VI", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
                         <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
                     </div>
                     <div class="form-group">
                         <label for="">Nhà cung cấp:</label>
-                        @*@Html.DropDownList("MA_NCC", null, String.Empty, new { @class = "form-control", @placeholder = "" })*@
                         <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
                     </div>
                 </div>
@@ -101,7 +100,7 @@
                         <select class="form-control"
                                 id="thong_so3"
                                 name="thong_so3"></select>
-                        <input type="text" id="input_thong_so3" name="input_thong_so3" />
+                        <input type="number" id="input_thong_so3" name="input_thong_so3" />
                     </div>
                     <div id="fourth" class="form-group">
                         <label id="label4"></label>
@@ -110,17 +109,22 @@
                                 name="thong_so4"></select>
                         <input type="text" id="input_thong_so4" name="input_thong_so4" />
                     </div>
-                    <div id="fifth" class="form-group">
-                        <label id="label5"></label>
-                        <select class="form-control"
-                                id="thong_so5"
-                                name="thong_so5"></select>
+                    <div id="fifth">
+                        <div class="form-group">
+                            <label id="label5"></label>
+                            <select class="form-control"
+                                    id="thong_so5"
+                                    name="thong_so5"></select>
+                        </div>
                     </div>
-                    <div id="sixth" class="form-group">
-                        <label id="label6"></label>
-                        <select class="form-control"
-                                id="thong_so6"
-                                name="thong_so6"></select>
+                    
+                    <div id="sixth">
+                        <div class="form-group">
+                            <label id="label6"></label>
+                            <select class="form-control"
+                                    id="thong_so6"
+                                    name="thong_so6"></select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -179,6 +183,23 @@
         });
     });
 
+    function preview_images() 
+    {         
+        for (var i = 0; i < 5; i++) {
+            $('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "'></div>");
+        }
+        var total_file = document.getElementById("images").files.length;
+        var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(313)
+                    .height(178);
+            };
+            reader.readAsDataURL(event.target.files[total_file - 1]);
+    }
+
 
     function Fill_LoaiTB() {
         var nhom_TB = $('#MA_NHOMTB').val();
@@ -205,6 +226,9 @@
                 if (data.NHOMTB == "PC") {
                     document.getElementById("fifth").hidden = false;
                     document.getElementById("sixth").hidden = false;
+                    //document.getElementById("fifth").setAttribute("hidden", "false");
+                    //document.getElementById("sixth").setAttribute("hidden", "false");
+
                     document.getElementById("thong_so1").hidden = false;
                     document.getElementById("input_thong_so1").hidden = true;
                     document.getElementById("thong_so3").hidden = false;
@@ -271,6 +295,8 @@
                 else if (data.NHOMTB == "PR") {
                     document.getElementById("fifth").hidden = true;
                     document.getElementById("sixth").hidden = true;
+                    //document.getElementById("fifth").setAttribute("hidden", "true");
+                    //document.getElementById("sixth").setAttribute("hidden", "true");
                     document.getElementById("thong_so1").hidden = true;
                     document.getElementById("input_thong_so1").hidden = false;
                     document.getElementById("thong_so3").hidden = true;
