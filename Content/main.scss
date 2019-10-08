@@ -1,4 +1,4 @@
-﻿* {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -264,20 +264,25 @@ main {
                 }
             }
 
-            button {
-                font-family: "Oswald", sans-serif;
-                width: 70%;
-                height: 40px;
-                line-height: 40px;
-                margin-top: 1.3rem;
-                margin-bottom: 2.5rem;
-                border-radius: 40px;
-                background-color: #0f848d;
-                color: white;
-                border: none;
-                font-size: 1.1em;
-                font-weight: 200;
-                cursor: pointer;
+            .submit {
+                display: flex;
+                flex-direction: column !important;
+                align-items: center;
+
+                .them {
+                    font-family: "Oswald", sans-serif;
+                    width: 60%;
+                    border-radius: 40px;
+                    background-color: #0f848d;
+                    color: #fff;
+                    font-weight: 300;
+                }
+
+                .reset {
+                    width: 40%;
+                    border-radius: 40px;
+                    margin-bottom: 50px;
+                }
             }
 
             .login-close {
@@ -389,7 +394,7 @@ main {
 
         tr {
             &:hover {
-                background-color: #c1dff0;
+                background-color: #ecf8ff;
             }
 
             &:hover span {
@@ -398,12 +403,12 @@ main {
         }
 
         .active {
-            background-color: #c1dff0;
+            background-color: #ecf8ff;
         }
 
         td,
         th {
-            border: 1px solid #707070;
+            border: 1px solid #c1dff0;
             text-align: left;
             height: 32px;
             font-size: 0.9em;
@@ -412,6 +417,7 @@ main {
         }
 
         th {
+            border: 1px solid #69c6fc;
             text-align: center;
             font-weight: 500;
             background-color: #daf1f3;
@@ -443,27 +449,32 @@ main {
 
     .form-group {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
         width: 100%;
         margin-bottom: 15px;
 
         label {
             margin-bottom: 7px;
             font-size: 0.9em;
+            line-height: 30px;
         }
 
         input,
         select {
-            width: 100%;
+            width: 70%;
             height: 30px;
             font-size: 0.8em;
             padding-left: 3px;
+            border: none;
+            border-bottom: 1px solid #c5c5c5;
         }
 
         textarea {
-            width: 100% !important;
+            width: 70% !important;
             min-height: 60px;
             font-size: 0.8em;
+            border: 1px solid #c5c5c5;
         }
     }
 
@@ -473,6 +484,7 @@ main {
         input {
             width: 280px;
             height: 30px;
+            border: 1px solid #c5c5c5;
         }
 
         .btn-search {
@@ -515,7 +527,7 @@ main {
             }
 
             .filter {
-                margin-left: 15px;
+                margin-left: 30px;
 
                 label,
                 select {
@@ -524,6 +536,7 @@ main {
 
                 select {
                     width: 150px;
+                    border: 1px solid #c5c5c5;
                     margin-left: 5px;
                     height: 25px;
                 }
@@ -589,31 +602,50 @@ main {
             display: flex;
             margin-bottom: 30px;
 
-            .them-hinh-anh {
-                width: 25%;
-                margin-right: 40px;
-
-                .img-container {
-                    width: 100%;
-                    height: 180px;
-                    border: 1px solid #353b3b;
-                    margin-bottom: 15px;
-
-                    img {
-                        width: 100%;
-                    }
-                }
-            }
 
             .thong-tin-chung {
-                width: 40%;
-                margin-right: 40px;
-                margin-left: 40px;
+                width: 50%;
             }
 
-            .thong-so-ky-thuat {
-                width: 35%;
-                margin-left: 40px;
+            .thongso-hinhanh {
+                width: 50%;
+                margin-left: 70px;
+
+                .them-hinh-anh {
+                    margin-bottom: 50px;
+
+                    .img-container {
+                        width: 60%;
+                        margin: 0 auto;
+                        margin-bottom: 15px;
+                        position: relative;
+
+                        img {
+                            width: 100%;
+                        }
+
+                        span {
+                            position: absolute;
+                            right: -10px;
+                            top: -10px;
+                            font-size: 1.5em;
+                        }
+                    }
+
+                    .small-container-div {
+                        display: flex;
+
+                        .small-img-container {
+                            width: 10%;
+                            margin-bottom: 20px;
+                            border: 1px solid #555555;
+
+                            img {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -650,17 +682,17 @@ main {
             margin-bottom: 60px;
 
             .thong-tin-tb-dieu-chuyen {
-                width: 45%;
-                margin-right: 80px;
+                width: 34%;
+                margin-right: 60px;
             }
 
             .dv-quan-ly {
-                width: 30%;
+                width: 33%;
                 margin-right: 30px;
             }
 
             .dv-tiep-nhan {
-                width: 30%;
+                width: 33%;
                 margin-left: 30px;
             }
         }
@@ -781,6 +813,22 @@ main {
             .them-nhom-tb {
                 width: 25%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-ntb {
@@ -810,6 +858,22 @@ main {
             .them-loai-tb {
                 width: 25%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-ltb {
@@ -844,6 +908,22 @@ main {
             .them-don-vi {
                 width: 25%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-dv {
@@ -888,6 +968,22 @@ main {
             .them-ncc {
                 width: 25%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-ncc {
@@ -1010,8 +1106,8 @@ main {
                 width: 23%;
 
                 .cau-hinh {
-                    padding: 10px 10px;
-                    border: 1px solid #555555;
+                    padding: 0px 10px;
+                    border-left: 1px solid #c4c4c4;
                     text-align: center;
 
                     span {
@@ -1022,7 +1118,6 @@ main {
                         text-align: center;
 
                         .img-container {
-                            border: 1px solid #555555;
                             width: 100%;
                             min-height: 100px;
                             margin: auto;
@@ -1030,6 +1125,22 @@ main {
 
                             img {
                                 width: 100%;
+                            }
+                        }
+
+                        .small-container-div {
+                            display: flex;
+                            width: 100%;
+                            justify-content: center;
+
+                            .small-img-container {
+                                width: 15%;
+                                margin-bottom: 20px;
+                                border: 1px solid #bebebe;
+
+                                img {
+                                    width: 100%;
+                                }
                             }
                         }
 
@@ -1059,7 +1170,7 @@ main {
 
                         td {
                             border: none;
-                            border-bottom: 1px solid rgb(212, 212, 212);
+                            border-bottom: 1px dotted rgb(212, 212, 212);
 
                             &:nth-of-type(2) {
                                 color: #0f848d;
@@ -1110,7 +1221,7 @@ main {
                     top: 50%;
                     transform: translate(-50%, -50%);
                     border: none;
-                    background-color: #fff;
+                    background-color: rgb(248, 248, 248);
                     display: flex;
                     justify-content: center;
 
@@ -1133,14 +1244,28 @@ main {
                             width: 70%;
 
                             .img-container {
-                                border: 1px solid #555555;
                                 width: 100%;
-                                min-height: 100px;
                                 margin: auto;
                                 margin-bottom: 10px;
 
                                 img {
                                     width: 100%;
+                                }
+                            }
+
+                            .small-container-div {
+                                display: flex;
+                                width: 100%;
+                                justify-content: center;
+
+                                .small-img-container {
+                                    width: 15%;
+                                    margin-bottom: 20px;
+                                    border: 1px solid #bebebe;
+
+                                    img {
+                                        width: 100%;
+                                    }
                                 }
                             }
 
@@ -1171,7 +1296,7 @@ main {
 
                             td {
                                 border: none;
-                                border-bottom: 1px solid rgb(212, 212, 212);
+                                border-bottom: 1px dotted rgb(212, 212, 212);
 
                                 &:nth-of-type(2) {
                                     color: #0f848d;
@@ -1367,6 +1492,22 @@ main {
             .them-nd {
                 width: 22%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-nd {
@@ -1413,6 +1554,22 @@ main {
             .them-nhom-nd {
                 width: 22%;
                 margin-right: 50px;
+
+                .form-group {
+                    flex-direction: column;
+
+                    label {
+                        margin-bottom: 0px;
+                    }
+
+                    input, select {
+                        width: 100%;
+                    }
+
+                    textarea {
+                        width: 100% !important;
+                    }
+                }
             }
 
             .ds-nnd {
@@ -1875,11 +2032,9 @@ footer {
 
         .form-group {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
             width: 100%;
             margin-bottom: 12px;
-            align-items: center;
 
             label {
                 margin-bottom: 0px;
@@ -1887,8 +2042,7 @@ footer {
 
             input,
             select {
-                width: 60%;
-                height: 30px;
+                width: 100%;
                 font-size: 0.8em;
                 padding-left: 3px;
             }
@@ -2005,23 +2159,19 @@ footer {
                 margin-bottom: 0px;
                 margin-top: 20px;
 
-                .them-hinh-anh {
+                .thong-tin-chung {
                     width: 70%;
-                    margin: 20px auto !important;
+                    margin: 20px auto;
 
                     .img-container {
                         width: 60%;
                     }
                 }
 
-                .thong-tin-chung {
-                    width: 70%;
-                    margin: 20px auto !important;
-                }
-
-                .thong-so-ky-thuat {
-                    width: 70%;
-                    margin: 20px auto !important;
+                .thongso-hinhanh {
+                    width: 65%;
+                    margin: 20px auto;
+                    margin-bottom: 80px;
                 }
             }
         }
