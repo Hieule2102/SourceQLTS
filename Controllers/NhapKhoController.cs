@@ -266,6 +266,7 @@ namespace Source.Controllers
                                 else if (hinh_Anh.HINH5 == null)
                                 {
                                     hinh_Anh.HINH5 = fileName;
+                                    break;
                                 }
                             }
                         }
