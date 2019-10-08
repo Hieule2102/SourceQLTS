@@ -114,7 +114,7 @@
                             <div class="img-container">
                                 <img id="img_ct" alt="hinh-anh-thiet-bi" />
                             </div>
-                            <div class="small-container-div"">
+                            <div class="small-container-div">
                                 <div class="small-img-container">
                                     <img id="img_ct1" width="50" height="50" alt="">
                                 </div>
@@ -171,6 +171,16 @@
 </main>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#img_ct2').click(function (event) {
+            var src = document.createAttribute("src");
+            src.value = $('#img_ct2').src;
+
+            var img = document.getElementById("img_ct");
+            img.setAttributeNode(src);
+        });
+    });
+
     function Edit(evt, row) {
         var i, tablinks;
 
@@ -301,7 +311,7 @@
                 if (data != null) {
                     src.value = "Images/" + data.HINH1;
                     src_ct.value = "Images/" + data.HINH1;
-                    src_ct1.value = "Images/" + data.HINH2;
+                    src_ct1.value = "Images/" + data.HINH1;
                     src_ct2.value = "Images/" + data.HINH2;
                     src_ct3.value = "Images/" + data.HINH3;
                     src_ct4.value = "Images/" + data.HINH4;
@@ -324,8 +334,58 @@
                 img_ct3.setAttributeNode(src_ct3);
                 img_ct4.setAttributeNode(src_ct4);
                 img_ct5.setAttributeNode(src_ct5);
+
+                $('#img_ct1').click(function () {
+                    var src = document.createAttribute("src");
+                    src.value = "Images/" + data.HINH1;
+
+                    var img = document.getElementById("img_ct");
+                    img.setAttributeNode(src);
+                });
+
+                $('#img_ct2').click(function () {
+                    var src = document.createAttribute("src");
+                    src.value = "Images/" + data.HINH2;
+
+                    var img = document.getElementById("img_ct");
+                    img.setAttributeNode(src);
+                });
+
+                $('#img_ct3').click(function () {
+                    var src = document.createAttribute("src");
+                    src.value = "Images/" + data.HINH3;
+
+                    var img = document.getElementById("img_ct");
+                    img.setAttributeNode(src);
+                });
+
+                $('#img_ct4').click(function () {
+                    var src = document.createAttribute("src");
+                    src.value = "Images/" + data.HINH4;
+
+                    var img = document.getElementById("img_ct");
+                    img.setAttributeNode(src);
+                });
+
+                $('#img_ct5').click(function () {
+                    var src = document.createAttribute("src");
+                    src.value = "Images/" + data.HINH5;
+
+                    var img = document.getElementById("img_ct");
+                    img.setAttributeNode(src);
+                });
             }
         });
-    }
+    };
+
+    //function on_click(imgCHANGE) {
+    //    var cHANGE = $(imgCHANGE).attr("id");
+
+    //    var src = document.createAttribute("src");
+    //    src.value = cHANGE.src;
+
+    //    var img = document.getElementById("img_ct");
+    //    img.setAttributeNode(src);
+    //};
 </script>
 
