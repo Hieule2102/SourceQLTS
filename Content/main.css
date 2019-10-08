@@ -291,21 +291,33 @@ main {
                     font-size: 1rem;
                 }
 
-            main #login .dang-nhap button {
-                font-family: "Oswald", sans-serif;
-                width: 70%;
-                height: 40px;
-                line-height: 40px;
-                margin-top: 1.3rem;
-                margin-bottom: 2.5rem;
-                border-radius: 40px;
-                background-color: #0f848d;
-                color: white;
-                border: none;
-                font-size: 1.1em;
-                font-weight: 200;
-                cursor: pointer;
+            main #login .dang-nhap .submit {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical !important;
+                -webkit-box-direction: normal !important;
+                -ms-flex-direction: column !important;
+                flex-direction: column !important;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
             }
+
+                main #login .dang-nhap .submit .them {
+                    font-family: "Oswald", sans-serif;
+                    width: 60%;
+                    border-radius: 40px;
+                    background-color: #0f848d;
+                    color: #fff;
+                    font-weight: 300;
+                }
+
+                main #login .dang-nhap .submit .reset {
+                    width: 40%;
+                    border-radius: 40px;
+                    margin-bottom: 50px;
+                }
 
             main #login .dang-nhap .login-close {
                 position: absolute;
@@ -421,7 +433,7 @@ main {
     }
 
         main table tr:hover {
-            background-color: #c1dff0;
+            background-color: #ecf8ff;
         }
 
             main table tr:hover span {
@@ -429,12 +441,12 @@ main {
             }
 
         main table .active {
-            background-color: #c1dff0;
+            background-color: #ecf8ff;
         }
 
         main table td,
         main table th {
-            border: 1px solid #707070;
+            border: 1px solid #c1dff0;
             text-align: left;
             height: 32px;
             font-size: 0.9em;
@@ -443,6 +455,7 @@ main {
         }
 
         main table th {
+            border: 1px solid #69c6fc;
             text-align: center;
             font-weight: 500;
             background-color: #daf1f3;
@@ -477,10 +490,13 @@ main {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-orient: vertical;
+        -webkit-box-orient: horizontal;
         -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
         width: 100%;
         margin-bottom: 15px;
     }
@@ -488,20 +504,24 @@ main {
         main .form-group label {
             margin-bottom: 7px;
             font-size: 0.9em;
+            line-height: 30px;
         }
 
         main .form-group input,
         main .form-group select {
-            width: 100%;
+            width: 70%;
             height: 30px;
             font-size: 0.8em;
             padding-left: 3px;
+            border: none;
+            border-bottom: 1px solid #c5c5c5;
         }
 
         main .form-group textarea {
-            width: 100% !important;
+            width: 70% !important;
             min-height: 60px;
             font-size: 0.8em;
+            border: 1px solid #c5c5c5;
         }
 
     main .search {
@@ -511,6 +531,7 @@ main {
         main .search input {
             width: 280px;
             height: 30px;
+            border: 1px solid #c5c5c5;
         }
 
         main .search .btn-search {
@@ -565,7 +586,7 @@ main {
             }
 
             main .loc .div-filter .filter {
-                margin-left: 15px;
+                margin-left: 30px;
             }
 
                 main .loc .div-filter .filter label,
@@ -575,6 +596,7 @@ main {
 
                 main .loc .div-filter .filter select {
                     width: 150px;
+                    border: 1px solid #c5c5c5;
                     margin-left: 5px;
                     height: 25px;
                 }
@@ -650,44 +672,52 @@ main {
             margin-bottom: 30px;
         }
 
-            main #nhap-kho .form-nhap-kho .them-hinh-anh {
-                width: 25%;
-                margin-right: 40px;
+            main #nhap-kho .form-nhap-kho .thong-tin-chung {
+                width: 50%;
             }
 
-                main #nhap-kho .form-nhap-kho .them-hinh-anh .img-container {
-                    width: 100%;
-                    height: 180px;
-                    border: 1px solid #353b3b;
-                    margin-bottom: 15px;
-                }
-
-            main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
+            main #nhap-kho .form-nhap-kho .thongso-hinhanh {
+                width: 50%;
+                margin-left: 70px;
             }
 
-                main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div .small-img-container {
-                    width: 15%;
-                    margin-bottom: 20px;
-                    border: 1px solid #555555;
+                main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh {
+                    margin-bottom: 50px;
                 }
 
-                    main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div .small-img-container img {
-                        width: 100%;
+                    main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .img-container {
+                        width: 60%;
+                        margin: 0 auto;
+                        margin-bottom: 15px;
+                        position: relative;
                     }
 
-            main #nhap-kho .form-nhap-kho .thong-tin-chung {
-                width: 40%;
-                margin-right: 40px;
-                margin-left: 40px;
-            }
+                        main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .img-container img {
+                            width: 100%;
+                        }
 
-            main #nhap-kho .form-nhap-kho .thong-so-ky-thuat {
-                width: 35%;
-                margin-left: 40px;
-            }
+                        main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .img-container span {
+                            position: absolute;
+                            right: -10px;
+                            top: -10px;
+                            font-size: 1.5em;
+                        }
+
+                    main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                    }
+
+                        main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div .small-img-container {
+                            width: 10%;
+                            margin-bottom: 20px;
+                            border: 1px solid #555555;
+                        }
+
+                            main #nhap-kho .form-nhap-kho .thongso-hinhanh .them-hinh-anh .small-container-div .small-img-container img {
+                                width: 100%;
+                            }
 
     main #xuat-kho {
         margin-top: 50px;
@@ -727,17 +757,17 @@ main {
         }
 
             main #dieu-chuyen .form-dieu-chuyen .thong-tin-tb-dieu-chuyen {
-                width: 45%;
-                margin-right: 80px;
+                width: 34%;
+                margin-right: 60px;
             }
 
             main #dieu-chuyen .form-dieu-chuyen .dv-quan-ly {
-                width: 30%;
+                width: 33%;
                 margin-right: 30px;
             }
 
             main #dieu-chuyen .form-dieu-chuyen .dv-tiep-nhan {
-                width: 30%;
+                width: 33%;
                 margin-left: 30px;
             }
 
@@ -868,6 +898,25 @@ main {
                 margin-right: 50px;
             }
 
+                main #nhom-tb .div-nhom-tb .them-nhom-tb .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #nhom-tb .div-nhom-tb .them-nhom-tb .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #nhom-tb .div-nhom-tb .them-nhom-tb .form-group input, main #nhom-tb .div-nhom-tb .them-nhom-tb .form-group select {
+                        width: 100%;
+                    }
+
+                    main #nhom-tb .div-nhom-tb .them-nhom-tb .form-group textarea {
+                        width: 100% !important;
+                    }
+
             main #nhom-tb .div-nhom-tb .ds-ntb {
                 width: 75%;
             }
@@ -898,6 +947,25 @@ main {
                 width: 25%;
                 margin-right: 50px;
             }
+
+                main #loai-tb .div-loai-tb .them-loai-tb .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #loai-tb .div-loai-tb .them-loai-tb .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #loai-tb .div-loai-tb .them-loai-tb .form-group input, main #loai-tb .div-loai-tb .them-loai-tb .form-group select {
+                        width: 100%;
+                    }
+
+                    main #loai-tb .div-loai-tb .them-loai-tb .form-group textarea {
+                        width: 100% !important;
+                    }
 
             main #loai-tb .div-loai-tb .ds-ltb {
                 width: 75%;
@@ -934,6 +1002,25 @@ main {
                 width: 25%;
                 margin-right: 50px;
             }
+
+                main #don-vi .div-don-vi .them-don-vi .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #don-vi .div-don-vi .them-don-vi .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #don-vi .div-don-vi .them-don-vi .form-group input, main #don-vi .div-don-vi .them-don-vi .form-group select {
+                        width: 100%;
+                    }
+
+                    main #don-vi .div-don-vi .them-don-vi .form-group textarea {
+                        width: 100% !important;
+                    }
 
             main #don-vi .div-don-vi .ds-dv {
                 width: 75%;
@@ -980,6 +1067,25 @@ main {
                 width: 25%;
                 margin-right: 50px;
             }
+
+                main #nha-cc .div-ncc .them-ncc .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #nha-cc .div-ncc .them-ncc .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #nha-cc .div-ncc .them-ncc .form-group input, main #nha-cc .div-ncc .them-ncc .form-group select {
+                        width: 100%;
+                    }
+
+                    main #nha-cc .div-ncc .them-ncc .form-group textarea {
+                        width: 100% !important;
+                    }
 
             main #nha-cc .div-ncc .ds-ncc {
                 width: 75%;
@@ -1112,8 +1218,8 @@ main {
             }
 
                 main #ds-tb .div-dstb .div-cauhinh .cau-hinh {
-                    padding: 10px 10px;
-                    border: 1px solid #555555;
+                    padding: 0px 10px;
+                    border-left: 1px solid #c4c4c4;
                     text-align: center;
                 }
 
@@ -1126,7 +1232,6 @@ main {
                     }
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .img-container {
-                            border: 1px solid #555555;
                             width: 100%;
                             min-height: 100px;
                             margin: auto;
@@ -1136,6 +1241,26 @@ main {
                             main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .img-container img {
                                 width: 100%;
                             }
+
+                        main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .small-container-div {
+                            display: -webkit-box;
+                            display: -ms-flexbox;
+                            display: flex;
+                            width: 100%;
+                            -webkit-box-pack: center;
+                            -ms-flex-pack: center;
+                            justify-content: center;
+                        }
+
+                            main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .small-container-div .small-img-container {
+                                width: 15%;
+                                margin-bottom: 20px;
+                                border: 1px solid #bebebe;
+                            }
+
+                                main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .small-container-div .small-img-container img {
+                                    width: 100%;
+                                }
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .img .ten-tb {
                             margin-bottom: 20px;
@@ -1161,7 +1286,7 @@ main {
 
                         main #ds-tb .div-dstb .div-cauhinh .cau-hinh .div-thong-so td {
                             border: none;
-                            border-bottom: 1px solid #d4d4d4;
+                            border-bottom: 1px dotted #d4d4d4;
                         }
 
                             main #ds-tb .div-dstb .div-cauhinh .cau-hinh .div-thong-so td:nth-of-type(2) {
@@ -1211,7 +1336,7 @@ main {
                     -webkit-transform: translate(-50%, -50%);
                     transform: translate(-50%, -50%);
                     border: none;
-                    background-color: #fff;
+                    background-color: #f8f8f8;
                     display: -webkit-box;
                     display: -ms-flexbox;
                     display: flex;
@@ -1248,9 +1373,7 @@ main {
                         }
 
                             main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .img-container {
-                                border: 1px solid #555555;
                                 width: 100%;
-                                min-height: 100px;
                                 margin: auto;
                                 margin-bottom: 10px;
                             }
@@ -1258,6 +1381,26 @@ main {
                                 main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .img-container img {
                                     width: 100%;
                                 }
+
+                            main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .small-container-div {
+                                display: -webkit-box;
+                                display: -ms-flexbox;
+                                display: flex;
+                                width: 100%;
+                                -webkit-box-pack: center;
+                                -ms-flex-pack: center;
+                                justify-content: center;
+                            }
+
+                                main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .small-container-div .small-img-container {
+                                    width: 15%;
+                                    margin-bottom: 20px;
+                                    border: 1px solid #bebebe;
+                                }
+
+                                    main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .small-container-div .small-img-container img {
+                                        width: 100%;
+                                    }
 
                             main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .img .ten-tb {
                                 margin-bottom: 20px;
@@ -1284,7 +1427,7 @@ main {
 
                             main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so td {
                                 border: none;
-                                border-bottom: 1px solid #d4d4d4;
+                                border-bottom: 1px dotted #d4d4d4;
                             }
 
                                 main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so td:nth-of-type(2) {
@@ -1469,6 +1612,25 @@ main {
                 margin-right: 50px;
             }
 
+                main #nguoi-dung .div-nd .them-nd .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #nguoi-dung .div-nd .them-nd .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #nguoi-dung .div-nd .them-nd .form-group input, main #nguoi-dung .div-nd .them-nd .form-group select {
+                        width: 100%;
+                    }
+
+                    main #nguoi-dung .div-nd .them-nd .form-group textarea {
+                        width: 100% !important;
+                    }
+
             main #nguoi-dung .div-nd .ds-nd {
                 width: 78%;
             }
@@ -1512,6 +1674,25 @@ main {
                 width: 22%;
                 margin-right: 50px;
             }
+
+                main #nhom-nd .div-nhom-nd .them-nhom-nd .form-group {
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                    main #nhom-nd .div-nhom-nd .them-nhom-nd .form-group label {
+                        margin-bottom: 0px;
+                    }
+
+                    main #nhom-nd .div-nhom-nd .them-nhom-nd .form-group input, main #nhom-nd .div-nhom-nd .them-nhom-nd .form-group select {
+                        width: 100%;
+                    }
+
+                    main #nhom-nd .div-nhom-nd .them-nhom-nd .form-group textarea {
+                        width: 100% !important;
+                    }
 
             main #nhom-nd .div-nhom-nd .ds-nnd {
                 width: 78%;
@@ -2005,18 +2186,12 @@ footer {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        -webkit-box-orient: horizontal;
+        -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
+        -ms-flex-direction: column;
+        flex-direction: column;
         width: 100%;
         margin-bottom: 12px;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
     }
 
         main .form-group label {
@@ -2025,8 +2200,7 @@ footer {
 
         main .form-group input,
         main .form-group select {
-            width: 60%;
-            height: 30px;
+            width: 100%;
             font-size: 0.8em;
             padding-left: 3px;
         }
@@ -2165,23 +2339,19 @@ footer {
         margin-top: 20px;
     }
 
-        main #nhap-kho .form-nhap-kho .them-hinh-anh {
+        main #nhap-kho .form-nhap-kho .thong-tin-chung {
             width: 70%;
-            margin: 20px auto !important;
+            margin: 20px auto;
         }
 
-            main #nhap-kho .form-nhap-kho .them-hinh-anh .img-container {
+            main #nhap-kho .form-nhap-kho .thong-tin-chung .img-container {
                 width: 60%;
             }
 
-        main #nhap-kho .form-nhap-kho .thong-tin-chung {
-            width: 70%;
-            margin: 20px auto !important;
-        }
-
-        main #nhap-kho .form-nhap-kho .thong-so-ky-thuat {
-            width: 70%;
-            margin: 20px auto !important;
+        main #nhap-kho .form-nhap-kho .thongso-hinhanh {
+            width: 65%;
+            margin: 20px auto;
+            margin-bottom: 80px;
         }
 
     main #xuat-kho .form-xuat-kho {
@@ -2783,5 +2953,4 @@ footer {
         font-size: 0.8em;
     }
 }
-
 /*# sourceMappingURL=main.css.map */
