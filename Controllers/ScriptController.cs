@@ -1,6 +1,7 @@
 ﻿using Source.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -207,7 +208,7 @@ namespace Source.Controllers
         }
 
         [HttpPost]
-        public ActionResult get_CauHinh(string maTB)
+        public ActionResult get_CAU_HINH(string maTB)
         {
             var temp = Int32.Parse(maTB);
             if (!String.IsNullOrEmpty(maTB))
@@ -235,15 +236,22 @@ namespace Source.Controllers
             return null;
         }
         [HttpGet]
-        public ActionResult get_HinhAnh(string maTB)
+        public ActionResult get_HINH_ANH(string maTB)
         {
             if (!String.IsNullOrEmpty(maTB))
             {
                 var temp = Int32.Parse(maTB);
                 var hinhAnh = db.HINH_ANH.Where(x => x.MATB == temp)
-                                         .Select(x => x.HINH1)
+                                         .Select(x => new
+                                         {
+                                             x.HINH1,
+                                             x.HINH2,
+                                             x.HINH3,
+                                             x.HINH4,
+                                             x.HINH5,
+                                         })
                                          .FirstOrDefault();
-                if (String.IsNullOrEmpty(hinhAnh))
+                if (hinhAnh == null)
                 {
                     return null;
                 }
@@ -282,10 +290,12 @@ namespace Source.Controllers
             if (!String.IsNullOrEmpty(mATB))
             {
                 int temp = Int32.Parse(mATB);
-                var NGAY_THUC_HIEN = String.Format("MM/dd/yyyy");
 
                 if (db.XUAT_KHO.FirstOrDefault(a => a.MATB == temp) != null)
                 {
+                    var NGAY_THUC_HIEN = String.Format("MM/dd/yyyy");
+                    //CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
+                    //var temp123 = DateTime.ParseExact(NGAY_THUC_HIEN, "MM/dd/yyyy", cul);
                     var xAC_NHAN = db.XUAT_KHO.Where(x => x.MATB == temp)
                                               .Select(x => new
                                               {
@@ -301,12 +311,13 @@ namespace Source.Controllers
                 }
                 else if (db.DIEU_CHUYEN_THIET_BI.FirstOrDefault(a => a.MATB == temp) != null)
                 {
+                    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
                     var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MATB == temp)
                                                         .Select(x => new
                                                         {
                                                             x.MATB,
                                                             x.THIETBI.TENTB,
-                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN.ToString(),
+                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN,
                                                             DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
                                                             DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                             MAND_THUC_HIEN = x.MAND_DIEU_CHUYEN,

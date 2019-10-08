@@ -16,6 +16,10 @@ namespace Source.Controllers
         // GET: /DangNhap/
         public ActionResult Index()
         {
+            if (Session["iS_ALREADY"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -33,6 +37,7 @@ namespace Source.Controllers
                 }
                 else
                 {
+                    Session["iS_ALREADY"] = 1;
                     Session["TEN_DANG_NHAP"] = (from b in db.NGUOI_DUNG
                                                 where b.TEN_DANG_NHAP == temp
                                                 select b.TEN_DANG_NHAP).FirstOrDefault();
@@ -71,6 +76,7 @@ namespace Source.Controllers
         public ActionResult Logout()
         {
             Session.RemoveAll();
+            Session["iS_ALREADY"] = null;
             //return View("~/Views/Home/Index.cshtml");
             return RedirectToAction("Index");
         }
