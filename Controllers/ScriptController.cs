@@ -317,7 +317,7 @@ namespace Source.Controllers
                                                         {
                                                             x.MATB,
                                                             x.THIETBI.TENTB,
-                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN,
+                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN.ToString(),
                                                             DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
                                                             DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                             MAND_THUC_HIEN = x.MAND_DIEU_CHUYEN,
