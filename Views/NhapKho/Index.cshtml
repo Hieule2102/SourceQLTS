@@ -71,12 +71,10 @@
                             Thêm hình ảnh
                         </h4>
                         <div class="img-container">
-                            <img id="blah" src="#" alt="your image" />
+                            <img id="img" src="#" alt="your image"/>
+                            <span><i class="far fa-times-circle"></i></span>
                         </div>                        
                         <div class="row" id="image_preview"></div>
-
-
-
                         <div>
                             <input type="file" class="form-control" id="images" name="HINH_ANH" onchange="preview_images();" multiple />
                         </div>
@@ -131,7 +129,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="submit">
                 @if (ViewBag.Them != null)
@@ -195,20 +192,19 @@
         }
         else {
             for (var i = 0; i < total_file; i++) {
-                $('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "'></div>");
+                $('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "' onclick='cHANGE_IMG(this.src)'></div>");
             }
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#blah')
+                $('#img')
                     .attr('src', e.target.result)
                     .width(313)
                     .height(178);
             };
             reader.readAsDataURL(event.target.files[total_file - 1]);
         }
-    }
-
+    }    
 
     function Fill_LoaiTB() {
         var nhom_TB = $('#MA_NHOMTB').val();
@@ -333,4 +329,8 @@
             }
         });
     };
+
+    function cHANGE_IMG(src) {
+        document.getElementById("img").src = src;
+    }
 </script>
