@@ -20,38 +20,7 @@
                 <p id="tb-sm">@ViewBag.ErrorMessage</p>
             }
             <div class="form-nhap-kho">
-                <div class="them-hinh-anh">
-                    <h4 class="sub-title">
-                        Thêm hình ảnh
-                    </h4>
-                    <div class="img-container">
-                        <img id="blah" src="#" alt="your image" />
-                    </div>
 
-                    @*<div class="small-container-div">
-                        <div class="small-img-container">
-                            <img id="img_ct1" width="50" height="50" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_ct2" width="50" height="50" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_ct3" width="50" height="50" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_ct4" width="50" height="50" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_ct5" width="50" height="50" alt="">
-                        </div>
-                    </div>*@
-
-                    <div class="row" id="image_preview"></div>
-
-                    <div>
-                        <input type="file" class="form-control" id="images" name="HINH_ANH" onchange="preview_images();" multiple />
-                    </div>
-                </div>
                 <div class="thong-tin-chung">
 
                     <h4 class="sub-title">
@@ -96,55 +65,73 @@
                         <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
                     </div>
                 </div>
-                <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
-                    <h4 class="sub-title">
-                        Thông số kỹ thuật
-                    </h4>
-                    <div id="first" class="form-group">
-                        <label id="label1"></label>
-                        <select class="form-control"
-                                id="thong_so1"
-                                name="thong_so1"></select>
-                        <input type="text" id="input_thong_so1" name="input_thong_so1" />
-                    </div>
-                    <div id="second" class="form-group">
-                        <label id="label2"></label>
-                        <select class="form-control"
-                                id="thong_so2"
-                                name="thong_so2"></select>
-                    </div>
-                    <div id="third" class="form-group">
-                        <label id="label3"></label>
-                        <select class="form-control"
-                                id="thong_so3"
-                                name="thong_so3"></select>
-                        <input type="number" id="input_thong_so3" name="input_thong_so3" />
-                    </div>
-                    <div id="fourth" class="form-group">
-                        <label id="label4"></label>
-                        <select class="form-control"
-                                id="thong_so4"
-                                name="thong_so4"></select>
-                        <input type="text" id="input_thong_so4" name="input_thong_so4" />
-                    </div>
-                    <div id="fifth">
-                        <div class="form-group">
-                            <label id="label5"></label>
-                            <select class="form-control"
-                                    id="thong_so5"
-                                    name="thong_so5"></select>
+                <div class="thongso-hinhanh">
+                    <div class="them-hinh-anh">
+                        <h4 class="sub-title">
+                            Thêm hình ảnh
+                        </h4>
+                        <div class="img-container">
+                            <img id="blah" src="#" alt="your image" />
+                        </div>                        
+                        <div class="row" id="image_preview"></div>
+
+
+
+                        <div>
+                            <input type="file" class="form-control" id="images" name="HINH_ANH" onchange="preview_images();" multiple />
                         </div>
                     </div>
-                    
-                    <div id="sixth">
-                        <div class="form-group">
-                            <label id="label6"></label>
+                    <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
+                        <h4 class="sub-title">
+                            Thông số kỹ thuật
+                        </h4>
+                        <div id="first" class="form-group">
+                            <label id="label1"></label>
                             <select class="form-control"
-                                    id="thong_so6"
-                                    name="thong_so6"></select>
+                                    id="thong_so1"
+                                    name="thong_so1"></select>
+                            <input type="text" id="input_thong_so1" name="input_thong_so1" />
+                        </div>
+                        <div id="second" class="form-group">
+                            <label id="label2"></label>
+                            <select class="form-control"
+                                    id="thong_so2"
+                                    name="thong_so2"></select>
+                        </div>
+                        <div id="third" class="form-group">
+                            <label id="label3"></label>
+                            <select class="form-control"
+                                    id="thong_so3"
+                                    name="thong_so3"></select>
+                            <input type="number" id="input_thong_so3" name="input_thong_so3" />
+                        </div>
+                        <div id="fourth" class="form-group">
+                            <label id="label4"></label>
+                            <select class="form-control"
+                                    id="thong_so4"
+                                    name="thong_so4"></select>
+                            <input type="text" id="input_thong_so4" name="input_thong_so4" />
+                        </div>
+                        <div id="fifth">
+                            <div class="form-group">
+                                <label id="label5"></label>
+                                <select class="form-control"
+                                        id="thong_so5"
+                                        name="thong_so5"></select>
+                            </div>
+                        </div>
+
+                        <div id="sixth">
+                            <div class="form-group">
+                                <label id="label6"></label>
+                                <select class="form-control"
+                                        id="thong_so6"
+                                        name="thong_so6"></select>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="submit">
                 @if (ViewBag.Them != null)
@@ -201,8 +188,7 @@
         });
     });
 
-    function preview_images() 
-    {    
+    function preview_images() {
         var total_file = document.getElementById("images").files.length;
         if (total_file > 5) {
             alert('Hello, just 5!');
@@ -210,7 +196,7 @@
         else {
             for (var i = 0; i < total_file; i++) {
                 $('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "'></div>");
-            }        
+            }
             var reader = new FileReader();
 
             reader.onload = function (e) {
