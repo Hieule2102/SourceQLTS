@@ -1,4 +1,4 @@
-@model IEnumerable<Source.Models.THIETBI>
+﻿@model IEnumerable<Source.Models.THIETBI>
 
 @{
     ViewBag.Title = "Index";
@@ -74,23 +74,6 @@
                         <div class="img-container">
                             <img id="img" alt="hinh-anh-thiet-bi" />
                         </div>
-                        <div class="small-container-div">
-                            <div class="small-img-container">
-                                <img id="img_c1" alt="">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_c2" alt="">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_c3" alt="">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_c4" alt="">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_c5" alt="">
-                            </div>
-                        </div>
                         <p class="ten-tb" id="TENTB"></p>
                     </div>
                     <h4 class="sub-title">Thông số kỹ thuật</h4>
@@ -133,19 +116,19 @@
                             </div>
                             <div class="small-container-div">
                                 <div class="small-img-container">
-                                    <img id="img_ct1" alt="">
+                                    <img id="img_ct1" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
                                 <div class="small-img-container">
-                                    <img id="img_ct2" alt="">
+                                    <img id="img_ct2" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
                                 <div class="small-img-container">
-                                    <img id="img_ct3" alt="">
+                                    <img id="img_ct3" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
                                 <div class="small-img-container">
-                                    <img id="img_ct4" alt="">
+                                    <img id="img_ct4" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
-                                <div class="small-img-container">
-                                    <img id="img_ct5" alt="">
+                                <div class="small -img-container">
+                                    <img id="img_ct5" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
                             </div>
                             <p class="ten-tb" id="TENTB_ct"></p>
@@ -321,45 +304,11 @@
                 img_ct3.setAttributeNode(src_ct3);
                 img_ct4.setAttributeNode(src_ct4);
                 img_ct5.setAttributeNode(src_ct5);
-                $('#img_ct1').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH1;
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-                $('#img_ct2').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH2;
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-                $('#img_ct3').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH3;
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-                $('#img_ct4').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH4;
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-                $('#img_ct5').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH5;
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
             }
         });
     };
-    //function on_click(imgCHANGE) {
-    //    var cHANGE = $(imgCHANGE).attr("id");
-    //    var src = document.createAttribute("src");
-    //    src.value = cHANGE.src;
-    //    var img = document.getElementById("img_ct");
-    //    img.setAttributeNode(src);
-    //};
+    function CHANGE_IMG(src) {
+        document.getElementById("img_ct").src = src;
+    }
 </script>
 

@@ -129,6 +129,23 @@
                     <div class="img-container">
                         <img id="img" alt="hinh-anh-thiet-bi" />
                     </div>
+                    @*<div class="small-container-div">
+                        <div class="small-img-container">
+                            <img id="img_c1" alt="">
+                        </div>
+                        <div class="small-img-container">
+                            <img id="img_c2" alt="">
+                        </div>
+                        <div class="small-img-container">
+                            <img id="img_c3" alt="">
+                        </div>
+                        <div class="small-img-container">
+                            <img id="img_c4" alt="">
+                        </div>
+                        <div class="small-img-container">
+                            <img id="img_c5" alt="">
+                        </div>
+                    </div>*@
                     <p class="ten-tb" id="TENTB"></p>
                 </div>
                 <h4 class="sub-title">Thông số kỹ thuật</h4>
@@ -171,19 +188,19 @@
                         </div>
                         <div class="small-container-div">
                             <div class="small-img-container">
-                                <img id="img_ct1" width="50" height="50" alt="">
+                                <img id="img_ct1" alt="" onclick="CHANGE_IMG(this.src)">
                             </div>
                             <div class="small-img-container">
-                                <img id="img_ct2" width="50" height="50" alt="">
+                                <img id="img_ct2" alt="" onclick="CHANGE_IMG(this.src)">
                             </div>
                             <div class="small-img-container">
-                                <img id="img_ct3" width="50" height="50" alt="">
+                                <img id="img_ct3" alt="" onclick="CHANGE_IMG(this.src)">
                             </div>
                             <div class="small-img-container">
-                                <img id="img_ct4" width="50" height="50" alt="">
+                                <img id="img_ct4" alt="" onclick="CHANGE_IMG(this.src)">
                             </div>
-                            <div class="small-img-container">
-                                <img id="img_ct5" width="50" height="50" alt="">
+                            <div class="small -img-container">
+                                <img id="img_ct5" alt="" onclick="CHANGE_IMG(this.src)">
                             </div>
                         </div>
                         <p class="ten-tb" id="TENTB_ct"></p>
@@ -272,23 +289,16 @@
 
     function Edit(evt, row) {
         var i, tablinks;
-
         tablinks = document.getElementsByClassName("tablinks");
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-
         evt.currentTarget.className += " active";
-
         $.ajax({
             type: "POST",
             url: "/Script/get_CAU_HINH",
             data: { maTB: row },
             success: function (data) {
-                $("#MATB_DC").val(data.MATB);
-                $("#MATB_XK").val(data.MATB);
-                $("#MATB_DC_ct").val(data.MATB);
-                $("#MATB_XK_ct").val(data.MATB);
                 $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
                 if (data.MA_NHOMTB == "PC") {
@@ -297,24 +307,19 @@
                     document.getElementById("label2").innerHTML = "RAM:";
                     document.getElementById("label3").innerHTML = "Màn hình:";
                     document.getElementById("label4").innerHTML = "Ổ cứng:";
-
                     $("#thong_so1").html(data.CPU);
                     $("#thong_so2").html(data.RAM);
                     $("#thong_so3").html(data.MAN_HINH);
                     $("#thong_so4").html(data.O_CUNG);
-
                     //Thông số kỹ thuật chi tiết
                     document.getElementById("more1").hidden = false;
                     document.getElementById("more2").hidden = false;
-
-
                     document.getElementById("label1_ct").innerHTML = "CPU:";
                     document.getElementById("label2_ct").innerHTML = "RAM:";
                     document.getElementById("label3_ct").innerHTML = "Màn hình:";
                     document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
                     document.getElementById("label5_ct").innerHTML = "VGA:";
                     document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
-
                     $("#thong_so1_ct").html(data.CPU);
                     $("#thong_so2_ct").html(data.RAM);
                     $("#thong_so3_ct").html(data.MAN_HINH);
@@ -328,12 +333,10 @@
                     document.getElementById("label2").innerHTML = "Loại mực:";
                     document.getElementById("label3").innerHTML = "Tốc độ:";
                     document.getElementById("label4").innerHTML = "Độ phân giải:";
-
                     $("#thong_so1").html(data.KICH_THUOC);
                     $("#thong_so2").html(data.LOAI_MUC);
                     $("#thong_so3").html(data.TOC_DO);
                     $("#thong_so4").html(data.DO_PHAN_GIAI);
-
                     //Thông số kỹ thuật chi tiết
                     document.getElementById("label1_ct").innerHTML = "Kích thước:";
                     document.getElementById("label2_ct").innerHTML = "Loại mực:";
@@ -341,8 +344,6 @@
                     document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
                     document.getElementById("more1").hidden = true;
                     document.getElementById("more2").hidden = true;
-
-
                     $("#thong_so1_ct").html(data.KICH_THUOC);
                     $("#thong_so2_ct").html(data.LOAI_MUC);
                     $("#thong_so3_ct").html(data.TOC_DO);
@@ -354,12 +355,10 @@
                     document.getElementById("label2").innerHTML = "";
                     document.getElementById("label3").innerHTML = "";
                     document.getElementById("label4").innerHTML = "";
-
                     $("#thong_so1").html("");
                     $("#thong_so2").html("");
                     $("#thong_so3").html("");
                     $("#thong_so4").html("");
-
                     //Thông số kỹ thuật chi tiết
                     document.getElementById("label1_ct").innerHTML = "";
                     document.getElementById("label2_ct").innerHTML = "";
@@ -367,8 +366,6 @@
                     document.getElementById("label4_ct").innerHTML = "";
                     document.getElementById("more1").hidden = true;
                     document.getElementById("more2").hidden = true;
-
-
                     $("#thong_so1_ct").html("");
                     $("#thong_so2_ct").html("");
                     $("#thong_so3_ct").html("");
@@ -384,7 +381,6 @@
                 //Thông số kỹ thuật
                 var src = document.createAttribute("src");
                 var img = document.getElementById("img");
-                
 
                 //Thông số kỹ thuật chi tiết
                 var img_ct = document.getElementById("img_ct");
@@ -393,14 +389,12 @@
                 var img_ct3 = document.getElementById("img_ct3");
                 var img_ct4 = document.getElementById("img_ct4");
                 var img_ct5 = document.getElementById("img_ct5");
-
                 var src_ct = document.createAttribute("src");
                 var src_ct1 = document.createAttribute("src");
                 var src_ct2 = document.createAttribute("src");
                 var src_ct3 = document.createAttribute("src");
                 var src_ct4 = document.createAttribute("src");
                 var src_ct5 = document.createAttribute("src");
-
                 if (data != null) {
                     src.value = "Images/" + data.HINH1;
                     src_ct.value = "Images/" + data.HINH1;
@@ -419,7 +413,6 @@
                     src_ct4.value = "Images/alibaba";
                     src_ct5.value = "Images/alibaba";
                 }
-
                 img.setAttributeNode(src);
                 img_ct.setAttributeNode(src_ct);
                 img_ct1.setAttributeNode(src_ct1);
@@ -428,47 +421,42 @@
                 img_ct4.setAttributeNode(src_ct4);
                 img_ct5.setAttributeNode(src_ct5);
 
-                $('#img_ct1').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH1;
-
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-
-                $('#img_ct2').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH2;
-
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-
-                $('#img_ct3').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH3;
-
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-
-                $('#img_ct4').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH4;
-
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
-
-                $('#img_ct5').click(function () {
-                    var src = document.createAttribute("src");
-                    src.value = "Images/" + data.HINH5;
-
-                    var img = document.getElementById("img_ct");
-                    img.setAttributeNode(src);
-                });
+                //$('#img_ct1').click(function () {
+                //    var src = document.createAttribute("src");
+                //    src.value = "Images/" + data.HINH1;
+                //    var img = document.getElementById("img_ct");
+                //    img.setAttributeNode(src);
+                //});
+                //$('#img_ct2').click(function () {
+                //    var src = document.createAttribute("src");
+                //    src.value = "Images/" + data.HINH2;
+                //    var img = document.getElementById("img_ct");
+                //    img.setAttributeNode(src);
+                //});
+                //$('#img_ct3').click(function () {
+                //    var src = document.createAttribute("src");
+                //    src.value = "Images/" + data.HINH3;
+                //    var img = document.getElementById("img_ct");
+                //    img.setAttributeNode(src);
+                //});
+                //$('#img_ct4').click(function () {
+                //    var src = document.createAttribute("src");
+                //    src.value = "Images/" + data.HINH4;
+                //    var img = document.getElementById("img_ct");
+                //    img.setAttributeNode(src);
+                //});
+                //$('#img_ct5').click(function () {
+                //    var src = document.createAttribute("src");
+                //    src.value = "Images/" + data.HINH5;
+                //    var img = document.getElementById("img_ct");
+                //    img.setAttributeNode(src);
+                //});
             }
         });
     };
+
+    function CHANGE_IMG(src) {
+        document.getElementById("img_ct").src = src;
+    }
 </script>
 
