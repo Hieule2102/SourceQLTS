@@ -1,11 +1,5 @@
-﻿$(document).ready(function () {
-    $('.nav-icon').click(function () {
-        $('.nav-icon').toggleClass('nav-close');
-        $('.nav').toggleClass('d-none');
-        $('header').toggleClass('header-show');
-        $('.navbar').toggleClass('navbar-show');
-    });
-    
+$(document).ready(function () {
+        
     $('.login-close').click(function () {
         $('#login').removeClass('login-show');
     });
@@ -57,30 +51,6 @@
             $(".cau-hinh-chi-tiet").removeClass("d-none");
         });
     }
-
-    $(".toggle").click(function (e) {
-        e.preventDefault();
-
-        var $this = $(this);
-
-        if ($this.next().hasClass("show")) {
-            $this.next().removeClass("show");
-            $this.next().slideUp(350);
-        } else {
-            $this
-                .parent()
-                .parent()
-                .find("li .inner")
-                .removeClass("show");
-            $this
-                .parent()
-                .parent()
-                .find("li .inner")
-                .slideUp(350);
-            $this.next().toggleClass("show");
-            $this.next().slideToggle(350);
-        }
-    });
 });
 
     
@@ -110,3 +80,36 @@ function btn_Edit(evt, row) {
     evt.currentTarget.className += " active";
   };
 
+//input file
+(function (e, t, n) {
+    var r = e.querySelectorAll("html")[0];
+    r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2");
+})(document, window, 0);
+
+(function (document, window, index) {
+    var inputs = document.querySelectorAll(".inputfile");
+    Array.prototype.forEach.call(inputs, function (input) {
+        var label = input.nextElementSibling,
+            labelVal = label.innerHTML;
+
+        input.addEventListener("change", function (e) {
+            var fileName = "";
+            if (this.files && this.files.length > 1)
+                fileName = (
+                    this.getAttribute("data-multiple-caption") || ""
+                ).replace("{count}", this.files.length);
+            else fileName = e.target.value.split("\\").pop();
+
+            if (fileName) label.querySelector("span").innerHTML = fileName;
+            else label.innerHTML = labelVal;
+        });
+
+        // Firefox bug fix
+        input.addEventListener("focus", function () {
+            input.classList.add("has-focus");
+        });
+        input.addEventListener("blur", function () {
+            input.classList.remove("has-focus");
+        });
+    });
+})(document, window, 0);
