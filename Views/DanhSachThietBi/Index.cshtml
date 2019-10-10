@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.THIETBI>
+@model IEnumerable<Source.Models.THIETBI>
 
 @{
     ViewBag.Title = "Index";
@@ -130,22 +130,22 @@
                         <img id="img" alt="hinh-anh-thiet-bi" />
                     </div>
                     @*<div class="small-container-div">
-                        <div class="small-img-container">
-                            <img id="img_c1" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_c2" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_c3" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_c4" alt="">
-                        </div>
-                        <div class="small-img-container">
-                            <img id="img_c5" alt="">
-                        </div>
-                    </div>*@
+                <div class="small-img-container">
+                    <img id="img_c1" alt="">
+                </div>
+                <div class="small-img-container">
+                    <img id="img_c2" alt="">
+                </div>
+                <div class="small-img-container">
+                    <img id="img_c3" alt="">
+                </div>
+                <div class="small-img-container">
+                    <img id="img_c4" alt="">
+                </div>
+                <div class="small-img-container">
+                    <img id="img_c5" alt="">
+                </div>
+            </div>*@
                     <p class="ten-tb" id="TENTB"></p>
                 </div>
                 <h4 class="sub-title">Thông số kỹ thuật</h4>
@@ -172,6 +172,22 @@
                 </div>
 
                 <button id="chct">Cấu hình chi tiết</button>
+                <div class="xk-dc">
+                    @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <input class="ten-tb" id="MATB_XK" name="MATB_XK" hidden="hidden" />
+                        <button>Xuất kho</button>
+                    }
+                    @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <input class="ten-tb" id="MATB_DC" name="MATB_DC" hidden="hidden" />
+                        <button>Điều chuyển</button>
+                    }
+                </div>
             </div>
 
 
@@ -233,6 +249,22 @@
                                 <td id="thong_so6_ct"></td>
                             </tr>
                         </table>
+                        <div class="xk-dc d-none">
+                            @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <input class="ten-tb" id="MATB_XK_ct" name="MATB_XK_ct" hidden="hidden" />
+                                <button>Xuất kho</button>
+                            }
+                            @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <input class="ten-tb" id="MATB_DC_ct" name="MATB_DC_ct" hidden="hidden" />
+                                <button>Điều chuyển</button>
+                            }
+                        </div>
                     </div>
                 </div>
 
@@ -299,6 +331,10 @@
             url: "/Script/get_CAU_HINH",
             data: { maTB: row },
             success: function (data) {
+                $("#MATB_DC").val(data.MATB);
+                $("#MATB_XK").val(data.MATB);
+                $("#MATB_DC_ct").val(data.MATB);
+                $("#MATB_XK_ct").val(data.MATB);
                 $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
                 if (data.MA_NHOMTB == "PC") {
