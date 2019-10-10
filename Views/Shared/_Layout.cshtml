@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -45,7 +45,7 @@
                             }
                             <li class="menuc1">
                                 @if (Session["DANH_MUC"] != null)
-                            {
+                                {
                                     <a href="javascript:void(0);" class="c1 toggle">
                                         Danh mục<span><i class="fas fa-sort-down fa-2x"></i></span>
                                     </a>
@@ -55,11 +55,11 @@
                                         <li>@Html.ActionLink("Đơn vị", "Index", "DonVi")<span></span></li>
                                         <li>@Html.ActionLink("Nhà cung cấp", "Index", "NhaCungCap")<span></span></li>
                                     </ul>
-                            }
+                                }
                             </li>
                             <li class="menuc1">
                                 @if (Session["BAO_CAO"] != null)
-                            {
+                                {
                                     <a href="javascript:void(0);" class="c1 toggle">
                                         Báo cáo<span><i class="fas fa-sort-down fa-2x"></i></span>
                                     </a>
@@ -72,11 +72,11 @@
                                         <li><a href="">Tồn kho</a><span></span></li>
                                         <li><a href="">Hết hạn bảo hành</a><span></span></li>
                                     </ul>
-                            }
+                                }
                             </li>
                             <li class="menuc1">
                                 @if (Session["QL_ND"] != null)
-                            {
+                                {
                                     <a href="javascript:void(0);" class="c1 toggle">
                                         Quản lý người dùng<span><i class="fas fa-sort-down fa-2x"></i></span>
                                     </a>
@@ -86,11 +86,11 @@
                                         <li>@Html.ActionLink("Nhóm người dùng", "Index", "NhomNguoiDung")<span></span></li>
                                         <li>@Html.ActionLink("Phân quyền", "Index", "PhanQuyen")<span></span></li>
                                     </ul>
-                            }
+                                }
                             </li>
                         </ul>
                     }
-                    </div>
+                </div>
                 <div class="log">
                     @if (Session["TEN_DANG_NHAP"] != null)
                     {
@@ -145,12 +145,44 @@
             </div>
         </div>
     </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script src="Scripts/jquery-ui.js"></script>
+    <script src="Scripts/main.js"></script>
+    <script>
+        $('.nav-icon').click(function () {
+            $('.nav-icon').toggleClass('nav-close');
+            $('.nav').toggleClass('d-none');
+            $('header').toggleClass('header-show');
+            $('.navbar').toggleClass('navbar-show');
+        });
+        $(".toggle").click(function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+
+        if ($this.next().hasClass("show")) {
+            $this.next().removeClass("show");
+            $this.next().slideUp();
+        } else {
+            $this
+                .parent()
+                .parent()
+                .find("li .inner")
+                .removeClass("show");
+            $this
+                .parent()
+                .parent()
+                .find("li .inner")
+                .slideUp();
+            $this.next().toggleClass("show");
+            $this.next().slideToggle();
+        }
+    });
+    </script>
 </body>
 </html>
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@RenderSection("scripts", required: false)
-<script src="Scripts/jquery-3.4.1.min.js"></script>
-<script src="Scripts/jquery-ui.js"></script>
-<script src="Scripts/main.js"></script>
