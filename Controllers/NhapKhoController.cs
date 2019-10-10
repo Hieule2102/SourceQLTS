@@ -1,363 +1,393 @@
-@model IEnumerable<Source.Models.NHAP_KHO>
+using Source.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<main>
-    <div class="container link">
-        <p>Trang chủ > Chức năng > Nhập kho</p>
-        <hr />
-    </div>
-    @using (Html.BeginForm("Index", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
+namespace Source.Controllers
+{
+    public class NhapKhoController : Controller
     {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        <section class="container" id="nhap-kho">
-            <h1 class="title">NHẬP KHO</h1>
-            @if (ViewBag.ErrorMessage != null)
+        private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
+
+        // GET: /NhapKho/
+        public ActionResult Index()
+        {
+            //var nhap_kho = db.NHAP_KHO.Include(n => n.DON_VI).Include(n => n.NGUOI_DUNG).Include(n => n.THIETBI);
+            //return View(await nhap_kho.ToListAsync());
+
+            if (Session["CHUC_NANG"] != null)
             {
-                <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 1 &&
+                                                         a.MA_QUYEN == 1 &&
+                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
             }
-            <div class="form-nhap-kho">
+            else
+            {
+                return HttpNotFound("You have no accesss permissions at this");
+            }
 
-                <div class="thong-tin-chung">
+            return View();
+        }
 
-                    <h4 class="sub-title">
-                        Thông tin chung
-                    </h4>
-                    <div class="form-group">
-                        <label for="">Nhóm thiết bị: </label>
-                        @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
-                        <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="Fill_LoaiTB()"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Loại thiết bị: </label>
-                        <select class="form-control" id="MA_LOAITB" name="MA_LOAITB"></select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Tên thiết bị:</label>
-                        <input type="text" name="TENTB" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Số serial:</label>
-                        <input type="text" name="SO_SERIAL" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Giá tiền:</label>
-                        <input type="number" name="GIA_TIEN" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">THBH:</label>
-                        <input type="text" name="THOI_HAN_BAO_HANH" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Ngày mua:</label>
-                        <input type="date" name="NGAY_MUA" />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Đơn vị mua:</label>
-                        <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Nhà cung cấp:</label>
-                        <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
-                    </div>
-                </div>
-                <div class="thongso-hinhanh">
-                    <div class="them-hinh-anh">
-                        <h4 class="sub-title">
-                            Thêm hình ảnh
-                        </h4>
-                        <div class="img-container">
-                            <img id="img" src="#" alt="your image" />
-                            <span><i class="far fa-times-circle"></i></span>
-                        </div>
-                        <div class="row" id="image_preview"></div>
-                        <div class="inputfile-div">
-                            <input type="file" class="inputfile inputfile-1"
-                                   data-multiple-caption="{count} files selected" id="file-1" name="HINH_ANH" onchange="preview_images();" multiple />
-                            <label for="file-1">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     width="20"
-                                     height="17"
-                                     viewBox="0 0 20 17">
-                                    <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
-                                </svg>
-                                <span>Choose a file&hellip;</span>
-                            </label>
-                        </div>
-                        @*<div class="inputfile-div">
-                                <input type="file"
-                                       name="file-1[]"
-                                       id="file-1"
-                                       class="inputfile inputfile-1"
-                                       data-multiple-caption="{count} files selected"
-                                       multiple />
-                                <label for="file-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         width="20"
-                                         height="17"
-                                         viewBox="0 0 20 17">
-                                        <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
-                                    </svg>
-                                    <span>Choose a file&hellip;</span>
-                                </label>
-                            </div>*@
-                    </div>
-                    <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
-                        <h4 class="sub-title">
-                            Thông số kỹ thuật
-                        </h4>
-                        <div id="first" class="form-group">
-                            <label id="label1"></label>
-                            <select class="form-control"
-                                    id="thong_so1"
-                                    name="thong_so1"></select>
-                            <input type="text" id="input_thong_so1" name="input_thong_so1" />
-                        </div>
-                        <div id="second" class="form-group">
-                            <label id="label2"></label>
-                            <select class="form-control"
-                                    id="thong_so2"
-                                    name="thong_so2"></select>
-                        </div>
-                        <div id="third" class="form-group">
-                            <label id="label3"></label>
-                            <select class="form-control"
-                                    id="thong_so3"
-                                    name="thong_so3"></select>
-                            <input type="number" id="input_thong_so3" name="input_thong_so3" />
-                        </div>
-                        <div id="fourth" class="form-group">
-                            <label id="label4"></label>
-                            <select class="form-control"
-                                    id="thong_so4"
-                                    name="thong_so4"></select>
-                            <input type="text" id="input_thong_so4" name="input_thong_so4" />
-                        </div>
-                        <div id="fifth">
-                            <div class="form-group">
-                                <label id="label5"></label>
-                                <select class="form-control"
-                                        id="thong_so5"
-                                        name="thong_so5"></select>
-                            </div>
-                        </div>
-
-                        <div id="sixth">
-                            <div class="form-group">
-                                <label id="label6"></label>
-                                <select class="form-control"
-                                        id="thong_so6"
-                                        name="thong_so6"></select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="submit">
-                @if (ViewBag.Them != null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, HttpPostedFileBase[] HINH_ANH)
+        {
+            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 1 &&
+                                                     a.MA_QUYEN == 1 &&
+                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            //Lưu
+            if (!String.IsNullOrEmpty(SAVE))
+            {
+                var temp = form["SO_SERIAL"].ToString();
+                if (form["TENTB"] == null || form["SO_SERIAL"] == null || form["MA_LOAITB"] == null)
                 {
-                    <button type="submit" id="SAVE" name="SAVE" value="save" class="luu">THÊM</button>
-                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    ViewBag.ErrorMessage = "Xin nhập đầy đủ thông tin";
                 }
-            </div>
-        </section>
-    }
-</main>
-
-<script type="text/javascript" src="~/Scripts/main.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_NHOMTB",
-            data: "{}",
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                else if (db.THIETBIs.FirstOrDefault(x => x.SO_SERIAL == temp) != null)
+                {
+                    ViewBag.ErrorMessage = "Số Serial đã tồn tại";
                 }
-                $("#MA_NHOMTB").html(s);
+                else
+                {
+                    #region Tạo thiết bị
+                    var thiet_Bi = new THIETBI();
+                    thiet_Bi.TENTB = form["TENTB"];
+                    thiet_Bi.SO_SERIAL = form["SO_SERIAL"];
+                    if (!String.IsNullOrEmpty(form["GIA_TIEN"]))
+                    {
+                        thiet_Bi.GIA_TIEN = Decimal.Parse(form["GIA_TIEN"].ToString());
+                    }
+                    else
+                    {
+                        thiet_Bi.GIA_TIEN = 0;
+                    }
+                    thiet_Bi.THOI_HAN_BAO_HANH = form["THOI_HAN_BAO_HANH"];
+
+                    temp = form["MA_LOAITB"].ToString();
+                    thiet_Bi.MA_LOAITB = (from p in db.LOAI_THIETBI
+                                          where p.TEN_LOAI == temp
+                                          select p.MA_LOAITB).FirstOrDefault();
+
+                    if (!String.IsNullOrEmpty(form["MA_DON_VI"]))
+                    {
+                        temp = form["MA_DON_VI"].ToString();
+                        thiet_Bi.MA_DV = (from p in db.DON_VI
+                                          where p.TEN_DON_VI == temp
+                                          select p.MA_DON_VI).FirstOrDefault();
+                    }
+
+                    if (!String.IsNullOrEmpty(form["MA_NCC"]))
+                    {
+                        temp = form["MA_NCC"].ToString();
+                        thiet_Bi.MA_NCC = (from p in db.NHA_CUNG_CAP
+                                           where p.TEN_NCC == temp
+                                           select p.MA_NCC).FirstOrDefault();
+                    }
+
+                    thiet_Bi.NGAY_MUA = DateTime.Parse(form["NGAY_MUA"]);
+                    thiet_Bi.TINH_TRANG = "Mới nhập";
+                    #endregion
+
+                    #region Tạo cấu hình
+                    temp = form["MA_NHOMTB"].ToString();
+                    var nhomTB = (from d in db.NHOM_THIETBI
+                                  where d.TEN_NHOM == temp
+                                  select d.MA_NHOMTB).FirstOrDefault();
+
+                    var cau_Hinh = new CAU_HINH();
+                    if (nhomTB == "PC")
+                    {
+                        if (!String.IsNullOrEmpty(form["thong_so1"]))
+                        {
+                            temp = form["thong_so1"].ToString();
+                            cau_Hinh.CPU = (from p in db.DM_CPU
+                                            where p.TEN_CPU == temp
+                                            select p.MA_CPU).First();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so2"]))
+                        {
+                            temp = form["thong_so2"].ToString();
+                            cau_Hinh.RAM = (from p in db.DM_RAM
+                                            where p.TEN_RAM == temp
+                                            select p.MA_RAM).First();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so3"]))
+                        {
+                            temp = form["thong_so3"].ToString();
+                            cau_Hinh.MAN_HINH = (from p in db.DM_MAN_HINH
+                                                 where p.TEN_MAN_HINH == temp
+                                                 select p.MA_MAN_HINH).First();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so4"]))
+                        {
+                            temp = form["thong_so4"].ToString();
+                            cau_Hinh.O_CUNG = (from p in db.DM_O_CUNG
+                                               where p.TEN_O_CUNG == temp
+                                               select p.MA_O_CUNG).First();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so5"]))
+                        {
+                            temp = form["thong_so5"].ToString();
+                            cau_Hinh.VGA = (from p in db.DM_VGA
+                                            where p.TEN_VGA == temp
+                                            select p.MA_VGA).First();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so6"]))
+                        {
+                            temp = form["thong_so6"].ToString();
+                            cau_Hinh.HE_DIEU_HANH = (from p in db.DM_HDH
+                                                     where p.TEN_HDH == temp
+                                                     select p.MA_HDH).First();
+                        }
+                    }
+                    else if (nhomTB == "PR")
+                    {
+                        if (!String.IsNullOrEmpty(form["input_thong_so1"]))
+                        {
+                            cau_Hinh.KICH_THUOC = form["input_thong_so1"];
+                        }
+
+                        if (!String.IsNullOrEmpty(form["thong_so2"]))
+                        {
+                            temp = form["thong_so2"].ToString();
+                            cau_Hinh.LOAI_MUC = (from a in db.DM_LOAI_MUC
+                                                 where a.TEN_LOAI_MUC == temp
+                                                 select a.MA_LOAI_MUC).FirstOrDefault();
+                        }
+
+                        if (!String.IsNullOrEmpty(form["input_thong_so3"]))
+                        {
+                            cau_Hinh.TOC_DO = form["input_thong_so3"] + "ppm";
+                        }
+
+                        if (!String.IsNullOrEmpty(form["input_thong_so4"]))
+                        {
+                            cau_Hinh.DO_PHAN_GIAI = form["input_thong_so4"];
+                        }
+                    }
+                    #endregion
+
+                    #region Tạo nhập kho
+                    var nhap_Kho_Create = new NHAP_KHO();
+
+                    if (!String.IsNullOrEmpty(form["MA_DON_VI"]))
+                    {
+                        temp = form["MA_DON_VI"].ToString();
+                        nhap_Kho_Create.MADV_NHAP = (from p in db.DON_VI
+                                                     where p.TEN_DON_VI == temp
+                                                     select p.MA_DON_VI).FirstOrDefault();
+                    }
+                    nhap_Kho_Create.NGAY_NHAP = DateTime.Now;
+
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    nhap_Kho_Create.MAND_NHAP = (from p in db.NGUOI_DUNG
+                                                 where p.TEN_DANG_NHAP == temp
+                                                 select p.MA_ND).FirstOrDefault();
+
+                    //Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Mới nhập";
+                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+                    #endregion
+
+                    if (ModelState.IsValid)
+                    {
+                        db.THIETBIs.Add(thiet_Bi);
+                        await db.SaveChangesAsync();
+
+                        temp = form["SO_SERIAL"].ToString();
+                        var maTB = (from p in db.THIETBIs
+                                    where p.SO_SERIAL == temp
+                                    select p.MATB).First();
+
+                        cau_Hinh.MATB = maTB;
+                        db.CAU_HINH.Add(cau_Hinh);
+
+                        nhap_Kho_Create.MATB = maTB;
+                        db.NHAP_KHO.Add(nhap_Kho_Create);
+
+                        nHAT_KY_THIET_BI.MATB = maTB;
+                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+
+                        await db.SaveChangesAsync();
+
+                        ViewBag.ErrorMessage = "Thêm thành công";
+                    }
+
+                    #region Tạo hình ảnh
+                    if (HINH_ANH != null)
+                    {
+                        var hinh_Anh = new HINH_ANH();
+
+                        temp = form["SO_SERIAL"].ToString();
+                        hinh_Anh.MATB = (from p in db.THIETBIs
+                                         where p.SO_SERIAL == temp
+                                         select p.MATB).First();
+
+                        foreach (var file in HINH_ANH)
+                        {
+                            if (file.ContentLength > 0)
+                            {
+                                var fileName = Path.GetFileName(file.FileName);
+                                var path = Path.Combine(Server.MapPath("~/Images/" + fileName));
+                                file.SaveAs(path);
+
+                                if (hinh_Anh.HINH1 == null)
+                                {
+                                    hinh_Anh.HINH1 = fileName;
+                                }
+                                else if (hinh_Anh.HINH2 == null)
+                                {
+                                    hinh_Anh.HINH2 = fileName;
+                                }
+                                else if (hinh_Anh.HINH3 == null)
+                                {
+                                    hinh_Anh.HINH3 = fileName;
+                                }
+                                else if (hinh_Anh.HINH4 == null)
+                                {
+                                    hinh_Anh.HINH4 = fileName;
+                                }
+                                else if (hinh_Anh.HINH5 == null)
+                                {
+                                    hinh_Anh.HINH5 = fileName;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (ModelState.IsValid)
+                        {
+                            db.HINH_ANH.Add(hinh_Anh);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    #endregion
+                }
             }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_DONVI",
-            data: "{}",
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#MA_DON_VI").html(s);
-            }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_NCC",
-            data: "{}",
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn nhà cung cấp</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#MA_NCC").html(s);
-            }
-        });
-    });
-
-    function preview_images() {
-        var total_file = document.getElementById("file-1").files.length;
-        if (total_file > 5) {
-            alert('Hello, just 5!');
+            return View();
         }
-        else {
-            for (var i = 0; i < total_file; i++) {
-                $('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "' onclick='cHANGE_IMG(this.src)'></div>");
-            }
-            var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#img')
-                    .attr('src', e.target.result)
-                    .width(313)
-                    .height(178);
-            };
-            reader.readAsDataURL(event.target.files[total_file - 1]);
+        // GET: /NhapKho/Details/5
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NHAP_KHO nhap_kho = await db.NHAP_KHO.FindAsync(id);
+            if (nhap_kho == null)
+            {
+                return HttpNotFound();
+            }
+            return View(nhap_kho);
+        }
+
+        // GET: /NhapKho/Create
+        public ActionResult Create(string value)
+        {
+            ViewBag.MADV_NHAP = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI");
+            ViewBag.MAND_NHAP = new SelectList(db.NGUOI_DUNG, "MA_ND", "TEN_ND");
+            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB");
+            return View();
+        }
+
+        // POST: /NhapKho/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create()
+        {
+            var nhap_kho = db.NHAP_KHO.Include(n => n.DON_VI).Include(n => n.NGUOI_DUNG).Include(n => n.THIETBI);
+            return View(await nhap_kho.ToListAsync());
+        }
+
+        // GET: /NhapKho/Edit/5
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NHAP_KHO nhap_kho = await db.NHAP_KHO.FindAsync(id);
+            if (nhap_kho == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.MADV_NHAP = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", nhap_kho.MADV_NHAP);
+            ViewBag.MAND_NHAP = new SelectList(db.NGUOI_DUNG, "MA_ND", "TEN_ND", nhap_kho.MAND_NHAP);
+            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", nhap_kho.MATB);
+            return View(nhap_kho);
+        }
+
+        // POST: /NhapKho/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "MA_NHAPKHO,MATB,MADV_NHAP,MAND_NHAP,NGAY")] NHAP_KHO nhap_kho)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(nhap_kho).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            ViewBag.MADV_NHAP = new SelectList(db.DON_VI, "MA_DON_VI", "TEN_DON_VI", nhap_kho.MADV_NHAP);
+            ViewBag.MAND_NHAP = new SelectList(db.NGUOI_DUNG, "MA_ND", "TEN_ND", nhap_kho.MAND_NHAP);
+            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", nhap_kho.MATB);
+            return View(nhap_kho);
+        }
+
+        // GET: /NhapKho/Delete/5
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            NHAP_KHO nhap_kho = await db.NHAP_KHO.FindAsync(id);
+            if (nhap_kho == null)
+            {
+                return HttpNotFound();
+            }
+            return View(nhap_kho);
+        }
+
+        // POST: /NhapKho/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            NHAP_KHO nhap_kho = await db.NHAP_KHO.FindAsync(id);
+            db.NHAP_KHO.Remove(nhap_kho);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
-
-    function Fill_LoaiTB() {
-        var nhom_TB = $('#MA_NHOMTB').val();
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_LOAITB",
-            data: { nhom_TB: nhom_TB },
-            success: function (data) {
-                document.getElementById("thong-so-ky-thuat").hidden = false;
-                $("#MA_LOAITB").html("");
-                var options = '<option disabled selected value>Xin chọn loại thiết bị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    options += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#MA_LOAITB").html(options);
-            }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_THONG_SO_KY_THUAT",
-            data: { nhom_TB: nhom_TB },
-            success: function (data) {
-                if (data.NHOMTB == "PC") {
-                    document.getElementById("fifth").hidden = false;
-                    document.getElementById("sixth").hidden = false;
-                    //document.getElementById("fifth").setAttribute("hidden", "false");
-                    //document.getElementById("sixth").setAttribute("hidden", "false");
-
-                    document.getElementById("thong_so1").hidden = false;
-                    document.getElementById("input_thong_so1").hidden = true;
-                    document.getElementById("thong_so3").hidden = false;
-                    document.getElementById("input_thong_so3").hidden = true;
-                    document.getElementById("thong_so4").hidden = false;
-                    document.getElementById("input_thong_so4").hidden = true;
-
-                    document.getElementById("label1").innerHTML = "CPU:";
-                    document.getElementById("label2").innerHTML = "RAM";
-                    document.getElementById("label3").innerHTML = "Màn hình:";
-                    document.getElementById("label4").innerHTML = "Ổ cứng:";
-                    document.getElementById("label5").innerHTML = "VGA:";
-                    document.getElementById("label6").innerHTML = "Hệ điều hành:";
-
-
-
-                    $("#thong_so1").html("");
-                    $("#thong_so2").html("");
-                    $("#thong_so3").html("");
-                    $("#thong_so4").html("");
-                    $("#thong_so5").html("");
-                    $("#thong_so6").html("");
-
-                    var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
-                    var options2 = '<option disabled selected value></option>';
-                    var options3 = '<option disabled selected value></option>';
-                    var options4 = '<option disabled selected value></option>';
-                    var options5 = '<option disabled selected value></option>';
-                    var options6 = '<option disabled selected value></option>';
-
-                    for (var i = 0; i < data.CPU.length; i++) {
-                        options1 += '<option value="' + data.CPU[i] + '">' + data.CPU[i] + '</option>';
-                    }
-
-                    for (var i = 0; i < data.RAM.length; i++) {
-                        options2 += '<option value="' + data.RAM[i] + '">' + data.RAM[i] + '</option>';
-                    }
-
-                    for (var i = 0; i < data.MAN_HINH.length; i++) {
-                        options3 += '<option value="' + data.MAN_HINH[i] + '">' + data.MAN_HINH[i] + '</option>';
-                    }
-
-                    for (var i = 0; i < data.O_CUNG.length; i++) {
-                        options4 += '<option value="' + data.O_CUNG[i] + '">' + data.O_CUNG[i] + '</option>';
-                    }
-
-                    for (var i = 0; i < data.VGA.length; i++) {
-                        options5 += '<option value="' + data.VGA[i] + '">' + data.VGA[i] + '</option>';
-                    }
-
-                    for (var i = 0; i < data.HDH.length; i++) {
-                        options6 += '<option value="' + data.HDH[i] + '">' + data.HDH[i] + '</option>';
-                    }
-
-                    $("#thong_so1").html(options1);
-                    $("#thong_so2").html(options2);
-                    $("#thong_so3").html(options3);
-                    $("#thong_so4").html(options4);
-                    $("#thong_so5").html(options5);
-                    $("#thong_so6").html(options6);
-
-
-                }
-                else if (data.NHOMTB == "PR") {
-                    document.getElementById("fifth").hidden = true;
-                    document.getElementById("sixth").hidden = true;
-                    //document.getElementById("fifth").setAttribute("hidden", "true");
-                    //document.getElementById("sixth").setAttribute("hidden", "true");
-                    document.getElementById("thong_so1").hidden = true;
-                    document.getElementById("input_thong_so1").hidden = false;
-                    document.getElementById("thong_so3").hidden = true;
-                    document.getElementById("input_thong_so3").hidden = false;
-                    document.getElementById("thong_so4").hidden = true;
-                    document.getElementById("input_thong_so4").hidden = false;
-
-                    document.getElementById("label1").innerHTML = "Kích thước:";
-                    document.getElementById("label2").innerHTML = "Loại mực:";
-                    document.getElementById("label3").innerHTML = "Tốc độ:";
-                    document.getElementById("label4").innerHTML = "Độ phân giải:";
-
-                    $("#thong_so2").html("");
-
-                    var options2 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
-                    //var options3 = '<option value="null"></option>';
-
-                    for (var i = 0; i < data.LOAI_MUC.length; i++) {
-                        options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
-                    }
-
-                    $("#thong_so2").html(options2);
-                    //$("#thong_so3").html(options3);
-                }
-            }
-        });
-    };
-
-    function cHANGE_IMG(src) {
-        document.getElementById("img").src = src;
-    }
-</script>
+}
