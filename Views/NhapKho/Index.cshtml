@@ -94,7 +94,7 @@
                             </div>
                             <div class="inputfile-div">
                                 <input type="file" class="inputfile inputfile-1"
-                                       data-multiple-caption="{count} files selected" id="file-1" name="HINH_ANH" onchange="preview_images();" multiple />
+                                       data-multiple-caption="{count} files selected" id="file-1" name="HINH_ANH" onchange="preview_images();" multiple/>
                                 <label for="file-1">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          width="20"
@@ -407,23 +407,42 @@
 
         if (document.getElementById("img1").src == remove) {
             document.getElementById("img1").removeAttribute("src");
+
             document.getElementById("img").src = document.getElementById("img2").src;
+            document.getElementById("img1").src = document.getElementById("img2").src;
+            document.getElementById("img2").src = document.getElementById("img3").src;
+            document.getElementById("img3").src = document.getElementById("img4").src;
+            document.getElementById("img4").src = document.getElementById("img5").src;
+            document.getElementById("img5").removeAttribute("src");
         }
         else if (document.getElementById("img2").src == remove) {
             document.getElementById("img2").removeAttribute("src");
+
             document.getElementById("img").src = document.getElementById("img3").src;
+            document.getElementById("img2").src = document.getElementById("img3").src;
+            document.getElementById("img3").src = document.getElementById("img4").src;
+            document.getElementById("img4").src = document.getElementById("img5").src;
+            document.getElementById("img5").removeAttribute("src");
         }
         else if (document.getElementById("img3").src == remove) {
             document.getElementById("img3").removeAttribute("src");
+
             document.getElementById("img").src = document.getElementById("img4").src;
+            document.getElementById("img3").src = document.getElementById("img4").src;
+            document.getElementById("img4").src = document.getElementById("img5").src;
+            document.getElementById("img5").removeAttribute("src");
         }
         else if (document.getElementById("img4").src == remove) {
             document.getElementById("img4").removeAttribute("src");
+
             document.getElementById("img").src = document.getElementById("img5").src;
+            document.getElementById("img4").src = document.getElementById("img5").src;
+            document.getElementById("img5").removeAttribute("src");
         }
         else if (document.getElementById("img5").src == remove) {
             document.getElementById("img5").removeAttribute("src");
-            document.getElementById("img").src = document.getElementById("img1").src;
+
+            document.getElementById("img").src = document.getElementById("img4").src;
         }
     }
 </script>
