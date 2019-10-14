@@ -11,6 +11,20 @@
     </div>
     <section class="container" id="ds-tb">
         <h4 class="sub-title">Danh sách thiết bị</h4>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="search">
+                <input type="text"
+                       name="SEARCH_STRING"
+                       class="placeholder"
+                       placeholder="Nhập tên thiết bị" />
+                <button type="submit" class="btn-search">
+                    <span><i class="fas fa-search"></i></span>
+                </button>
+            </div>
+        }
         <div class="div-dstb">
             <div class="ds-tb">
                 <table>
@@ -58,8 +72,8 @@
                                 @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
                             </td>
                             @*<td>
-                                    @Html.DisplayFor(modelItem => item.MANS_QL)
-                                </td>*@
+                                @Html.DisplayFor(modelItem => item.MANS_QL)
+                            </td>*@
                         </tr>
                     }
                 </table>
@@ -127,7 +141,7 @@
                                 <div class="small-img-container">
                                     <img id="img_ct4" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
-                                <div class="small -img-container">
+                                <div class="small-img-container">
                                     <img id="img_ct5" alt="" onclick="CHANGE_IMG(this.src)">
                                 </div>
                             </div>

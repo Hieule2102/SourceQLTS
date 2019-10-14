@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -90,6 +90,10 @@
                             </li>
                         </ul>
                     }
+                    else
+                    {
+                        @*<h2 class="title-dn">QUẢN LÝ TÀI SẢN CÔNG NGHỆ THÔNG TIN</h2>*@
+                    }
                 </div>
                 <div class="log">
                     @if (Session["TEN_DANG_NHAP"] != null)
@@ -160,28 +164,28 @@
             $('.navbar').toggleClass('navbar-show');
         });
         $(".toggle").click(function (e) {
-        e.preventDefault();
+            e.preventDefault();
 
-        var $this = $(this);
+            var $this = $(this);
 
-        if ($this.next().hasClass("show")) {
-            $this.next().removeClass("show");
-            $this.next().slideUp();
-        } else {
-            $this
-                .parent()
-                .parent()
-                .find("li .inner")
-                .removeClass("show");
-            $this
-                .parent()
-                .parent()
-                .find("li .inner")
-                .slideUp();
-            $this.next().toggleClass("show");
-            $this.next().slideToggle();
-        }
-    });
+            if ($this.next().hasClass("show")) {
+                $this.next().removeClass("show");
+                $this.next().slideUp();
+            } else {
+                $this
+                    .parent()
+                    .parent()
+                    .find("li .inner")
+                    .removeClass("show");
+                $this
+                    .parent()
+                    .parent()
+                    .find("li .inner")
+                    .slideUp();
+                $this.next().toggleClass("show");
+                $this.next().slideToggle();
+            }
+        });
     </script>
 </body>
 </html>

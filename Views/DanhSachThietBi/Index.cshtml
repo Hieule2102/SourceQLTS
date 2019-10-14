@@ -1,4 +1,4 @@
-@model IEnumerable<Source.Models.THIETBI>
+﻿@model IEnumerable<Source.Models.THIETBI>
 
 @{
     ViewBag.Title = "Index";
@@ -19,7 +19,7 @@
             <h1 class="title">DANH SÁCH THIẾT BỊ</h1>
             <div class="search">
                 <input type="text"
-                       name="searchString"
+                       name="SEARCH_STRING"
                        class="placeholder"
                        placeholder="Nhập tên thiết bị" />
                 <button type="submit" class="btn-search">
@@ -129,23 +129,6 @@
                     <div class="img-container">
                         <img id="img" alt="hinh-anh-thiet-bi" />
                     </div>
-                    @*<div class="small-container-div">
-                <div class="small-img-container">
-                    <img id="img_c1" alt="">
-                </div>
-                <div class="small-img-container">
-                    <img id="img_c2" alt="">
-                </div>
-                <div class="small-img-container">
-                    <img id="img_c3" alt="">
-                </div>
-                <div class="small-img-container">
-                    <img id="img_c4" alt="">
-                </div>
-                <div class="small-img-container">
-                    <img id="img_c5" alt="">
-                </div>
-            </div>*@
                     <p class="ten-tb" id="TENTB"></p>
                 </div>
                 <h4 class="sub-title">Thông số kỹ thuật</h4>

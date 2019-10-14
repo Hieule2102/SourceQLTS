@@ -1,4 +1,4 @@
-@model IEnumerable<Source.Models.NHAP_KHO>
+﻿@model IEnumerable<Source.Models.NHAP_KHO>
 
 @{
     ViewBag.Title = "Index";
@@ -61,6 +61,10 @@
                             <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
                         </div>
                         <div class="form-group">
+                            <label for="">Người quản lý:</label>
+                            <select class="form-control" id="MAND_QL" name="MAND_QL"></select>
+                        </div>
+                        <div class="form-group">
                             <label for="">Nhà cung cấp:</label>
                             <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
                         </div>
@@ -72,7 +76,7 @@
                             </h4>
                             <div class="img-container">
                                 <img id="img" alt="your image" />
-                                <span><i class="far fa-times-circle" onclick="REMOVE_IMG()"></i></span>
+                                <span class="delete-img"><i class="far fa-times-circle" onclick="REMOVE_IMG()"></i></span>
                             </div>
                             @*<div class="row" id="image_preview"></div>*@
                             <div class="small-container-div">
