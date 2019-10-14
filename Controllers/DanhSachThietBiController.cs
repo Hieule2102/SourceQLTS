@@ -63,7 +63,7 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(string searchString, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB)
+        public async Task<ActionResult> Index(string SEARCH_STRING, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB)
         {
             //Đơn vị
             var dsTenDonVi = new List<string>();
@@ -111,20 +111,19 @@ namespace Source.Controllers
                 thietbis = thietbis.Where(data => data.LOAI_THIETBI.TEN_LOAI == MA_LOAITB);
             }
             //Tìm tên thiết bị
-            else if (!String.IsNullOrEmpty(searchString))
+            else if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                thietbis = thietbis.Where(data => data.TENTB.Contains(searchString));
+                thietbis = thietbis.Where(data => data.TENTB.Contains(SEARCH_STRING));
             }
             //Tìm đơn vị
             else if (!String.IsNullOrEmpty(MA_DON_VI))
             {
                 thietbis = thietbis.Where(data => data.DON_VI.TEN_DON_VI == MA_DON_VI);
-
-                RedirectToAction("Index", "Home", new { id = 3 });
             }
 
             dsLOAITB.AddRange(qLOAITB.Distinct());
             ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
+
             return View(await thietbis.ToListAsync());
         }
 

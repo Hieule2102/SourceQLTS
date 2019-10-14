@@ -88,6 +88,7 @@ namespace Source.Controllers
                     var tHIETBI = (from a in db.THIETBIs
                                    where a.MATB == mATB
                                    select a).FirstOrDefault();
+                    tHIETBI.MAND_QL = xuat_kho.MAND_NHAN;
                     tHIETBI.TINH_TRANG = "Đang điều chuyển";
 
                     //Thêm vào nhật ký thiết bị
