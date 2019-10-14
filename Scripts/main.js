@@ -1,5 +1,13 @@
 $(document).ready(function () {
         
+    $(".small-img-container").click(function() {
+    $(".delete-img").removeClass("d-none");
+  });
+
+  $(".inputfile-div").click(function() {
+    $(".small-container-div").removeClass("d-none");
+  });
+        
     $('.login-close').click(function () {
         $('#login').removeClass('login-show');
     });
