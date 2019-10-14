@@ -71,7 +71,7 @@
                                 Thêm hình ảnh
                             </h4>
                             <div class="img-container">
-                                <img id="img" src="#" alt="your image" />
+                                <img id="img" alt="your image" />
                                 <span><i class="far fa-times-circle" onclick="REMOVE_IMG()"></i></span>
                             </div>
                             @*<div class="row" id="image_preview"></div>*@
@@ -404,45 +404,101 @@
 
     function REMOVE_IMG() {
         var remove = document.getElementById("img").src;
+       
+        if (document.getElementById("img").src != "") {
+            if (document.getElementById("img1").src == remove) {
+                if (document.getElementById("img2").src == "") {
+                    document.getElementById("img").removeAttribute("src");
+                    document.getElementById("img1").removeAttribute("src");
+                }
+                else if (document.getElementById("img3").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
 
-        if (document.getElementById("img1").src == remove) {
-            document.getElementById("img1").removeAttribute("src");
+                    document.getElementById("img2").removeAttribute("src");
+                }
+                else if (document.getElementById("img4").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
 
-            document.getElementById("img").src = document.getElementById("img2").src;
-            document.getElementById("img1").src = document.getElementById("img2").src;
-            document.getElementById("img2").src = document.getElementById("img3").src;
-            document.getElementById("img3").src = document.getElementById("img4").src;
-            document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+                }
+            }
+            else if (document.getElementById("img2").src == remove) {
+                if (document.getElementById("img3").src == "") {
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img2").removeAttribute("src");
+                }
+                else if (document.getElementById("img4").src == "") {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+                }
+            }
+            else if (document.getElementById("img3").src == remove) {
+                if (document.getElementById("img4").src == "") {
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                    document.getElementById("img").src = document.getElementById("img3").src;
+                }
+                else {
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img3").src;
+                }
+            }
+            else if (document.getElementById("img4").src == remove) {
+                if (document.getElementById("img5").src == "") {
+                    document.getElementById("img").src = document.getElementById("img3").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img4").src;
+                }
+            }
+            else if (document.getElementById("img5").src == remove) {
+                document.getElementById("img").src = document.getElementById("img4").src;
+            }
             document.getElementById("img5").removeAttribute("src");
-        }
-        else if (document.getElementById("img2").src == remove) {
-            document.getElementById("img2").removeAttribute("src");
-
-            document.getElementById("img").src = document.getElementById("img3").src;
-            document.getElementById("img2").src = document.getElementById("img3").src;
-            document.getElementById("img3").src = document.getElementById("img4").src;
-            document.getElementById("img4").src = document.getElementById("img5").src;
-            document.getElementById("img5").removeAttribute("src");
-        }
-        else if (document.getElementById("img3").src == remove) {
-            document.getElementById("img3").removeAttribute("src");
-
-            document.getElementById("img").src = document.getElementById("img4").src;
-            document.getElementById("img3").src = document.getElementById("img4").src;
-            document.getElementById("img4").src = document.getElementById("img5").src;
-            document.getElementById("img5").removeAttribute("src");
-        }
-        else if (document.getElementById("img4").src == remove) {
-            document.getElementById("img4").removeAttribute("src");
-
-            document.getElementById("img").src = document.getElementById("img5").src;
-            document.getElementById("img4").src = document.getElementById("img5").src;
-            document.getElementById("img5").removeAttribute("src");
-        }
-        else if (document.getElementById("img5").src == remove) {
-            document.getElementById("img5").removeAttribute("src");
-
-            document.getElementById("img").src = document.getElementById("img4").src;
         }
     }
 </script>
