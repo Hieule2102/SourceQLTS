@@ -306,7 +306,8 @@ namespace Source.Controllers
                                                   DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                   MAND_THUC_HIEN = x.MAND_XUAT,
                                                   x.SO_LUONG,
-                                                  x.GHI_CHU
+                                                  x.GHI_CHU,
+                                                  x.VAN_CHUYEN
                                               }).FirstOrDefault();
                     return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
                 }
@@ -323,7 +324,8 @@ namespace Source.Controllers
                                                             DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                             MAND_THUC_HIEN = x.MAND_DIEU_CHUYEN,
                                                             x.SO_LUONG,
-                                                            x.GHI_CHU
+                                                            x.GHI_CHU,
+                                                            x.VAN_CHUYEN
                                                         }).FirstOrDefault();
                     return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
                 }
