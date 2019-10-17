@@ -18,19 +18,19 @@ namespace Source.Controllers
         }
         #region get_ThongTin
         [HttpGet]
-        public ActionResult get_ThongTinTB(string maTB)
+        public ActionResult get_ThongTinTB(string mATB)
         {
             //Tìm tên thiết bị
-            if (!String.IsNullOrEmpty(maTB))
+            if (!String.IsNullOrEmpty(mATB))
             {
-                int temp = Int32.Parse(maTB);
-
-                var thet_Bi = db.THIETBIs.Where(a => a.MATB == temp)
+                var thet_Bi = db.THIETBIs.Where(a => a.MATB == mATB)
                                          .Select(x => new
                                          {
+                                             x.MATB,
                                              x.TENTB,
                                              x.DON_VI.TEN_DON_VI,
-                                             x.NGUOI_DUNG.TEN_ND
+                                             x.NGUOI_DUNG.TEN_ND,
+                                             x.LOAI_THIETBI.TEN_LOAI,
                                          }).FirstOrDefault();
 
                 return Json(thet_Bi, JsonRequestBehavior.AllowGet);
@@ -163,12 +163,12 @@ namespace Source.Controllers
         }
 
         [HttpGet]
-        public ActionResult get_THONG_SO_KY_THUAT(string nhom_TB)
+        public ActionResult get_THONG_SO_KY_THUAT(string mA_NHOMTB)
         {
-            if (!String.IsNullOrEmpty(nhom_TB))
+            if (!String.IsNullOrEmpty(mA_NHOMTB))
             {
                 var nhomTB = (from d in db.NHOM_THIETBI
-                              where d.TEN_NHOM == nhom_TB
+                              where d.TEN_NHOM == mA_NHOMTB
                               select d.MA_NHOMTB).FirstOrDefault();
                 if (nhomTB == "PC")
                 {
@@ -208,17 +208,18 @@ namespace Source.Controllers
         }
 
         [HttpPost]
-        public ActionResult get_CAU_HINH(string maTB)
+        public ActionResult get_CAU_HINH(string mA_LOAITB)
         {
-            var temp = Int32.Parse(maTB);
-            if (!String.IsNullOrEmpty(maTB))
+            if (!String.IsNullOrEmpty(mA_LOAITB))
             {
-                var cauHinh = db.CAU_HINH.Where(x => x.MATB == temp)
+                //mA_LOAITB = (from a in db.LOAI_THIETBI
+                //             where a.TEN_LOAI == mA_LOAITB
+                //             select a.MA_LOAITB).FirstOrDefault();
+                var cAU_HINH = db.CAU_HINH.Where(x => x.LOAI_THIETBI.TEN_LOAI == mA_LOAITB)
                                          .Select(x => new
                                          {
-                                             x.MATB,
-                                             x.THIETBI.LOAI_THIETBI.MA_NHOMTB,
-                                             x.THIETBI.TENTB,
+                                             x.LOAI_THIETBI.TEN_LOAI,
+                                             x.LOAI_THIETBI.MA_NHOMTB,
                                              CPU = x.DM_CPU.TEN_CPU,
                                              MAN_HINH = x.DM_MAN_HINH.TEN_MAN_HINH,
                                              RAM = x.DM_RAM.TEN_RAM,
@@ -231,17 +232,20 @@ namespace Source.Controllers
                                              x.DO_PHAN_GIAI
                                          })
                                          .FirstOrDefault();
-                return Json(cauHinh, JsonRequestBehavior.AllowGet);
+                if(cAU_HINH == null)
+                {
+                    return null;
+                }
+                return Json(cAU_HINH, JsonRequestBehavior.AllowGet);
             }
             return null;
         }
         [HttpGet]
-        public ActionResult get_HINH_ANH(string maTB)
+        public ActionResult get_HINH_ANH(string mATB)
         {
-            if (!String.IsNullOrEmpty(maTB))
+            if (!String.IsNullOrEmpty(mATB))
             {
-                var temp = Int32.Parse(maTB);
-                var hinhAnh = db.HINH_ANH.Where(x => x.MATB == temp)
+                var hinhAnh = db.HINH_ANH.Where(x => x.MATB == mATB)
                                          .Select(x => new
                                          {
                                              x.HINH1,
@@ -289,38 +293,36 @@ namespace Source.Controllers
             //Tìm tên thiết bị
             if (!String.IsNullOrEmpty(mATB))
             {
-                int temp = Int32.Parse(mATB);
-
-                if (db.XUAT_KHO.FirstOrDefault(a => a.MATB == temp) != null)
+                if (db.XUAT_KHO.FirstOrDefault(a => a.MATB == mATB) != null)
                 {
-                    var NGAY_THUC_HIEN = String.Format("MM/dd/yyyy");
-                    //CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
-                    //var temp123 = DateTime.ParseExact(NGAY_THUC_HIEN, "MM/dd/yyyy", cul);
-                    var xAC_NHAN = db.XUAT_KHO.Where(x => x.MATB == temp)
+                    var xAC_NHAN = db.XUAT_KHO.Where(x => x.MATB == mATB)
                                               .Select(x => new
                                               {
+                                                  x.MA_XUAT_KHO,
                                                   x.MATB,
                                                   x.THIETBI.TENTB,
                                                   NGAY_THUC_HIEN = x.NGAY_XUAT.ToString(),
                                                   DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
                                                   DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                   MAND_THUC_HIEN = x.MAND_XUAT,
+                                                  x.SO_LUONG,
                                                   x.GHI_CHU
                                               }).FirstOrDefault();
                     return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
                 }
-                else if (db.DIEU_CHUYEN_THIET_BI.FirstOrDefault(a => a.MATB == temp) != null)
+                else if (db.DIEU_CHUYEN_THIET_BI.FirstOrDefault(a => a.MATB == mATB) != null)
                 {
-                    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
-                    var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MATB == temp)
+                    var xAC_NHAN = db.DIEU_CHUYEN_THIET_BI.Where(x => x.MATB == mATB)
                                                         .Select(x => new
                                                         {
+                                                            x.MA_DIEU_CHUYEN,
                                                             x.MATB,
                                                             x.THIETBI.TENTB,
-                                                            NGAY_THUC_HIEN = x.NGAY_CHUYEN.ToString(),
+                                                            NGAY_THUC_HIEN = x.NGAY_DIEU_CHUYEN.ToString(),
                                                             DV_THUC_HIEN = x.DON_VI.TEN_DON_VI,
                                                             DV_NHAN = x.DON_VI1.TEN_DON_VI,
                                                             MAND_THUC_HIEN = x.MAND_DIEU_CHUYEN,
+                                                            x.SO_LUONG,
                                                             x.GHI_CHU
                                                         }).FirstOrDefault();
                     return Json(xAC_NHAN, JsonRequestBehavior.AllowGet);
@@ -351,11 +353,11 @@ namespace Source.Controllers
         [HttpGet]
         public ActionResult get_MATB()
         {
-            var dsMaTB = new List<int>();
+            var dsMaTB = new List<string>();
             var qMaTB = (from d in db.THIETBIs
                          orderby d.MATB
-                         select d.MATB);
-            dsMaTB.AddRange(qMaTB.ToList());
+                         select d.MATB).ToList();
+            dsMaTB.AddRange(qMaTB);
             return Json(dsMaTB, JsonRequestBehavior.AllowGet);
         }
 
@@ -363,12 +365,11 @@ namespace Source.Controllers
         [HttpGet]
         public ActionResult get_TENTB(string maTB)
         {
-            int temp = Int32.Parse(maTB);
             //Tìm tên thiết bị
             if (!String.IsNullOrEmpty(maTB))
             {
                 var tenTB = (from d in db.THIETBIs
-                             where d.MATB == temp
+                             where d.MATB == maTB
                              select d.TENTB).First();
                 return Json(tenTB, JsonRequestBehavior.AllowGet);
             }
@@ -435,16 +436,30 @@ namespace Source.Controllers
         }
 
         [HttpGet]
-        public ActionResult get_ND(string ma_DV)
+        public ActionResult get_ND(string mA_DV)
         {
             var dsND = new List<string>();
             var qND = (from d in db.NGUOI_DUNG
-                       where d.DON_VI.TEN_DON_VI == ma_DV
+                       where d.DON_VI.TEN_DON_VI == mA_DV
                        orderby d.TEN_ND
                        select d.TEN_ND);
             dsND.AddRange(qND.Distinct());
 
             return Json(dsND, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult get_DV(string tEN_DANG_NHAP)
+        {
+            if(!String.IsNullOrEmpty(tEN_DANG_NHAP))
+            {
+                var dONVI = db.NGUOI_DUNG.Where(a => a.TEN_DANG_NHAP == tEN_DANG_NHAP)
+                                         .Select(a => a.DON_VI.TEN_DON_VI)
+                                         .FirstOrDefault();
+
+                return Json(dONVI, JsonRequestBehavior.AllowGet);
+            }
+            return null;
         }
 
         public ActionResult get_CPU()

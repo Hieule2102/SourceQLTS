@@ -57,7 +57,7 @@ namespace Source.Controllers
             {
                 return HttpNotFound("You have no accesss permissions at this");
             }
-            var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
+            var thietbis = db.THIETBIs.OrderBy(t => t.MATB).Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
             return View(await thietbis.ToListAsync());
         }
 
@@ -124,7 +124,7 @@ namespace Source.Controllers
             dsLOAITB.AddRange(qLOAITB.Distinct());
             ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
 
-            return View(await thietbis.ToListAsync());
+            return View(await thietbis.OrderBy(a => a.MATB).ToListAsync());
         }
 
         // GET: /DanhSachThietBi/Details/5

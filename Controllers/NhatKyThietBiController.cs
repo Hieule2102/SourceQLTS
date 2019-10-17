@@ -1,17 +1,20 @@
-﻿using Source.Models;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using Source.Models;
 
 namespace Source.Controllers
 {
     public class NhatKyThietBiController : Controller
     {
         private QuanLyTaiSanCNTTEntities db = new QuanLyTaiSanCNTTEntities();
+
         // GET: NhatKyThietBi
         public async Task<ActionResult> Index()
         {
@@ -23,7 +26,7 @@ namespace Source.Controllers
             {
                 return HttpNotFound("You have no accesss permissions at this");
             }
-            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.THIETBI);
+            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
             return View(await nHAT_KY_THIET_BI.ToListAsync());
         }
 
@@ -31,13 +34,35 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string TINH_TRANG, string SEARCH_STRING)
         {
-            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.THIETBI);
+            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
             //Tìm tên thiết bị
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.THIETBI.TENTB.Contains(SEARCH_STRING));
-                ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.MATB).FirstOrDefault();
-                ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.THIETBI.TENTB).FirstOrDefault();
+                if((nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.NHAP_KHO.THIETBI.TENTB.Contains(SEARCH_STRING))) != null)
+                {
+                    ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.NHAP_KHO.THIETBI.MATB).FirstOrDefault();
+                    ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.NHAP_KHO.THIETBI.TENTB).FirstOrDefault();
+                }
+                else if ((nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING))) != null)
+                {
+                    ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.XUAT_KHO.THIETBI.MATB).FirstOrDefault();
+                    ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.XUAT_KHO.THIETBI.TENTB).FirstOrDefault();
+                }
+                else if ((nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING))) != null)
+                {
+                    ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.MATB).FirstOrDefault();
+                    ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB).FirstOrDefault();
+                }
+                else if ((nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING))) != null)
+                {
+                    ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.THIETBI.MATB).FirstOrDefault();
+                    ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.THIETBI.TENTB).FirstOrDefault();
+                }
+                else if ((nHAT_KY_THIET_BI = nHAT_KY_THIET_BI.Where(data => data.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING))) != null)
+                {
+                    ViewBag.MATB = nHAT_KY_THIET_BI.Select(a => a.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.THIETBI.MATB).FirstOrDefault();
+                    ViewBag.TENTB = nHAT_KY_THIET_BI.Select(a => a.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB).FirstOrDefault();
+                }
             }
             else
             {
@@ -66,7 +91,10 @@ namespace Source.Controllers
         // GET: NhatKyThietBi/Create
         public ActionResult Create()
         {
-            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB");
+            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MATB");
+            ViewBag.MA_NHAP_KHO = new SelectList(db.NHAP_KHO, "MA_NHAP_KHO", "MATB");
+            ViewBag.MA_XAC_NHAN = new SelectList(db.XAC_NHAN_DIEU_CHUYEN, "MA_XAC_NHAN", "MAND_XAC_NHAN");
+            ViewBag.MA_XUAT_KHO = new SelectList(db.XUAT_KHO, "MA_XUAT_KHO", "MATB");
             return View();
         }
 
@@ -75,7 +103,7 @@ namespace Source.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "MA_NHAT_KY,MATB,TINH_TRANG,NGAY_THUC_HIEN")] NHAT_KY_THIET_BI nHAT_KY_THIET_BI)
+        public async Task<ActionResult> Create([Bind(Include = "MA_NHAT_KY,MA_XUAT_KHO,MA_DIEU_CHUYEN,MA_XAC_NHAN,MA_NHAP_KHO,TINH_TRANG")] NHAT_KY_THIET_BI nHAT_KY_THIET_BI)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +112,10 @@ namespace Source.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", nHAT_KY_THIET_BI.MATB);
+            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MATB", nHAT_KY_THIET_BI.MA_DIEU_CHUYEN);
+            ViewBag.MA_NHAP_KHO = new SelectList(db.NHAP_KHO, "MA_NHAP_KHO", "MATB", nHAT_KY_THIET_BI.MA_NHAP_KHO);
+            ViewBag.MA_XAC_NHAN = new SelectList(db.XAC_NHAN_DIEU_CHUYEN, "MA_XAC_NHAN", "MAND_XAC_NHAN", nHAT_KY_THIET_BI.MA_XAC_NHAN);
+            ViewBag.MA_XUAT_KHO = new SelectList(db.XUAT_KHO, "MA_XUAT_KHO", "MATB", nHAT_KY_THIET_BI.MA_XUAT_KHO);
             return View(nHAT_KY_THIET_BI);
         }
 
@@ -100,7 +131,10 @@ namespace Source.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", nHAT_KY_THIET_BI.MATB);
+            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MATB", nHAT_KY_THIET_BI.MA_DIEU_CHUYEN);
+            ViewBag.MA_NHAP_KHO = new SelectList(db.NHAP_KHO, "MA_NHAP_KHO", "MATB", nHAT_KY_THIET_BI.MA_NHAP_KHO);
+            ViewBag.MA_XAC_NHAN = new SelectList(db.XAC_NHAN_DIEU_CHUYEN, "MA_XAC_NHAN", "MAND_XAC_NHAN", nHAT_KY_THIET_BI.MA_XAC_NHAN);
+            ViewBag.MA_XUAT_KHO = new SelectList(db.XUAT_KHO, "MA_XUAT_KHO", "MATB", nHAT_KY_THIET_BI.MA_XUAT_KHO);
             return View(nHAT_KY_THIET_BI);
         }
 
@@ -109,7 +143,7 @@ namespace Source.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "MA_NHAT_KY,MATB,TINH_TRANG,NGAY_THUC_HIEN")] NHAT_KY_THIET_BI nHAT_KY_THIET_BI)
+        public async Task<ActionResult> Edit([Bind(Include = "MA_NHAT_KY,MA_XUAT_KHO,MA_DIEU_CHUYEN,MA_XAC_NHAN,MA_NHAP_KHO,TINH_TRANG")] NHAT_KY_THIET_BI nHAT_KY_THIET_BI)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +151,10 @@ namespace Source.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MATB = new SelectList(db.THIETBIs, "MATB", "TENTB", nHAT_KY_THIET_BI.MATB);
+            ViewBag.MA_DIEU_CHUYEN = new SelectList(db.DIEU_CHUYEN_THIET_BI, "MA_DIEU_CHUYEN", "MATB", nHAT_KY_THIET_BI.MA_DIEU_CHUYEN);
+            ViewBag.MA_NHAP_KHO = new SelectList(db.NHAP_KHO, "MA_NHAP_KHO", "MATB", nHAT_KY_THIET_BI.MA_NHAP_KHO);
+            ViewBag.MA_XAC_NHAN = new SelectList(db.XAC_NHAN_DIEU_CHUYEN, "MA_XAC_NHAN", "MAND_XAC_NHAN", nHAT_KY_THIET_BI.MA_XAC_NHAN);
+            ViewBag.MA_XUAT_KHO = new SelectList(db.XUAT_KHO, "MA_XUAT_KHO", "MATB", nHAT_KY_THIET_BI.MA_XUAT_KHO);
             return View(nHAT_KY_THIET_BI);
         }
 

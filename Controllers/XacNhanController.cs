@@ -44,45 +44,69 @@ namespace Source.Controllers
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.THIETBI.TENTB.Contains(SEARCH_STRING));
+                if(xAC_NHAN_DIEU_CHUYEN.FirstOrDefault(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING)) != null)
+                {
+                    xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING));
+                }
+                else
+                {
+                    xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));
+                }
             }
             else if (!String.IsNullOrEmpty(XAC_NHAN))
             {
-                //Thêm vào xác nhận điều chuyển
-                var temp = Int32.Parse(form["MATB"]);
-                //Thay đổi trạng thái thiết bị
-                var tHIETBI = db.THIETBIs.Where(a => a.MATB == temp).FirstOrDefault();
-                tHIETBI.TINH_TRANG = "Đang sử dụng";
+                #region Xác nhận
+                //XAC_NHAN_DIEU_CHUYEN xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MATB == temp).FirstOrDefault();
+                var mA_DIEU_CHUYEN = 0;
+                if (!String.IsNullOrEmpty(form["MA_DIEU_CHUYEN"].ToString()))
+                {
+                    mA_DIEU_CHUYEN = Int32.Parse(form["MA_DIEU_CHUYEN"].ToString());
+                }
+                else
+                {
+                    mA_DIEU_CHUYEN = Int32.Parse(form["MA_XUAT_KHO"].ToString());
+                }
+                var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XUAT_KHO.MA_XUAT_KHO == mA_DIEU_CHUYEN).FirstOrDefault();
+                if (xAC_NHAN != null)
+                {
+                    xAC_NHAN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.DIEU_CHUYEN_THIET_BI.MA_DIEU_CHUYEN == mA_DIEU_CHUYEN).FirstOrDefault();
+                }
 
-                XAC_NHAN_DIEU_CHUYEN xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MATB == temp).FirstOrDefault();
-
-                var MAND_XAC_NHAN = Session["TEN_DANG_NHAP"].ToString();
+                var temp = Session["TEN_DANG_NHAP"].ToString();
                 xAC_NHAN.MAND_XAC_NHAN = (from p in db.NGUOI_DUNG
-                                          where p.TEN_DANG_NHAP == MAND_XAC_NHAN
+                                          where p.TEN_DANG_NHAP == temp
                                           select p.MA_ND).FirstOrDefault();
 
-                xAC_NHAN.THOI_GIAN_XAC_NHAN = DateTime.Now;
                 xAC_NHAN.XAC_NHAN = true;
+                xAC_NHAN.THOI_GIAN_XAC_NHAN = DateTime.Now;
+                #endregion
 
-                //Thêm vào nhật ký thiết bị
-                NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                nHAT_KY_THIET_BI.TINH_TRANG = "Đã xác nhận";
-                nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+                #region Thay đổi trạng thái thiết bị
+                var mATB = form["MATB"].ToString();
+                var tHIETBI = db.THIETBIs.Where(a => a.MATB == mATB).FirstOrDefault();
+                tHIETBI.MAND_QL = xAC_NHAN.MAND_XAC_NHAN;
+                tHIETBI.TINH_TRANG = "Đang sử dụng";
+                #endregion
 
                 if (ModelState.IsValid)
                 {
                     db.Entry(tHIETBI).State = EntityState.Modified;
                     db.Entry(xAC_NHAN).State = EntityState.Modified;
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                     await db.SaveChangesAsync();
 
                     ViewBag.ErrorMessage = "Xác nhận thành công";
                 }
+
+                #region Thêm vào nhật ký thiết bị
+                NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                nHAT_KY_THIET_BI.MA_XAC_NHAN = mA_DIEU_CHUYEN;
+                nHAT_KY_THIET_BI.TINH_TRANG = "Đã xác nhận";
+                db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                await db.SaveChangesAsync();
+                #endregion
+
                 xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             }
-
-
             return View(await xAC_NHAN_DIEU_CHUYEN.ToListAsync());
         }
 

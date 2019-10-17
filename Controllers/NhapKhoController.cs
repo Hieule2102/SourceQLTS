@@ -53,30 +53,36 @@ namespace Source.Controllers
                 {
                     ViewBag.ErrorMessage = "Xin nhập đầy đủ thông tin";
                 }
-                else if (db.THIETBIs.FirstOrDefault(x => x.SO_SERIAL == temp) != null)
-                {
-                    ViewBag.ErrorMessage = "Số Serial đã tồn tại";
-                }
+                //else if (db.THIETBIs.FirstOrDefault(x => x.SO_SERIAL == temp) != null)
+                //{
+                //    ViewBag.ErrorMessage = "Số Serial đã tồn tại";
+                //}
                 else
                 {
+                    temp = form["MA_NHOMTB"].ToString();
+                    var nhomTB = (from d in db.NHOM_THIETBI
+                                  where d.TEN_NHOM == temp
+                                  select d.MA_NHOMTB).FirstOrDefault();
+
+                    var count = (from a in db.THIETBIs
+                                 where a.LOAI_THIETBI.NHOM_THIETBI.MA_NHOMTB == nhomTB
+                                 select a.MATB).Count() + 1;
+
                     #region Tạo thiết bị
                     var thiet_Bi = new THIETBI();
+                    thiet_Bi.MATB = nhomTB + "0" + count;
                     thiet_Bi.TENTB = form["TENTB"];
                     thiet_Bi.SO_SERIAL = form["SO_SERIAL"];
-                    if (!String.IsNullOrEmpty(form["GIA_TIEN"]))
-                    {
-                        thiet_Bi.GIA_TIEN = Decimal.Parse(form["GIA_TIEN"].ToString());
-                    }
-                    else
-                    {
-                        thiet_Bi.GIA_TIEN = 0;
-                    }
-                    thiet_Bi.THOI_HAN_BAO_HANH = form["THOI_HAN_BAO_HANH"];
 
                     temp = form["MA_LOAITB"].ToString();
                     thiet_Bi.MA_LOAITB = (from p in db.LOAI_THIETBI
                                           where p.TEN_LOAI == temp
                                           select p.MA_LOAITB).FirstOrDefault();
+
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    thiet_Bi.MAND_QL = (from p in db.NGUOI_DUNG
+                                        where p.TEN_DANG_NHAP == temp
+                                        select p.MA_ND).FirstOrDefault();
 
                     if (!String.IsNullOrEmpty(form["MA_DON_VI"]))
                     {
@@ -94,93 +100,100 @@ namespace Source.Controllers
                                            select p.MA_NCC).FirstOrDefault();
                     }
 
-                    thiet_Bi.NGAY_MUA = DateTime.Parse(form["NGAY_MUA"]);
                     thiet_Bi.TINH_TRANG = "Mới nhập";
-                    #endregion
+                    thiet_Bi.NGAY_MUA = DateTime.Parse(form["NGAY_MUA"].ToString());
+                    thiet_Bi.THOI_HAN_BAO_HANH = Int32.Parse(form["THOI_HAN_BAO_HANH"]);
+                    thiet_Bi.THOI_HAN_HET_BAO_HANH = DateTime.Parse(form["THOI_HAN_HET_BAO_HANH"].ToString());
 
-                    #region Tạo cấu hình
-                    temp = form["MA_NHOMTB"].ToString();
-                    var nhomTB = (from d in db.NHOM_THIETBI
-                                  where d.TEN_NHOM == temp
-                                  select d.MA_NHOMTB).FirstOrDefault();
-
-                    var cau_Hinh = new CAU_HINH();
-                    if (nhomTB == "PC")
+                    thiet_Bi.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
+                    if (!String.IsNullOrEmpty(form["GIA_TIEN"]))
                     {
-                        if (!String.IsNullOrEmpty(form["thong_so1"]))
-                        {
-                            temp = form["thong_so1"].ToString();
-                            cau_Hinh.CPU = (from p in db.DM_CPU
-                                            where p.TEN_CPU == temp
-                                            select p.MA_CPU).First();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so2"]))
-                        {
-                            temp = form["thong_so2"].ToString();
-                            cau_Hinh.RAM = (from p in db.DM_RAM
-                                            where p.TEN_RAM == temp
-                                            select p.MA_RAM).First();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so3"]))
-                        {
-                            temp = form["thong_so3"].ToString();
-                            cau_Hinh.MAN_HINH = (from p in db.DM_MAN_HINH
-                                                 where p.TEN_MAN_HINH == temp
-                                                 select p.MA_MAN_HINH).First();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so4"]))
-                        {
-                            temp = form["thong_so4"].ToString();
-                            cau_Hinh.O_CUNG = (from p in db.DM_O_CUNG
-                                               where p.TEN_O_CUNG == temp
-                                               select p.MA_O_CUNG).First();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so5"]))
-                        {
-                            temp = form["thong_so5"].ToString();
-                            cau_Hinh.VGA = (from p in db.DM_VGA
-                                            where p.TEN_VGA == temp
-                                            select p.MA_VGA).First();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so6"]))
-                        {
-                            temp = form["thong_so6"].ToString();
-                            cau_Hinh.HE_DIEU_HANH = (from p in db.DM_HDH
-                                                     where p.TEN_HDH == temp
-                                                     select p.MA_HDH).First();
-                        }
+                        thiet_Bi.GIA_TIEN = Decimal.Parse(form["GIA_TIEN"].ToString());
                     }
-                    else if (nhomTB == "PR")
+                    else
                     {
-                        if (!String.IsNullOrEmpty(form["input_thong_so1"]))
-                        {
-                            cau_Hinh.KICH_THUOC = form["input_thong_so1"];
-                        }
-
-                        if (!String.IsNullOrEmpty(form["thong_so2"]))
-                        {
-                            temp = form["thong_so2"].ToString();
-                            cau_Hinh.LOAI_MUC = (from a in db.DM_LOAI_MUC
-                                                 where a.TEN_LOAI_MUC == temp
-                                                 select a.MA_LOAI_MUC).FirstOrDefault();
-                        }
-
-                        if (!String.IsNullOrEmpty(form["input_thong_so3"]))
-                        {
-                            cau_Hinh.TOC_DO = form["input_thong_so3"] + "ppm";
-                        }
-
-                        if (!String.IsNullOrEmpty(form["input_thong_so4"]))
-                        {
-                            cau_Hinh.DO_PHAN_GIAI = form["input_thong_so4"];
-                        }
+                        thiet_Bi.GIA_TIEN = 0;
                     }
                     #endregion
+
+                    //#region Tạo cấu hình
+                    //var cau_Hinh = new CAU_HINH();
+                    //if (nhomTB == "PC")
+                    //{
+                    //    if (!String.IsNullOrEmpty(form["thong_so1"]))
+                    //    {
+                    //        temp = form["thong_so1"].ToString();
+                    //        cau_Hinh.CPU = (from p in db.DM_CPU
+                    //                        where p.TEN_CPU == temp
+                    //                        select p.MA_CPU).First();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so2"]))
+                    //    {
+                    //        temp = form["thong_so2"].ToString();
+                    //        cau_Hinh.RAM = (from p in db.DM_RAM
+                    //                        where p.TEN_RAM == temp
+                    //                        select p.MA_RAM).First();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so3"]))
+                    //    {
+                    //        temp = form["thong_so3"].ToString();
+                    //        cau_Hinh.MAN_HINH = (from p in db.DM_MAN_HINH
+                    //                             where p.TEN_MAN_HINH == temp
+                    //                             select p.MA_MAN_HINH).First();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so4"]))
+                    //    {
+                    //        temp = form["thong_so4"].ToString();
+                    //        cau_Hinh.O_CUNG = (from p in db.DM_O_CUNG
+                    //                           where p.TEN_O_CUNG == temp
+                    //                           select p.MA_O_CUNG).First();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so5"]))
+                    //    {
+                    //        temp = form["thong_so5"].ToString();
+                    //        cau_Hinh.VGA = (from p in db.DM_VGA
+                    //                        where p.TEN_VGA == temp
+                    //                        select p.MA_VGA).First();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so6"]))
+                    //    {
+                    //        temp = form["thong_so6"].ToString();
+                    //        cau_Hinh.HE_DIEU_HANH = (from p in db.DM_HDH
+                    //                                 where p.TEN_HDH == temp
+                    //                                 select p.MA_HDH).First();
+                    //    }
+                    //}
+                    //else if (nhomTB == "PR")
+                    //{
+                    //    if (!String.IsNullOrEmpty(form["input_thong_so1"]))
+                    //    {
+                    //        cau_Hinh.KICH_THUOC = form["input_thong_so1"];
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["thong_so2"]))
+                    //    {
+                    //        temp = form["thong_so2"].ToString();
+                    //        cau_Hinh.LOAI_MUC = (from a in db.DM_LOAI_MUC
+                    //                             where a.TEN_LOAI_MUC == temp
+                    //                             select a.MA_LOAI_MUC).FirstOrDefault();
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["input_thong_so3"]))
+                    //    {
+                    //        cau_Hinh.TOC_DO = form["input_thong_so3"] + "ppm";
+                    //    }
+
+                    //    if (!String.IsNullOrEmpty(form["input_thong_so4"]))
+                    //    {
+                    //        cau_Hinh.DO_PHAN_GIAI = form["input_thong_so4"];
+                    //    }
+                    //}
+                    //#endregion
 
                     #region Tạo nhập kho
                     var nhap_Kho_Create = new NHAP_KHO();
@@ -191,53 +204,47 @@ namespace Source.Controllers
                         nhap_Kho_Create.MADV_NHAP = (from p in db.DON_VI
                                                      where p.TEN_DON_VI == temp
                                                      select p.MA_DON_VI).FirstOrDefault();
-                    }
+                    }                    
+                    nhap_Kho_Create.MAND_NHAP = thiet_Bi.MAND_QL;
                     nhap_Kho_Create.NGAY_NHAP = DateTime.Now;
-
-                    temp = Session["TEN_DANG_NHAP"].ToString();
-                    nhap_Kho_Create.MAND_NHAP = (from p in db.NGUOI_DUNG
-                                                 where p.TEN_DANG_NHAP == temp
-                                                 select p.MA_ND).FirstOrDefault();
-
-                    //Thêm vào nhật ký thiết bị
-                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                    nHAT_KY_THIET_BI.TINH_TRANG = "Mới nhập";
-                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+                    nhap_Kho_Create.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
                     #endregion
 
+                    temp = form["SO_SERIAL"].ToString();
+                    var maTB = (from p in db.THIETBIs
+                                where p.SO_SERIAL == temp
+                                select p.MATB).First();
                     if (ModelState.IsValid)
                     {
                         db.THIETBIs.Add(thiet_Bi);
-                        await db.SaveChangesAsync();
+                        await db.SaveChangesAsync();                        
 
-                        temp = form["SO_SERIAL"].ToString();
-                        var maTB = (from p in db.THIETBIs
-                                    where p.SO_SERIAL == temp
-                                    select p.MATB).First();
-
-                        cau_Hinh.MATB = maTB;
-                        db.CAU_HINH.Add(cau_Hinh);
+                        //cau_Hinh.MA_LOAITB = thiet_Bi.MA_LOAITB;
+                        //db.CAU_HINH.Add(cau_Hinh);
 
                         nhap_Kho_Create.MATB = maTB;
                         db.NHAP_KHO.Add(nhap_Kho_Create);
 
-                        nHAT_KY_THIET_BI.MATB = maTB;
-                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
-
                         await db.SaveChangesAsync();
-
                         ViewBag.ErrorMessage = "Thêm thành công";
                     }
+
+                    #region Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.MA_NHAP_KHO = (from p in db.NHAP_KHO
+                                                    where p.MATB == maTB
+                                                    select p.MA_NHAP_KHO).FirstOrDefault();
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Mới nhập";
+
+                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                    await db.SaveChangesAsync();
+                    #endregion
 
                     #region Tạo hình ảnh
                     if (HINH_ANH != null)
                     {
                         var hinh_Anh = new HINH_ANH();
-
-                        temp = form["SO_SERIAL"].ToString();
-                        hinh_Anh.MATB = (from p in db.THIETBIs
-                                         where p.SO_SERIAL == temp
-                                         select p.MATB).First();
+                        hinh_Anh.MATB = maTB;
 
                         foreach (var file in HINH_ANH)
                         {

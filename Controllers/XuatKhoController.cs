@@ -56,11 +56,19 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    //Tạo xuất kho
-                    var xuat_kho = new XUAT_KHO();
-                    xuat_kho.MATB = Int32.Parse(form["maTB"]);
+                    #region Thay đổi trạng thái thiết bị
+                    var temp = form["maTB"].ToString();
+                    var tHIETBI = (from a in db.THIETBIs
+                                   where a.MATB == temp
+                                   select a).FirstOrDefault();
+                    tHIETBI.TINH_TRANG = "Đang xuất kho";
+                    #endregion
 
-                    var temp = form["MADV_QL"].ToString();
+                    #region Tạo xuất kho
+                    var xuat_kho = new XUAT_KHO();
+                    xuat_kho.MATB = tHIETBI.MATB;
+
+                    temp = form["MADV_QL"].ToString();
                     xuat_kho.MADV_XUAT = (from p in db.DON_VI
                                           where p.TEN_DON_VI == temp
                                           select p.MA_DON_VI).FirstOrDefault();
@@ -80,42 +88,56 @@ namespace Source.Controllers
                                           where p.TEN_ND == temp
                                           select p.MA_ND).FirstOrDefault();
 
-                    xuat_kho.GHI_CHU = form["GHI_CHU"];
                     xuat_kho.NGAY_XUAT = DateTime.Now;
-
-                    //Thay đổi trạng thái thiết bị
-                    var mATB = Int32.Parse(form["maTB"]);
-                    var tHIETBI = (from a in db.THIETBIs
-                                   where a.MATB == mATB
-                                   select a).FirstOrDefault();
-                    tHIETBI.MAND_QL = xuat_kho.MAND_NHAN;
-                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
-
-                    //Thêm vào nhật ký thiết bị
-                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                    nHAT_KY_THIET_BI.MATB = Int32.Parse(form["MATB"]);
-                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
-                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+                    xuat_kho.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
+                    xuat_kho.GHI_CHU = form["GHI_CHU"];
+                    xuat_kho.VAN_CHUYEN = form["VAN_CHUYEN"];
+                    #endregion
 
                     if (ModelState.IsValid)
                     {
                         db.Entry(tHIETBI).State = EntityState.Modified;
                         db.XUAT_KHO.Add(xuat_kho);
-                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                         await db.SaveChangesAsync();
 
                         ViewBag.ErrorMessage = "Thêm thành công";
                     }
 
-                    //Thêm vào xác nhận
+                    #region Thêm vào xác nhận
                     var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
-                    xAC_NHAN.MATB = mATB;
                     xAC_NHAN.XAC_NHAN = false;
                     xAC_NHAN.MA_XUAT_KHO = (from a in db.XUAT_KHO
-                                            where a.MATB == mATB
+                                            where a.MATB == tHIETBI.MATB
                                             select a.MA_XUAT_KHO).FirstOrDefault();
 
                     db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
+                    #endregion
+
+                    #region Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.MA_XUAT_KHO = xAC_NHAN.MA_XUAT_KHO;
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang xuất kho";
+                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                    #endregion
+
+                    await db.SaveChangesAsync();
+
+                    Email.EmailUsername = "angellove27101997@gmail.com";
+                    Email.EmailPassword = "toantran168";
+                    Email email = new Email();
+                    email.ToEmail = "tnhuy2710@gmail.com";
+                    email.Subject = "Thiết bị xuất kho";
+                    email.Body = "Thanks for Registering your account.<br>"
+                                 + "Thiết bị " + form["MATB"] + ".<br>"
+                                 + "Đơn vị quản lý: " + form["MADV_QL"] + ".<br>"
+                                 + "Người xuất: " + Session["TEN_DANG_NHAP"] + ".<br>"
+                                 + "Số lượng: " + Int32.Parse(form["SO_LUONG"].ToString()) + ".<br>"
+                                 + "Ghi chú: " + form["GHI_CHU"].ToString() + ".<br>"
+                                 + "Đơn vị nhận: " + form["MADV_NHAN"] + ".<br>"
+                                 + "Người nhận: " + form["MAND_NHAN"] + ".<br>"
+                                 + "Phương thức vận chuyển: " + form["VAN_CHUYEN"] + ".<br>";
+                    email.IsHtml = true;
+                    email.Send();
                 }
             }
             else if (!String.IsNullOrEmpty(MATB_XK))
@@ -128,6 +150,8 @@ namespace Source.Controllers
             }
             return View();
         }
+
+
 
         // GET: /XuatKho/Details/5
         public async Task<ActionResult> Details(int? id)

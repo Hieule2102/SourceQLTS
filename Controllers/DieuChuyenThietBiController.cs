@@ -56,11 +56,19 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    //Tạo điều chuyển thiết bị
-                    var dieu_chuyen_thiet_bi = new DIEU_CHUYEN_THIET_BI();
-                    dieu_chuyen_thiet_bi.MATB = Int32.Parse(form["maTB"]);
+                    #region Thay đổi trạng thái thiết bị
+                    var temp = form["maTB"].ToString();
+                    var tHIETBI = (from a in db.THIETBIs
+                                   where a.MATB == temp
+                                   select a).FirstOrDefault();
+                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
+                    #endregion
 
-                    var temp = form["MADV_QL"].ToString();
+                    #region Tạo điều chuyển thiết bị
+                    var dieu_chuyen_thiet_bi = new DIEU_CHUYEN_THIET_BI();
+                    dieu_chuyen_thiet_bi.MATB = tHIETBI.MATB;
+
+                    temp = form["MADV_QL"].ToString();
                     dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN = (from p in db.DON_VI
                                                              where p.TEN_DON_VI == temp
                                                              select p.MA_DON_VI).FirstOrDefault();
@@ -78,42 +86,39 @@ namespace Source.Controllers
                                                              where p.TEN_DANG_NHAP == temp
                                                              select p.MA_ND).FirstOrDefault();
 
-                    dieu_chuyen_thiet_bi.NGAY_CHUYEN = DateTime.Now;
+                    dieu_chuyen_thiet_bi.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
+                    dieu_chuyen_thiet_bi.NGAY_DIEU_CHUYEN = DateTime.Now;
                     dieu_chuyen_thiet_bi.GHI_CHU = form["GHI_CHU"];
-
-                    //Thay đổi trạng thái thiết bị
-                    var mATB = Int32.Parse(form["maTB"]);
-                    var tHIETBI = (from a in db.THIETBIs
-                                   where a.MATB == mATB
-                                   select a).FirstOrDefault();
-                    tHIETBI.MAND_QL = dieu_chuyen_thiet_bi.MAND_NHAN;
-                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
-
-                    //Thêm vào nhật ký thiết bị
-                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                    nHAT_KY_THIET_BI.MATB = Int32.Parse(form["maTB"]);
-                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
-                    nHAT_KY_THIET_BI.NGAY_THUC_HIEN = DateTime.Now;
+                    dieu_chuyen_thiet_bi.VAN_CHUYEN = form["VAN_CHUYEN"];
+                    #endregion                    
 
                     if (ModelState.IsValid)
                     {
                         db.Entry(tHIETBI).State = EntityState.Modified;
                         db.DIEU_CHUYEN_THIET_BI.Add(dieu_chuyen_thiet_bi);
-                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                         await db.SaveChangesAsync();
 
                         ViewBag.ErrorMessage = "Thêm thành công";
                     }
 
-                    //Thêm vào xác nhận
+                    #region Thêm vào xác nhận
                     var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
-                    xAC_NHAN.MATB = mATB;
                     xAC_NHAN.XAC_NHAN = false;
-                    xAC_NHAN.MA_XUAT_KHO = (from a in db.DIEU_CHUYEN_THIET_BI
-                                            where a.MATB == mATB
+                    xAC_NHAN.MA_DIEU_CHUYEN = (from a in db.DIEU_CHUYEN_THIET_BI
+                                            where a.MATB == tHIETBI.MATB
                                             select a.MA_DIEU_CHUYEN).FirstOrDefault();
 
                     db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
+                    #endregion
+
+                    #region Thêm vào nhật ký thiết bị
+                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+                    nHAT_KY_THIET_BI.MA_DIEU_CHUYEN = xAC_NHAN.MA_DIEU_CHUYEN;
+                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang điều chuyển";
+                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                    #endregion
+
+                    await db.SaveChangesAsync();
                 }
             }
             else if (!String.IsNullOrEmpty(MATB_DC))

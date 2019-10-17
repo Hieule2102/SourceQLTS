@@ -22,7 +22,7 @@ namespace Source.Controllers
             {
                 return HttpNotFound("You have no accesss permissions at this");
             }
-            var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
+            var thietbis = db.THIETBIs.OrderBy(t => t.MATB).Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
             return View(await thietbis.ToListAsync());
         }
 
@@ -37,7 +37,7 @@ namespace Source.Controllers
             {
                 thietbis = thietbis.Where(data => data.TENTB.Contains(SEARCH_STRING));
             }            
-            return View(await thietbis.ToListAsync());
+            return View(await thietbis.OrderBy(t => t.MATB).ToListAsync());
         }
 
         public ActionResult About()

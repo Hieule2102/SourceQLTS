@@ -138,7 +138,6 @@ namespace Source.Controllers
             {
                 var temp = form["MA_ND"].ToString();
                 NGUOI_DUNG edit_ND = db.NGUOI_DUNG.FirstOrDefault(x => x.MA_ND == temp);
-                NHOM_ND edit_NHOM_ND = db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp);
 
                 //Sửa người dùng
                 edit_ND.TEN_ND = form["TEN_ND"];
@@ -150,20 +149,41 @@ namespace Source.Controllers
                                      where a.TEN_DON_VI == temp
                                      select a.MA_DON_VI).FirstOrDefault();
 
-                //Sửa nhóm người dùng
-                temp = form["MA_NHOM"].ToString();
-                edit_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                        where a.TEN_NHOM == temp
-                                        select a.MA_NHOM).FirstOrDefault();
-
                 if (ModelState.IsValid)
                 {
                     db.Entry(edit_ND).State = EntityState.Modified;
-                    db.Entry(edit_NHOM_ND).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-
-                    ViewBag.ErrorMessage = "Sửa thành công";
                 }
+
+                //Sửa nhóm người dùng
+                temp = form["MA_NHOM"].ToString();
+                if (db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp) != null)
+                {
+                    //Sửa nhóm người dùng   
+                    NHOM_ND edit_NHOM_ND = db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp);
+
+                    edit_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
+                                            where a.TEN_NHOM == temp
+                                            select a.MA_NHOM).FirstOrDefault();
+
+                    db.Entry(edit_NHOM_ND).State = EntityState.Modified;
+                }
+                else if (db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp) == null)
+                {
+                    //Thêm nhóm người dùng
+                    NHOM_ND create_NHOM_ND = new NHOM_ND();
+                    create_NHOM_ND.MA_ND = form["MA_ND"];
+
+                    temp = form["MA_NHOM"].ToString();
+                    create_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
+                                              where a.TEN_NHOM == temp
+                                              select a.MA_NHOM).FirstOrDefault();
+
+                    db.NHOM_ND.Add(create_NHOM_ND);
+                }
+
+                await db.SaveChangesAsync();
+                ViewBag.ErrorMessage = "Sửa thành công";
             }
             else
             {
