@@ -37,36 +37,154 @@
         <div class="nk-tb">
             <table>
                 <tr>
-                    <th>Mã nhật ký</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày thực hiện</th>
+                    <th>Mã thiết bị</th>
+                    <th>Tên thiết bị</th>
+                    <th>Số lượng</th>
+                    <th>Đơn vị thực hiện</th>
                     <th>Người thực hiện</th>
-                    <th>ĐV thực hiện</th>
+                    <th>Ngày thực hiện</th>
+                    <th>Tình trạng</th>
                 </tr>
-                @if (ViewBag.MATB != null)
-                {
-                    foreach (var item in Model)
+                @*@if (ViewBag.MATB != null)
+                {*@
+                    @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MA_NHAT_KY)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TINH_TRANG)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NGAY_THUC_HIEN)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.NGUOI_DUNG.TEN_ND)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.THIETBI.DON_VI.TEN_DON_VI)
-                            </td>
-                        </tr>
-                    }
-                }
+                        if (item.MA_NHAP_KHO != null)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.THIETBI.MATB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.THIETBI.TENTB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.SO_LUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.DON_VI.TEN_DON_VI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.NGUOI_DUNG.TEN_ND)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NHAP_KHO.NGAY_NHAP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                </td>
+                            </tr>
+                        }
+                        else if (item.MA_XUAT_KHO != null)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.MATB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.TENTB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.SO_LUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.DON_VI.TEN_DON_VI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.NGUOI_DUNG.TEN_ND)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.XUAT_KHO.NGAY_XUAT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                </td>
+                            </tr>
+                        }
+                        else if (item.MA_DIEU_CHUYEN != null)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.SO_LUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.NGUOI_DUNG1.TEN_ND)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.NGAY_DIEU_CHUYEN)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                </td>
+                            </tr>
+                        }
+                        else if (item.MA_XAC_NHAN != null)
+                        {
+                            if (item.XAC_NHAN_DIEU_CHUYEN.MA_XUAT_KHO != null)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.THIETBI.MATB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.THIETBI.TENTB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.SO_LUONG)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.XUAT_KHO.DON_VI.TEN_DON_VI)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.NGUOI_DUNG.TEN_ND)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.THOI_GIAN_XAC_NHAN)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.XAC_NHAN_DIEU_CHUYEN.MA_DIEU_CHUYEN != null)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.SO_LUONG)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.NGUOI_DUNG.TEN_ND)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XAC_NHAN_DIEU_CHUYEN.THOI_GIAN_XAC_NHAN)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                    </td>
+                                </tr>
+                            }
 
+                        }
+                    }
+                @*}*@
             </table>
         </div>
     </section>

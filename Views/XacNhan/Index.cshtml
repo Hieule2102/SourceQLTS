@@ -100,6 +100,10 @@
                                 <td>Ghi chú:</td>
                                 <td id="GHI_CHU"></td>
                             </tr>
+                            <tr>
+                                <td>Phương thức vận chuyển:</td>
+                                <td id="VAN_CHUYEN"></td>
+                            </tr>
                         </table>
                         <div class="submit">
                             @if (ViewBag.Them != null)
@@ -145,8 +149,9 @@
                 $("#DV_THUC_HIEN").html(data.DV_THUC_HIEN);
                 $("#DV_NHAN").html(data.DV_NHAN);
                 $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
-                $("#SO_LUONG").html(data.GHI_CHU);
+                $("#SO_LUONG").html(data.SO_LUONG);
                 $("#GHI_CHU").html(data.GHI_CHU);
+                $("#VAN_CHUYEN").html(data.VAN_CHUYEN);
 
                 document.getElementsByName("MA_DIEU_CHUYEN")[0].value = data.MA_DIEU_CHUYEN;
                 document.getElementsByName("MA_XUAT_KHO")[0].value = data.MA_XUAT_KHO;
