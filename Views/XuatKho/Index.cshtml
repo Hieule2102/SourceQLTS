@@ -38,21 +38,21 @@
                             <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
                         }
                     </div>
-                    <div class="form-group">
-                        <label for="">Tên thiết bị:</label>
-                        <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
-                    </div>
+                    @*<div class="form-group">
+            <label for="">Tên thiết bị:</label>
+            <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
+        </div>*@
                     <div class="form-group">
                         <label for="">ĐVQL:</label>
                         <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
                     </div>
                     <div class="form-group">
-                        <label for="">Người QL:</label>
+                        <label for="">Người nhập:</label>
                         <input class="form-control"
-                               id="MAND_QL"
-                               name="MAND_QL"
+                               id="MAND_NHAP"
+                               name="MAND_NHAP"
                                aria-describedby="emailHelp"
-                               placeholder="" 
+                               placeholder=""
                                readonly />
                     </div>
                     <div class="form-group">
@@ -63,6 +63,10 @@
                                aria-describedby="emailHelp"
                                placeholder=""
                                readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Số lượng:</label>
+                        <input type="number" min="1" name="SO_LUONG" />
                     </div>
                     <div class="form-group">
                         <label for="">Ghi chú:</label>
@@ -83,6 +87,10 @@
                         <label for="">Người nhận:</label>
                         <select class="form-control" id="MAND_NHAN" name="MAND_NHAN"></select>
                     </div>
+                    <div class="form-group">
+                        <label for="">Phương thức vận chuyển:</label>
+                        <input type="text" id="VAN_CHUYEN" name="VAN_CHUYEN" />
+                    </div>
                 </div>
             </div>
             <div class="submit">
@@ -98,15 +106,15 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var maTB = $('#MATB').val();
+        var mATB = $('#MATB').val();
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinTB",
-            data: { maTB: maTB },
+            data: { mATB: mATB },
             success: function (data) {
-                $("#TENTB").val(data.TENTB);
+                $("#MATB").val(data.MATB + " -- " + data.TENTB);
                 $("#MADV_QL").val(data.TEN_DON_VI);
-                $("#MAND_QL").val(data.TEN_ND);
+                $("#MAND_NHAP").val(data.TEN_ND);
             }
         });
         $.ajax({
@@ -136,15 +144,15 @@
     });
 
     function get_ThongTinTB() {
-        var maTB = $('#MATB').val();
+        var mATB = $('#MATB').val();
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinTB",
-            data: { maTB: maTB },
+            data: { mATB: mATB },
             success: function (data) {
-                $("#TENTB").val(data.TENTB);
+                //$("#MATB").val(data.MATB + "--" + data.TENTB);
                 $("#MADV_QL").val(data.TEN_DON_VI);
-                $("#MAND_QL").val(data.TEN_ND);
+                $("#MAND_NHAP").val(data.TEN_ND);
             }
         });
     };

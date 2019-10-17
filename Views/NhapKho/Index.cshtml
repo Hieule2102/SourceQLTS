@@ -1,4 +1,4 @@
-@model IEnumerable<Source.Models.NHAP_KHO>
+﻿@model IEnumerable<Source.Models.NHAP_KHO>
 
 @{
     ViewBag.Title = "Index";
@@ -29,44 +29,57 @@
                         <div class="form-group">
                             <label for="">Nhóm thiết bị: </label>
                             @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
-                            <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="Fill_LoaiTB()"></select>
+                            <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="FILL_LOAITB()"></select>
                         </div>
                         <div class="form-group">
                             <label for="">Loại thiết bị: </label>
-                            <select class="form-control" id="MA_LOAITB" name="MA_LOAITB"></select>
+                            <select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="FILL_CAU_HINH_LOAITB()"></select>
                         </div>
-
                         <div class="form-group">
                             <label for="">Tên thiết bị:</label>
-                            <input type="text" name="TENTB" />
+                            <input type="text" id="TENTB" name="TENTB" />
                         </div>
                         <div class="form-group">
                             <label for="">Số serial:</label>
                             <input type="text" name="SO_SERIAL" />
                         </div>
                         <div class="form-group">
+                            <label for="">Số lượng:</label>
+                            <input type="number" min="1" step="1" max="2500" name="SO_LUONG" />
+                        </div>
+                        <div class="form-group">
                             <label for="">Giá tiền:</label>
-                            <input type="number" name="GIA_TIEN" />
+                            <input type="number" min="1" name="GIA_TIEN" />
                         </div>
-                        <div class="form-group">
-                            <label for="">THBH:</label>
-                            <input type="text" name="THOI_HAN_BAO_HANH" />
-                        </div>
-                        <div class="form-group">
-                            <label for="">Ngày mua:</label>
-                            <input type="date" name="NGAY_MUA" />
-                        </div>
-                        <div class="form-group">
-                            <label for="">Đơn vị mua:</label>
-                            <select class="form-control" id="MA_DON_VI" name="MA_DON_VI"></select>
-                        </div>
-                        @*<div class="form-group">
-                            <label for="">Người quản lý:</label>
-                            <select class="form-control" id="MAND_QL" name="MAND_QL"></select>
-                        </div>*@
                         <div class="form-group">
                             <label for="">Nhà cung cấp:</label>
                             <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Ngày mua:</label>
+                            <input type="date" id="NGAY_MUA" name="NGAY_MUA" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">THBH (theo tháng):</label>
+                            <input type="number" id="THOI_HAN_BAO_HANH" name="THOI_HAN_BAO_HANH" oninput="TINH_NGAY_BAO_HANH()" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Thời hạn hết BH:</label>
+                            <input type="text" id="THOI_HAN_HET_BAO_HANH" name="THOI_HAN_HET_BAO_HANH" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Đơn vị mua:</label>
+                            <input class="form-control" id="MA_DON_VI" name="MA_DON_VI" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Người quản lý:</label>
+                            <input class="form-control"
+                                   value="@Session["TEN_DANG_NHAP"]"
+                                   id="TEN_DANG_NHAP"
+                                   name="TEN_DANG_NHAP"
+                                   aria-describedby="emailHelp"
+                                   placeholder=""
+                                   readonly />
                         </div>
                     </div>
                     <div class="thongso-hinhanh">
@@ -131,48 +144,59 @@
                             <h4 class="sub-title">
                                 Thông số kỹ thuật
                             </h4>
-                            <div id="first" class="form-group">
-                                <label id="label1"></label>
-                                <select class="form-control"
+                            <div id="first">
+                                <div class="form-group">
+                                    <label id="label1"></label>                                
+                                    @*<select class="form-control"
                                         id="thong_so1"
-                                        name="thong_so1"></select>
-                                <input type="text" id="input_thong_so1" name="input_thong_so1" />
+                                        name="thong_so1"></select>*@
+                                    <input type="text" id="input_thong_so1" name="input_thong_so1" readonly/>
+                                </div>
                             </div>
-                            <div id="second" class="form-group">
-                                <label id="label2"></label>
-                                <select class="form-control"
+                            <div id="second">
+                                <div class="form-group">
+                                    <label id="label2"></label>
+                                    @*<select class="form-control"
                                         id="thong_so2"
-                                        name="thong_so2"></select>
+                                        name="thong_so2"></select>*@
+                                    <input type="text" id="input_thong_so2" name="input_thong_so2" readonly/>
+                                </div>
                             </div>
-                            <div id="third" class="form-group">
-                                <label id="label3"></label>
-                                <select class="form-control"
+                            <div id="third">
+                                <div class="form-group">
+                                    <label id="label3"></label>
+                                    @*<select class="form-control"
                                         id="thong_so3"
-                                        name="thong_so3"></select>
-                                <input type="number" id="input_thong_so3" name="input_thong_so3" />
+                                        name="thong_so3"></select>*@
+                                    <input type="text" id="input_thong_so3" name="input_thong_so3" readonly/>
+                                </div>
                             </div>
-                            <div id="fourth" class="form-group">
-                                <label id="label4"></label>
-                                <select class="form-control"
+                            <div id="fourth">                                
+                                <div class="form-group">
+                                    <label id="label4"></label>
+                                    @*<select class="form-control"
                                         id="thong_so4"
-                                        name="thong_so4"></select>
-                                <input type="text" id="input_thong_so4" name="input_thong_so4" />
+                                        name="thong_so4"></select>*@
+                                    <input type="text" id="input_thong_so4" name="input_thong_so4" readonly/>
+                                </div>
                             </div>
                             <div id="fifth">
                                 <div class="form-group">
                                     <label id="label5"></label>
-                                    <select class="form-control"
-                                            id="thong_so5"
-                                            name="thong_so5"></select>
+                                    @*<select class="form-control"
+                                    id="thong_so5"
+                                    name="thong_so5"></select>*@
+                                    <input type="text" id="input_thong_so5" name="input_thong_so5" readonly/>
                                 </div>
                             </div>
 
                             <div id="sixth">
                                 <div class="form-group">
                                     <label id="label6"></label>
-                                    <select class="form-control"
-                                            id="thong_so6"
-                                            name="thong_so6"></select>
+                                    @*<select class="form-control"
+                                        id="thong_so6"
+                                        name="thong_so6"></select>*@
+                                    <input type="text" id="input_thong_so6" name="input_thong_so6" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -231,9 +255,19 @@
                 $("#MA_NCC").html(s);
             }
         });
+
+        var tEN_DANG_NHAP = $('#TEN_DANG_NHAP').val();
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_DV",
+            data: { tEN_DANG_NHAP: tEN_DANG_NHAP },
+            success: function (data) {
+                $('#MA_DON_VI').val(data);
+            }
+        });
     });
 
-    function preview_images() {        
+    function preview_images() {                
         var total_file = document.getElementById("file-1").files.length;
         var flag = 1;
         
@@ -278,14 +312,13 @@
         }
     }
 
-    function Fill_LoaiTB() {
+    function FILL_LOAITB() {
         var nhom_TB = $('#MA_NHOMTB').val();
         $.ajax({
             type: "GET",
             url: "/Script/get_LOAITB",
             data: { nhom_TB: nhom_TB },
             success: function (data) {
-                document.getElementById("thong-so-ky-thuat").hidden = false;
                 $("#MA_LOAITB").html("");
                 var options = '<option disabled selected value>Xin chọn loại thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
@@ -294,24 +327,41 @@
                 $("#MA_LOAITB").html(options);
             }
         });
+        document.getElementById("thong-so-ky-thuat").hidden = true;
+        document.getElementById("first").hidden = true;
+        document.getElementById("second").hidden = true;
+        document.getElementById("third").hidden = true;
+        document.getElementById("fourth").hidden = true;
+        document.getElementById("fifth").hidden = true;
+        document.getElementById("sixth").hidden = true;
+        $("#TENTB").val("");
+    };
 
+    function FILL_CAU_HINH_LOAITB() {
+        var mA_LOAITB = $('#MA_LOAITB').val();
+        document.getElementById("thong-so-ky-thuat").hidden = false;
         $.ajax({
-            type: "GET",
-            url: "/Script/get_THONG_SO_KY_THUAT",
-            data: { nhom_TB: nhom_TB },
+            type: "POST",
+            url: "/Script/get_CAU_HINH",
+            data: { mA_LOAITB: mA_LOAITB },
             success: function (data) {
-                if (data.NHOMTB == "PC") {
+                $("#TENTB").val(data.TEN_LOAI);
+                if (data.MA_NHOMTB == "PC" || data.MA_NHOMTB == "LT") {
+                    document.getElementById("first").hidden = false;
+                    document.getElementById("second").hidden = false;
+                    document.getElementById("third").hidden = false;
+                    document.getElementById("fourth").hidden = false;
                     document.getElementById("fifth").hidden = false;
                     document.getElementById("sixth").hidden = false;
                     //document.getElementById("fifth").setAttribute("hidden", "false");
                     //document.getElementById("sixth").setAttribute("hidden", "false");
 
-                    document.getElementById("thong_so1").hidden = false;
-                    document.getElementById("input_thong_so1").hidden = true;
-                    document.getElementById("thong_so3").hidden = false;
-                    document.getElementById("input_thong_so3").hidden = true;
-                    document.getElementById("thong_so4").hidden = false;
-                    document.getElementById("input_thong_so4").hidden = true;
+                    //document.getElementById("thong_so1").hidden = false;
+                    //document.getElementById("input_thong_so1").hidden = true;
+                    //document.getElementById("thong_so3").hidden = false;
+                    //document.getElementById("input_thong_so3").hidden = true;
+                    //document.getElementById("thong_so4").hidden = false;
+                    //document.getElementById("input_thong_so4").hidden = true;
 
                     document.getElementById("label1").innerHTML = "CPU:";
                     document.getElementById("label2").innerHTML = "RAM";
@@ -320,82 +370,96 @@
                     document.getElementById("label5").innerHTML = "VGA:";
                     document.getElementById("label6").innerHTML = "Hệ điều hành:";
 
+                    $("#input_thong_so1").val(data.CPU);
+                    $("#input_thong_so2").val(data.RAM);
+                    $("#input_thong_so3").val(data.MAN_HINH);
+                    $("#input_thong_so4").val(data.O_CUNG);
+                    $("#input_thong_so5").val(data.VGA);
+                    $("#input_thong_so6").val(data.HDH);
 
+                    //$("#thong_so1").html("");
+                    //$("#thong_so2").html("");
+                    //$("#thong_so3").html("");
+                    //$("#thong_so4").html("");
+                    //$("#thong_so5").html("");
+                    //$("#thong_so6").html("");
 
-                    $("#thong_so1").html("");
-                    $("#thong_so2").html("");
-                    $("#thong_so3").html("");
-                    $("#thong_so4").html("");
-                    $("#thong_so5").html("");
-                    $("#thong_so6").html("");
+                    //var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    //var options2 = '<option disabled selected value></option>';
+                    //var options3 = '<option disabled selected value></option>';
+                    //var options4 = '<option disabled selected value></option>';
+                    //var options5 = '<option disabled selected value></option>';
+                    //var options6 = '<option disabled selected value></option>';
 
-                    var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
-                    var options2 = '<option disabled selected value></option>';
-                    var options3 = '<option disabled selected value></option>';
-                    var options4 = '<option disabled selected value></option>';
-                    var options5 = '<option disabled selected value></option>';
-                    var options6 = '<option disabled selected value></option>';
+                    //for (var i = 0; i < data.CPU.length; i++) {
+                    //    options1 += '<option value="' + data.CPU[i] + '">' + data.CPU[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.CPU.length; i++) {
-                        options1 += '<option value="' + data.CPU[i] + '">' + data.CPU[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.RAM.length; i++) {
+                    //    options2 += '<option value="' + data.RAM[i] + '">' + data.RAM[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.RAM.length; i++) {
-                        options2 += '<option value="' + data.RAM[i] + '">' + data.RAM[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.MAN_HINH.length; i++) {
+                    //    options3 += '<option value="' + data.MAN_HINH[i] + '">' + data.MAN_HINH[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.MAN_HINH.length; i++) {
-                        options3 += '<option value="' + data.MAN_HINH[i] + '">' + data.MAN_HINH[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.O_CUNG.length; i++) {
+                    //    options4 += '<option value="' + data.O_CUNG[i] + '">' + data.O_CUNG[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.O_CUNG.length; i++) {
-                        options4 += '<option value="' + data.O_CUNG[i] + '">' + data.O_CUNG[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.VGA.length; i++) {
+                    //    options5 += '<option value="' + data.VGA[i] + '">' + data.VGA[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.VGA.length; i++) {
-                        options5 += '<option value="' + data.VGA[i] + '">' + data.VGA[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.HDH.length; i++) {
+                    //    options6 += '<option value="' + data.HDH[i] + '">' + data.HDH[i] + '</option>';
+                    //}
 
-                    for (var i = 0; i < data.HDH.length; i++) {
-                        options6 += '<option value="' + data.HDH[i] + '">' + data.HDH[i] + '</option>';
-                    }
-
-                    $("#thong_so1").html(options1);
-                    $("#thong_so2").html(options2);
-                    $("#thong_so3").html(options3);
-                    $("#thong_so4").html(options4);
-                    $("#thong_so5").html(options5);
-                    $("#thong_so6").html(options6);
+                    //$("#thong_so1").html(options1);
+                    //$("#thong_so2").html(options2);
+                    //$("#thong_so3").html(options3);
+                    //$("#thong_so4").html(options4);
+                    //$("#thong_so5").html(options5);
+                    //$("#thong_so6").html(options6);
 
 
                 }
-                else if (data.NHOMTB == "PR") {
+                else if (data.MA_NHOMTB == "PR") {
+                    document.getElementById("first").hidden = false;
+                    document.getElementById("second").hidden = false;
+                    document.getElementById("third").hidden = false;
+                    document.getElementById("fourth").hidden = false;
                     document.getElementById("fifth").hidden = true;
                     document.getElementById("sixth").hidden = true;
                     //document.getElementById("fifth").setAttribute("hidden", "true");
                     //document.getElementById("sixth").setAttribute("hidden", "true");
-                    document.getElementById("thong_so1").hidden = true;
-                    document.getElementById("input_thong_so1").hidden = false;
-                    document.getElementById("thong_so3").hidden = true;
-                    document.getElementById("input_thong_so3").hidden = false;
-                    document.getElementById("thong_so4").hidden = true;
-                    document.getElementById("input_thong_so4").hidden = false;
+
+                    //document.getElementById("thong_so1").hidden = true;
+                    //document.getElementById("input_thong_so1").hidden = false;
+                    //document.getElementById("thong_so3").hidden = true;
+                    //document.getElementById("input_thong_so3").hidden = false;
+                    //document.getElementById("thong_so4").hidden = true;
+                    //document.getElementById("input_thong_so4").hidden = false;
 
                     document.getElementById("label1").innerHTML = "Kích thước:";
                     document.getElementById("label2").innerHTML = "Loại mực:";
                     document.getElementById("label3").innerHTML = "Tốc độ:";
                     document.getElementById("label4").innerHTML = "Độ phân giải:";
 
-                    $("#thong_so2").html("");
+                    $("#input_thong_so1").val(data.KICH_THUOC);
+                    $("#input_thong_so2").val(data.LOAI_MUC);
+                    $("#input_thong_so3").val(data.TOC_DO);
+                    $("#input_thong_so4").val(data.DO_PHAN_GIAI);
+                    //$("#thong_so2").html("");
 
-                    var options2 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
-                    //var options3 = '<option value="null"></option>';
+                    //var options2 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    ////var options3 = '<option value="null"></option>';
 
-                    for (var i = 0; i < data.LOAI_MUC.length; i++) {
-                        options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
-                    }
+                    //for (var i = 0; i < data.LOAI_MUC.length; i++) {
+                    //    options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
+                    //}
 
-                    $("#thong_so2").html(options2);
+                    //$("#thong_so2").html(options2);
                     //$("#thong_so3").html(options3);
                 }
             }
@@ -404,7 +468,7 @@
 
     function cHANGE_IMG(src) {
         document.getElementById("img").src = src;
-    }
+    };
 
     function REMOVE_IMG() {
         var remove = document.getElementById("img").src;
@@ -504,5 +568,63 @@
             }
             document.getElementById("img5").removeAttribute("src");
         }
-    }
+    };   
+
+    function TINH_NGAY_BAO_HANH() {
+        var date = new Date($('#NGAY_MUA').val());
+
+        var input = $('#THOI_HAN_BAO_HANH').val();
+
+        date.setMonth(date.getMonth() + (input % 12));
+        date.setFullYear(date.getFullYear() + (input / 12));    
+
+        if (date.getMonth() == 0) {
+            document.getElementById("THOI_HAN_HET_BAO_HANH").value = 12 + "/" + date.getDate() + "/" + (date.getFullYear() - 1);
+            
+        }
+        else {
+            document.getElementById("THOI_HAN_HET_BAO_HANH").value = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+        }
+    };    
+
+    //function KIEM_TRA_NAM_NHUAN(nam) {
+    //    return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
+    //};
+
+    //function SO_NGAY_TRONG_THANG(thang, nam) {
+    //    var NgayTrongThang;
+    //    switch (thang)
+    //    {
+    //        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+    //            NgayTrongThang = 31;
+    //            break;
+    //        case 4: case 6: case 9: case 11:
+    //            NgayTrongThang = 30;
+    //            break;
+    //        case 2: 
+    //            var Check = KiemTraNamNhuan(nam); 
+    //            if (Check == 1) 
+    //            {  
+    //                NgayTrongThang = 29;
+    //            }
+    //            else
+    //            {
+    //                NgayTrongThang = 28;
+    //            }
+    //    }
+    //    return NgayTrongThang;
+    //};
+
+    //function NGAY_BAO_NHIEU_TRONG_NAM(ngay, thang, nam) {
+    //    var S = ngay;
+        
+    //    for (var i = 1; i < thang; i++)
+    //    { 
+    //        var NgayTrongThang = SO_NGAY_TRONG_THANG(thang, nam);
+    //        S = S + NgayTrongThang;
+    //    }
+    //    return S;
+    //}
+
+
 </script>

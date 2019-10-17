@@ -40,8 +40,8 @@
                     <th>Mã nhật ký</th>
                     <th>Trạng thái</th>
                     <th>Ngày thực hiện</th>
-                    <th>ĐVQL</th>
-                    @*<th>Người QL</th>*@
+                    <th>Người thực hiện</th>
+                    <th>ĐV thực hiện</th>
                 </tr>
                 @if (ViewBag.MATB != null)
                 {
@@ -58,11 +58,11 @@
                                 @Html.DisplayFor(modelItem => item.NGAY_THUC_HIEN)
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.NGUOI_DUNG.TEN_ND)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.THIETBI.DON_VI.TEN_DON_VI)
                             </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.NGAY_THUC_HIEN)
-                            </td>*@
                         </tr>
                     }
                 }

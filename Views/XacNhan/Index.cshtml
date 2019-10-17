@@ -39,17 +39,28 @@
                         </tr>
                         @foreach (var item in Model)
                         {
-                            <tr class="xn" onclick="Edit(event, '@item.MATB')">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MATB)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
-                                </td>
-                                @*<td>
-                                    @Html.DisplayFor(modelItem => item.THOI_GIAN_XAC_NHAN)
-                                </td>*@
-                            </tr>
+                            if (item.MA_XUAT_KHO != null)
+                            {
+                                <tr class="xn" onclick="Edit(event, '@item.XUAT_KHO.MATB')">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.MATB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.TENTB)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.MA_DIEU_CHUYEN != null)
+                            {
+                                <tr class="xn" onclick="Edit(event, '@item.DIEU_CHUYEN_THIET_BI.MATB')">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </table>
                 </div>
@@ -82,6 +93,10 @@
                                 <td id="MAND_THUC_HIEN"></td>
                             </tr>
                             <tr>
+                                <td>Số lượng:</td>
+                                <td id="SO_LUONG"></td>
+                            </tr>
+                            <tr>
                                 <td>Ghi chú:</td>
                                 <td id="GHI_CHU"></td>
                             </tr>
@@ -96,6 +111,8 @@
                     </div>
 
                     <div hidden="hidden">
+                        <input name="MA_DIEU_CHUYEN" />
+                        <input name="MA_XUAT_KHO" />
                         <input name="MATB" />
                     </div>
                 </div>
@@ -128,8 +145,11 @@
                 $("#DV_THUC_HIEN").html(data.DV_THUC_HIEN);
                 $("#DV_NHAN").html(data.DV_NHAN);
                 $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
+                $("#SO_LUONG").html(data.GHI_CHU);
                 $("#GHI_CHU").html(data.GHI_CHU);
 
+                document.getElementsByName("MA_DIEU_CHUYEN")[0].value = data.MA_DIEU_CHUYEN;
+                document.getElementsByName("MA_XUAT_KHO")[0].value = data.MA_XUAT_KHO;
                 document.getElementsByName("MATB")[0].value = data.MATB;
             }
         });

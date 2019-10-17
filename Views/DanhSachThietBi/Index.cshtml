@@ -79,7 +79,7 @@
                     <th>THBH</th>
                     <th>Tình trạng</th>
                     <th>ĐVQL</th>
-                    @*<th>Người QL</th>*@
+                    <th>Người QL</th>
                 </tr>
 
                 @foreach (var item in Model)
@@ -112,9 +112,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
                         </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.MANS_QL)
-                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NGUOI_DUNG.TEN_ND)
+                        </td>
                     </tr>
                 }
             </table>
@@ -310,92 +310,99 @@
         }
         evt.currentTarget.className += " active";
         $.ajax({
-            type: "POST",
-            url: "/Script/get_CAU_HINH",
-            data: { maTB: row },
+            type: "GET",
+            url: "/Script/get_ThongTinTB",
+            data: { mATB: row },
             success: function (data) {
-                $("#MATB_DC").val(data.MATB);
-                $("#MATB_XK").val(data.MATB);
-                $("#MATB_DC_ct").val(data.MATB);
-                $("#MATB_XK_ct").val(data.MATB);
+                $("#MATB_DC").val(row);
+                $("#MATB_XK").val(row);
+                $("#MATB_DC_ct").val(row);
+                $("#MATB_XK_ct").val(row);
                 $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
-                if (data.MA_NHOMTB == "PC") {
-                    //Thông số kỹ thuật
-                    document.getElementById("label1").innerHTML = "CPU:";
-                    document.getElementById("label2").innerHTML = "RAM:";
-                    document.getElementById("label3").innerHTML = "Màn hình:";
-                    document.getElementById("label4").innerHTML = "Ổ cứng:";
-                    $("#thong_so1").html(data.CPU);
-                    $("#thong_so2").html(data.RAM);
-                    $("#thong_so3").html(data.MAN_HINH);
-                    $("#thong_so4").html(data.O_CUNG);
-                    //Thông số kỹ thuật chi tiết
-                    document.getElementById("more1").hidden = false;
-                    document.getElementById("more2").hidden = false;
-                    document.getElementById("label1_ct").innerHTML = "CPU:";
-                    document.getElementById("label2_ct").innerHTML = "RAM:";
-                    document.getElementById("label3_ct").innerHTML = "Màn hình:";
-                    document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
-                    document.getElementById("label5_ct").innerHTML = "VGA:";
-                    document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
-                    $("#thong_so1_ct").html(data.CPU);
-                    $("#thong_so2_ct").html(data.RAM);
-                    $("#thong_so3_ct").html(data.MAN_HINH);
-                    $("#thong_so4_ct").html(data.O_CUNG);
-                    $("#thong_so5_ct").html(data.VGA);
-                    $("#thong_so6_ct").html(data.HDH);
-                }
-                else if (data.MA_NHOMTB == "PR") {
-                    //Thông số kỹ thuật
-                    document.getElementById("label1").innerHTML = "Kích thước:";
-                    document.getElementById("label2").innerHTML = "Loại mực:";
-                    document.getElementById("label3").innerHTML = "Tốc độ:";
-                    document.getElementById("label4").innerHTML = "Độ phân giải:";
-                    $("#thong_so1").html(data.KICH_THUOC);
-                    $("#thong_so2").html(data.LOAI_MUC);
-                    $("#thong_so3").html(data.TOC_DO);
-                    $("#thong_so4").html(data.DO_PHAN_GIAI);
-                    //Thông số kỹ thuật chi tiết
-                    document.getElementById("label1_ct").innerHTML = "Kích thước:";
-                    document.getElementById("label2_ct").innerHTML = "Loại mực:";
-                    document.getElementById("label3_ct").innerHTML = "Tốc độ:";
-                    document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
-                    document.getElementById("more1").hidden = true;
-                    document.getElementById("more2").hidden = true;
-                    $("#thong_so1_ct").html(data.KICH_THUOC);
-                    $("#thong_so2_ct").html(data.LOAI_MUC);
-                    $("#thong_so3_ct").html(data.TOC_DO);
-                    $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
-                }
-                else {
-                    //Thông số kỹ thuật
-                    document.getElementById("label1").innerHTML = "";
-                    document.getElementById("label2").innerHTML = "";
-                    document.getElementById("label3").innerHTML = "";
-                    document.getElementById("label4").innerHTML = "";
-                    $("#thong_so1").html("");
-                    $("#thong_so2").html("");
-                    $("#thong_so3").html("");
-                    $("#thong_so4").html("");
-                    //Thông số kỹ thuật chi tiết
-                    document.getElementById("label1_ct").innerHTML = "";
-                    document.getElementById("label2_ct").innerHTML = "";
-                    document.getElementById("label3_ct").innerHTML = "";
-                    document.getElementById("label4_ct").innerHTML = "";
-                    document.getElementById("more1").hidden = true;
-                    document.getElementById("more2").hidden = true;
-                    $("#thong_so1_ct").html("");
-                    $("#thong_so2_ct").html("");
-                    $("#thong_so3_ct").html("");
-                    $("#thong_so4_ct").html("");
-                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Script/get_CAU_HINH",
+                    data: { mA_LOAITB: data.TEN_LOAI },
+                    success: function (data) {
+                            if (data.MA_NHOMTB == "PC" || data.MA_NHOMTB == "LT") {
+                            //Thông số kỹ thuật
+                            document.getElementById("label1").innerHTML = "CPU:";
+                            document.getElementById("label2").innerHTML = "RAM:";
+                            document.getElementById("label3").innerHTML = "Màn hình:";
+                            document.getElementById("label4").innerHTML = "Ổ cứng:";
+                            $("#thong_so1").html(data.CPU);
+                            $("#thong_so2").html(data.RAM);
+                            $("#thong_so3").html(data.MAN_HINH);
+                            $("#thong_so4").html(data.O_CUNG);
+                            //Thông số kỹ thuật chi tiết
+                            document.getElementById("more1").hidden = false;
+                            document.getElementById("more2").hidden = false;
+                            document.getElementById("label1_ct").innerHTML = "CPU:";
+                            document.getElementById("label2_ct").innerHTML = "RAM:";
+                            document.getElementById("label3_ct").innerHTML = "Màn hình:";
+                            document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
+                            document.getElementById("label5_ct").innerHTML = "VGA:";
+                            document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
+                            $("#thong_so1_ct").html(data.CPU);
+                            $("#thong_so2_ct").html(data.RAM);
+                            $("#thong_so3_ct").html(data.MAN_HINH);
+                            $("#thong_so4_ct").html(data.O_CUNG);
+                            $("#thong_so5_ct").html(data.VGA);
+                            $("#thong_so6_ct").html(data.HDH);
+                        }
+                        else if (data.MA_NHOMTB == "PR") {
+                            //Thông số kỹ thuật
+                            document.getElementById("label1").innerHTML = "Kích thước:";
+                            document.getElementById("label2").innerHTML = "Loại mực:";
+                            document.getElementById("label3").innerHTML = "Tốc độ:";
+                            document.getElementById("label4").innerHTML = "Độ phân giải:";
+                            $("#thong_so1").html(data.KICH_THUOC);
+                            $("#thong_so2").html(data.LOAI_MUC);
+                            $("#thong_so3").html(data.TOC_DO);
+                            $("#thong_so4").html(data.DO_PHAN_GIAI);
+                            //Thông số kỹ thuật chi tiết
+                            document.getElementById("label1_ct").innerHTML = "Kích thước:";
+                            document.getElementById("label2_ct").innerHTML = "Loại mực:";
+                            document.getElementById("label3_ct").innerHTML = "Tốc độ:";
+                            document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
+                            document.getElementById("more1").hidden = true;
+                            document.getElementById("more2").hidden = true;
+                            $("#thong_so1_ct").html(data.KICH_THUOC);
+                            $("#thong_so2_ct").html(data.LOAI_MUC);
+                            $("#thong_so3_ct").html(data.TOC_DO);
+                            $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
+                        }
+                        else{
+                            //Thông số kỹ thuật
+                            document.getElementById("label1").innerHTML = "";
+                            document.getElementById("label2").innerHTML = "";
+                            document.getElementById("label3").innerHTML = "";
+                            document.getElementById("label4").innerHTML = "";
+                            $("#thong_so1").html("");
+                            $("#thong_so2").html("");
+                            $("#thong_so3").html("");
+                            $("#thong_so4").html("");
+                            //Thông số kỹ thuật chi tiết
+                            document.getElementById("label1_ct").innerHTML = "";
+                            document.getElementById("label2_ct").innerHTML = "";
+                            document.getElementById("label3_ct").innerHTML = "";
+                            document.getElementById("label4_ct").innerHTML = "";
+                            document.getElementById("more1").hidden = true;
+                            document.getElementById("more2").hidden = true;
+                            $("#thong_so1_ct").html("");
+                            $("#thong_so2_ct").html("");
+                            $("#thong_so3_ct").html("");
+                            $("#thong_so4_ct").html("");
+                        }                        
+                    }
+                });
             }
-        });
+        });            
         $.ajax({
             type: "GET",
             url: "/Script/get_HINH_ANH",
-            data: { maTB: row },
+            data: { mATB: row },
             success: function (data) {
                 //Thông số kỹ thuật
                 var src = document.createAttribute("src");
