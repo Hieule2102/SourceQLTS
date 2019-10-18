@@ -31,6 +31,7 @@ namespace Source.Controllers
                                              x.DON_VI.TEN_DON_VI,
                                              x.NGUOI_DUNG.TEN_ND,
                                              x.LOAI_THIETBI.TEN_LOAI,
+                                             x.SO_LUONG
                                          }).FirstOrDefault();
 
                 return Json(thet_Bi, JsonRequestBehavior.AllowGet);
@@ -332,6 +333,51 @@ namespace Source.Controllers
             }
             return null;
         }
+
+        public ActionResult get_THONG_TIN_XAC_NHAN(string mA_XAC_NHAN)
+        {
+            //Tìm tên thiết bị
+            if (!String.IsNullOrEmpty(mA_XAC_NHAN))
+            {
+                var temp = Int32.Parse(mA_XAC_NHAN);
+                var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MA_XAC_NHAN == temp);
+                if (xAC_NHAN.Select(a => a.MA_XUAT_KHO).FirstOrDefault() != null)
+                {
+                    var rESULT = xAC_NHAN.Select(b => new
+                                        {
+                                            b.MA_XAC_NHAN,
+                                            b.XUAT_KHO.MATB,
+                                            b.XUAT_KHO.THIETBI.TENTB,
+                                            NGAY_THUC_HIEN = b.XUAT_KHO.NGAY_XUAT.ToString(),
+                                            DV_THUC_HIEN = b.XUAT_KHO.DON_VI.TEN_DON_VI,
+                                            DV_NHAN = b.XUAT_KHO.DON_VI1.TEN_DON_VI,
+                                            MAND_THUC_HIEN = b.XUAT_KHO.MAND_XUAT,
+                                            b.XUAT_KHO.SO_LUONG,
+                                            b.XUAT_KHO.GHI_CHU,
+                                            b.XUAT_KHO.VAN_CHUYEN
+                                        }).FirstOrDefault();
+                    return Json(rESULT, JsonRequestBehavior.AllowGet);
+                }
+                else if (xAC_NHAN.Select(a => a.MA_DIEU_CHUYEN).FirstOrDefault() != null)
+                {
+                    var rESULT = xAC_NHAN.Select(b => new
+                                        {
+                                            b.MA_XAC_NHAN,
+                                            b.DIEU_CHUYEN_THIET_BI.MATB,
+                                            b.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB,
+                                            NGAY_THUC_HIEN = b.DIEU_CHUYEN_THIET_BI.NGAY_DIEU_CHUYEN.ToString(),
+                                            DV_THUC_HIEN = b.DIEU_CHUYEN_THIET_BI.DON_VI.TEN_DON_VI,
+                                            DV_NHAN = b.DIEU_CHUYEN_THIET_BI.DON_VI1.TEN_DON_VI,
+                                            MAND_THUC_HIEN = b.DIEU_CHUYEN_THIET_BI.MAND_DIEU_CHUYEN,
+                                            b.DIEU_CHUYEN_THIET_BI.SO_LUONG,
+                                            b.DIEU_CHUYEN_THIET_BI.GHI_CHU,
+                                            b.DIEU_CHUYEN_THIET_BI.VAN_CHUYEN
+                                        }).FirstOrDefault();
+                    return Json(rESULT, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region get_Ten
@@ -415,6 +461,19 @@ namespace Source.Controllers
             return Json(dsDonVi, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult get_DON_VI_NHAP_KHO(string tEN_DANG_NHAP)
+        {
+            if (!String.IsNullOrEmpty(tEN_DANG_NHAP))
+            {
+                var dON_VI = db.NGUOI_DUNG.Where(a => a.TEN_DANG_NHAP == tEN_DANG_NHAP)
+                                          .Select(a => a.DON_VI.TEN_DON_VI)
+                                          .FirstOrDefault();
+
+                return Json(dON_VI, JsonRequestBehavior.AllowGet);
+            }
+            return null;
+        }
+
         public ActionResult get_TRANGTHAI()
         {
             var dsTrangThai = new List<string>();
@@ -451,14 +510,16 @@ namespace Source.Controllers
         }
 
         [HttpGet]
-        public ActionResult get_DV(string tEN_DANG_NHAP)
+        public ActionResult get_DV_DIEU_CHUYEN(string mAND_DIEU_CHUYEN)
         {
-            if(!String.IsNullOrEmpty(tEN_DANG_NHAP))
+            if(!String.IsNullOrEmpty(mAND_DIEU_CHUYEN))
             {
-                var dONVI = db.NGUOI_DUNG.Where(a => a.TEN_DANG_NHAP == tEN_DANG_NHAP)
-                                         .Select(a => a.DON_VI.TEN_DON_VI)
-                                         .FirstOrDefault();
-
+                var dONVI = db.NGUOI_DUNG.Where(a => a.TEN_DANG_NHAP == mAND_DIEU_CHUYEN)
+                                         .Select(x => new
+                                         {
+                                             x.MA_DON_VI,
+                                             x.DON_VI.TEN_DON_VI,
+                                         }).FirstOrDefault();
                 return Json(dONVI, JsonRequestBehavior.AllowGet);
             }
             return null;
@@ -547,18 +608,32 @@ namespace Source.Controllers
         }
 
         [HttpGet]
-        public ActionResult get_MATB_DIEU_CHUYEN()
+        public ActionResult get_MATB_DIEU_CHUYEN(string mADV)
         {
-            var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
-            var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
+            if (!String.IsNullOrEmpty(mADV))
+            {
+                var temp = Int32.Parse(mADV.ToString());
+                var tHIETBI = db.THIETBIs.Where(a => a.MA_DV == temp)
+                                         .Select(x => new
+                                         {
+                                             x.MATB,
+                                             x.TENTB
+                                         }).ToList();
 
-            var dIEUCHUYEN = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB) && !maTB_DIEU_CHUYEN.Contains(x.MATB))
-                                        .Select(x => new
-                                        {
-                                            x.MATB,
-                                            x.THIETBI.TENTB
-                                        }).ToList();
-            return Json(dIEUCHUYEN, JsonRequestBehavior.AllowGet);
+                return Json(tHIETBI, JsonRequestBehavior.AllowGet);
+            }
+            return null;
+
+            //var maTB_DIEU_CHUYEN = db.DIEU_CHUYEN_THIET_BI.Select(a => a.MATB);
+            //var maTB_XUAT_KHO = db.XUAT_KHO.Select(a => a.MATB);
+
+            //var dIEUCHUYEN = db.NHAP_KHO.Where(x => !maTB_XUAT_KHO.Contains(x.MATB) && !maTB_DIEU_CHUYEN.Contains(x.MATB))
+            //                            .Select(x => new
+            //                            {
+            //                                x.MATB,
+            //                                x.THIETBI.TENTB
+            //                            }).ToList();
+            //return Json(dIEUCHUYEN, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

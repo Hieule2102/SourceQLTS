@@ -46,32 +46,30 @@ namespace Source.Controllers
 
             if (!String.IsNullOrEmpty(SAVE))
             {
-                if (String.IsNullOrEmpty(form["maTB"]))
+                if (String.IsNullOrEmpty(form["MATB"]))
                 {
                     ViewBag.ErrorMessage = "Xin chọn thiết bị";
                 }
-                else if (String.IsNullOrEmpty(form["MADV_NHAN"]))
+                else if (String.IsNullOrEmpty(form["MADV_NHAN"]) || String.IsNullOrEmpty(form["MAND_NHAN"]))
                 {
                     ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
                 }
                 else
                 {
-                    #region Thay đổi trạng thái thiết bị
-                    var temp = form["maTB"].ToString();
-                    var tHIETBI = (from a in db.THIETBIs
-                                   where a.MATB == temp
-                                   select a).FirstOrDefault();
-                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
-                    #endregion
-
                     #region Tạo điều chuyển thiết bị
+                    var temp = form["MATB"].ToString();
                     var dieu_chuyen_thiet_bi = new DIEU_CHUYEN_THIET_BI();
-                    dieu_chuyen_thiet_bi.MATB = tHIETBI.MATB;
+                    dieu_chuyen_thiet_bi.MATB = form["MATB"].ToString();
 
-                    temp = form["MADV_QL"].ToString();
-                    dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN = (from p in db.DON_VI
-                                                             where p.TEN_DON_VI == temp
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    dieu_chuyen_thiet_bi.MADV_DIEU_CHUYEN = (from p in db.NGUOI_DUNG
+                                                             where p.TEN_DANG_NHAP == temp
                                                              select p.MA_DON_VI).FirstOrDefault();
+
+                    dieu_chuyen_thiet_bi.MAND_DIEU_CHUYEN = (from p in db.NGUOI_DUNG
+                                                             where p.TEN_DANG_NHAP == temp
+                                                             select p.MA_ND).FirstOrDefault();
+
                     temp = form["MADV_NHAN"].ToString();
                     dieu_chuyen_thiet_bi.MADV_NHAN = (from p in db.DON_VI
                                                       where p.TEN_DON_VI == temp
@@ -81,16 +79,18 @@ namespace Source.Controllers
                                                       where p.TEN_ND == temp
                                                       select p.MA_ND).FirstOrDefault();
 
-                    temp = Session["TEN_DANG_NHAP"].ToString();
-                    dieu_chuyen_thiet_bi.MAND_DIEU_CHUYEN = (from p in db.NGUOI_DUNG
-                                                             where p.TEN_DANG_NHAP == temp
-                                                             select p.MA_ND).FirstOrDefault();
-
                     dieu_chuyen_thiet_bi.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
                     dieu_chuyen_thiet_bi.NGAY_DIEU_CHUYEN = DateTime.Now;
                     dieu_chuyen_thiet_bi.GHI_CHU = form["GHI_CHU"];
                     dieu_chuyen_thiet_bi.VAN_CHUYEN = form["VAN_CHUYEN"];
-                    #endregion                    
+                    #endregion
+
+                    #region Thay đổi trạng thái thiết bị
+                    var tHIETBI = (from a in db.THIETBIs
+                                   where a.MATB == dieu_chuyen_thiet_bi.MATB
+                                   select a).FirstOrDefault();
+                    tHIETBI.TINH_TRANG = "Đang điều chuyển";
+                    #endregion
 
                     if (ModelState.IsValid)
                     {

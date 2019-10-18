@@ -84,13 +84,9 @@ namespace Source.Controllers
                                         where p.TEN_DANG_NHAP == temp
                                         select p.MA_ND).FirstOrDefault();
 
-                    if (!String.IsNullOrEmpty(form["MA_DON_VI"]))
-                    {
-                        temp = form["MA_DON_VI"].ToString();
-                        thiet_Bi.MA_DV = (from p in db.DON_VI
-                                          where p.TEN_DON_VI == temp
-                                          select p.MA_DON_VI).FirstOrDefault();
-                    }
+                    thiet_Bi.MA_DV = (from p in db.NGUOI_DUNG
+                                      where p.TEN_DANG_NHAP == temp
+                                      select p.MA_DON_VI).FirstOrDefault();
 
                     if (!String.IsNullOrEmpty(form["MA_NCC"]))
                     {
@@ -113,6 +109,12 @@ namespace Source.Controllers
                     else
                     {
                         thiet_Bi.GIA_TIEN = 0;
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        db.THIETBIs.Add(thiet_Bi);
+                        await db.SaveChangesAsync();
                     }
                     #endregion
 
@@ -197,54 +199,40 @@ namespace Source.Controllers
 
                     #region Tạo nhập kho
                     var nhap_Kho_Create = new NHAP_KHO();
-
-                    if (!String.IsNullOrEmpty(form["MA_DON_VI"]))
-                    {
-                        temp = form["MA_DON_VI"].ToString();
-                        nhap_Kho_Create.MADV_NHAP = (from p in db.DON_VI
-                                                     where p.TEN_DON_VI == temp
-                                                     select p.MA_DON_VI).FirstOrDefault();
-                    }                    
+                    nhap_Kho_Create.MATB = thiet_Bi.MATB;
+                    nhap_Kho_Create.MADV_NHAP = thiet_Bi.MA_DV;
                     nhap_Kho_Create.MAND_NHAP = thiet_Bi.MAND_QL;
                     nhap_Kho_Create.NGAY_NHAP = DateTime.Now;
-                    nhap_Kho_Create.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
-                    #endregion
+                    nhap_Kho_Create.SO_LUONG = Int32.Parse(form["SO_LUONG"]);                    
 
-                    temp = form["SO_SERIAL"].ToString();
-                    var maTB = (from p in db.THIETBIs
-                                where p.SO_SERIAL == temp
-                                select p.MATB).First();
                     if (ModelState.IsValid)
-                    {
-                        db.THIETBIs.Add(thiet_Bi);
-                        await db.SaveChangesAsync();                        
-
-                        //cau_Hinh.MA_LOAITB = thiet_Bi.MA_LOAITB;
-                        //db.CAU_HINH.Add(cau_Hinh);
-
-                        nhap_Kho_Create.MATB = maTB;
+                    {                        
                         db.NHAP_KHO.Add(nhap_Kho_Create);
-
                         await db.SaveChangesAsync();
-                        ViewBag.ErrorMessage = "Thêm thành công";
                     }
+                    #endregion
 
                     #region Thêm vào nhật ký thiết bị
                     NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
                     nHAT_KY_THIET_BI.MA_NHAP_KHO = (from p in db.NHAP_KHO
-                                                    where p.MATB == maTB
+                                                    where p.MATB == thiet_Bi.MATB
                                                     select p.MA_NHAP_KHO).FirstOrDefault();
                     nHAT_KY_THIET_BI.TINH_TRANG = "Mới nhập";
 
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
-                    await db.SaveChangesAsync();
+                    if (ModelState.IsValid)
+                    {
+                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+                        await db.SaveChangesAsync();
+                    }
                     #endregion
+
+                    ViewBag.ErrorMessage = "Thêm thành công";
 
                     #region Tạo hình ảnh
                     if (HINH_ANH != null)
                     {
                         var hinh_Anh = new HINH_ANH();
-                        hinh_Anh.MATB = maTB;
+                        hinh_Anh.MATB = thiet_Bi.MATB;
 
                         foreach (var file in HINH_ANH)
                         {

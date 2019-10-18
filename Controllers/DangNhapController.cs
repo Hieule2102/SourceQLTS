@@ -29,9 +29,9 @@ namespace Source.Controllers
         {
             if (!String.IsNullOrEmpty(form["TEN_DANG_NHAP"].ToString()))
             {
-                var temp = form["TEN_DANG_NHAP"];
-                var temp1 = form["MAT_KHAU"];
-                if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == temp) == null || db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == temp1) == null)
+                var tEN_DANG_NHAP = form["TEN_DANG_NHAP"];
+                var mAT_KHAU = form["MAT_KHAU"];
+                if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == tEN_DANG_NHAP) == null || db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == mAT_KHAU) == null)
                 {
                     ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ";
                 }
@@ -39,11 +39,11 @@ namespace Source.Controllers
                 {
                     Session["iS_ALREADY"] = 1;
                     Session["TEN_DANG_NHAP"] = (from b in db.NGUOI_DUNG
-                                                where b.TEN_DANG_NHAP == temp
+                                                where b.TEN_DANG_NHAP == tEN_DANG_NHAP
                                                 select b.TEN_DANG_NHAP).FirstOrDefault();
 
                     var ma_ND = (from b in db.NGUOI_DUNG
-                                 where b.TEN_DANG_NHAP == temp
+                                 where b.TEN_DANG_NHAP == tEN_DANG_NHAP
                                  select b.MA_ND).FirstOrDefault();
 
                     Session["NHOM_ND"] = (from b in db.NHOM_ND

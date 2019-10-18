@@ -50,17 +50,16 @@ namespace Source.Controllers
                 {
                     ViewBag.ErrorMessage = "Xin chọn thiết bị";
                 }
-                else if (String.IsNullOrEmpty(form["MADV_NHAN"]))
+                else if (String.IsNullOrEmpty(form["MADV_NHAN"]) || String.IsNullOrEmpty(form["MAND_NHAN"]))
                 {
                     ViewBag.ErrorMessage = "Xin chọn đơn vị tiếp nhận";
                 }
                 else
                 {
                     #region Thay đổi trạng thái thiết bị
-                    var temp = form["maTB"].ToString();
-                    var tHIETBI = (from a in db.THIETBIs
-                                   where a.MATB == temp
-                                   select a).FirstOrDefault();
+                    var temp = form["MATB"].ToString();
+                    var tHIETBI = db.THIETBIs.Where(a => a.MATB == temp).FirstOrDefault();
+
                     tHIETBI.TINH_TRANG = "Đang xuất kho";
                     #endregion
 
@@ -68,12 +67,11 @@ namespace Source.Controllers
                     var xuat_kho = new XUAT_KHO();
                     xuat_kho.MATB = tHIETBI.MATB;
 
-                    temp = form["MADV_QL"].ToString();
-                    xuat_kho.MADV_XUAT = (from p in db.DON_VI
-                                          where p.TEN_DON_VI == temp
+                    temp = Session["TEN_DANG_NHAP"].ToString();
+                    xuat_kho.MADV_XUAT = (from p in db.NGUOI_DUNG
+                                          where p.TEN_DANG_NHAP == temp
                                           select p.MA_DON_VI).FirstOrDefault();
 
-                    temp = Session["TEN_DANG_NHAP"].ToString();
                     xuat_kho.MAND_XUAT = (from p in db.NGUOI_DUNG
                                           where p.TEN_DANG_NHAP == temp
                                           select p.MA_ND).FirstOrDefault();
@@ -122,22 +120,22 @@ namespace Source.Controllers
 
                     await db.SaveChangesAsync();
 
-                    Email.EmailUsername = "angellove27101997@gmail.com";
-                    Email.EmailPassword = "toantran168";
-                    Email email = new Email();
-                    email.ToEmail = "tnhuy2710@gmail.com";
-                    email.Subject = "Thiết bị xuất kho";
-                    email.Body = "Thanks for Registering your account.<br>"
-                                 + "Thiết bị " + form["MATB"] + ".<br>"
-                                 + "Đơn vị quản lý: " + form["MADV_QL"] + ".<br>"
-                                 + "Người xuất: " + Session["TEN_DANG_NHAP"] + ".<br>"
-                                 + "Số lượng: " + Int32.Parse(form["SO_LUONG"].ToString()) + ".<br>"
-                                 + "Ghi chú: " + form["GHI_CHU"].ToString() + ".<br>"
-                                 + "Đơn vị nhận: " + form["MADV_NHAN"] + ".<br>"
-                                 + "Người nhận: " + form["MAND_NHAN"] + ".<br>"
-                                 + "Phương thức vận chuyển: " + form["VAN_CHUYEN"] + ".<br>";
-                    email.IsHtml = true;
-                    email.Send();
+                    //Email.EmailUsername = "angellove27101997@gmail.com";
+                    //Email.EmailPassword = "toantran168";
+                    //Email email = new Email();
+                    //email.ToEmail = "tnhuy2710@gmail.com";
+                    //email.Subject = "Thiết bị xuất kho";
+                    //email.Body = "Thanks for Registering your account.<br>"
+                    //             + "Thiết bị " + form["MATB"] + ".<br>"
+                    //             + "Đơn vị quản lý: " + form["MADV_QL"] + ".<br>"
+                    //             + "Người xuất: " + Session["TEN_DANG_NHAP"] + ".<br>"
+                    //             + "Số lượng: " + Int32.Parse(form["SO_LUONG"].ToString()) + ".<br>"
+                    //             + "Ghi chú: " + form["GHI_CHU"].ToString() + ".<br>"
+                    //             + "Đơn vị nhận: " + form["MADV_NHAN"] + ".<br>"
+                    //             + "Người nhận: " + form["MAND_NHAN"] + ".<br>"
+                    //             + "Phương thức vận chuyển: " + form["VAN_CHUYEN"] + ".<br>";
+                    //email.IsHtml = true;
+                    //email.Send();
                 }
             }
             else if (!String.IsNullOrEmpty(MATB_XK))

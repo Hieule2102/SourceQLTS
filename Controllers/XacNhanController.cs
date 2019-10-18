@@ -1,5 +1,6 @@
 ﻿using Source.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -30,6 +31,12 @@ namespace Source.Controllers
             }
 
             var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
+            var tEN_DANG_NHAP = Session["TEN_DANG_NHAP"].ToString();
+            if (tEN_DANG_NHAP != "admin")
+            {
+                xAC_NHAN = xAC_NHAN.Where(a => (a.XUAT_KHO.NGUOI_DUNG1.TEN_DANG_NHAP == tEN_DANG_NHAP
+                                             || a.DIEU_CHUYEN_THIET_BI.NGUOI_DUNG.TEN_DANG_NHAP == tEN_DANG_NHAP));
+            }
             return View(await xAC_NHAN.ToListAsync());
         }
 
@@ -41,36 +48,26 @@ namespace Source.Controllers
             ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
                                                      a.MA_QUYEN == 1 &&
                                                      a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
+
+            var tEN_DANG_NHAP = Session["TEN_DANG_NHAP"].ToString();
+            if (tEN_DANG_NHAP != "admin")
+            {
+                xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => (a.XUAT_KHO.NGUOI_DUNG1.TEN_DANG_NHAP == tEN_DANG_NHAP
+                                                                     || a.DIEU_CHUYEN_THIET_BI.NGUOI_DUNG.TEN_DANG_NHAP == tEN_DANG_NHAP)
+                                                                     && a.XAC_NHAN == false);
+            }
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                if(xAC_NHAN_DIEU_CHUYEN.FirstOrDefault(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING)) != null)
-                {
-                    xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING));
-                }
-                else
-                {
-                    xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));
-                }
+                xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING)
+                                                                    || a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));
             }
             else if (!String.IsNullOrEmpty(XAC_NHAN))
             {
                 #region Xác nhận
-                //XAC_NHAN_DIEU_CHUYEN xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MATB == temp).FirstOrDefault();
-                var mA_DIEU_CHUYEN = 0;
-                if (!String.IsNullOrEmpty(form["MA_DIEU_CHUYEN"].ToString()))
-                {
-                    mA_DIEU_CHUYEN = Int32.Parse(form["MA_DIEU_CHUYEN"].ToString());
-                }
-                else
-                {
-                    mA_DIEU_CHUYEN = Int32.Parse(form["MA_XUAT_KHO"].ToString());
-                }
-                var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XUAT_KHO.MA_XUAT_KHO == mA_DIEU_CHUYEN).FirstOrDefault();
-                if (xAC_NHAN != null)
-                {
-                    xAC_NHAN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.DIEU_CHUYEN_THIET_BI.MA_DIEU_CHUYEN == mA_DIEU_CHUYEN).FirstOrDefault();
-                }
+                var mA_XAC_NHAN = Int32.Parse(form["MA_XAC_NHAN"].ToString());
+                var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.MA_XAC_NHAN == mA_XAC_NHAN).FirstOrDefault();                
 
                 var temp = Session["TEN_DANG_NHAP"].ToString();
                 xAC_NHAN.MAND_XAC_NHAN = (from p in db.NGUOI_DUNG
@@ -82,9 +79,12 @@ namespace Source.Controllers
                 #endregion
 
                 #region Thay đổi trạng thái thiết bị
-                var mATB = form["MATB"].ToString();
+                var mATB = form["MATB_temp"].ToString();
                 var tHIETBI = db.THIETBIs.Where(a => a.MATB == mATB).FirstOrDefault();
                 tHIETBI.MAND_QL = xAC_NHAN.MAND_XAC_NHAN;
+                tHIETBI.MA_DV = db.NGUOI_DUNG.Where(a => a.MA_ND == xAC_NHAN.MAND_XAC_NHAN)
+                                             .Select(a => a.MA_DON_VI)
+                                             .FirstOrDefault();
                 tHIETBI.TINH_TRANG = "Đang sử dụng";
                 #endregion
 
@@ -99,13 +99,13 @@ namespace Source.Controllers
 
                 #region Thêm vào nhật ký thiết bị
                 NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                nHAT_KY_THIET_BI.MA_XAC_NHAN = mA_DIEU_CHUYEN;
+                nHAT_KY_THIET_BI.MA_XAC_NHAN = mA_XAC_NHAN;
                 nHAT_KY_THIET_BI.TINH_TRANG = "Đã xác nhận";
                 db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
                 await db.SaveChangesAsync();
                 #endregion
 
-                xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
+                xAC_NHAN_DIEU_CHUYEN = xAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
             }
             return View(await xAC_NHAN_DIEU_CHUYEN.ToListAsync());
         }
