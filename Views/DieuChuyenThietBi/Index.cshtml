@@ -26,7 +26,7 @@
                     </h4>
                     <div class="form-group">
                         <label for="">ĐVQL:</label>
-                        <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" value="" readonly />
+                        <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
                     </div>
                     <div class="form-group">
                         <label for="">Người QL:</label>
@@ -44,32 +44,32 @@
                     </h4>
                     <div class="form-group">
                         <label for="">Mã thiết bị:</label>
-                        @if (ViewBag.MATB_DC != null)
+                        @*@if (ViewBag.MATB_DC != null)
                         {
                             <input class="form-control" id="MATB" name="MATB" value=@ViewBag.MATB_DC readonly />
                         }
                         else
                         {
                             <select class="form-control" id="MATB" name="MATB" onchange="get_ThongTinTB()"></select>
-                        }
+                        }*@
+                        <select class="form-control" id="MATB" name="MATB" onchange="get_THONG_TIN_TB();"></select>
                     </div>
                     @*<div class="form-group">
                         <label for="">Tên thiết bị:</label>
                         <input type="text" class="form-control" id="TENTB" name="TENTB" value="" readonly />                      
                     </div>*@
-
                     <div class="form-group">
                         <label for="">Người ĐC:</label>
                         <input class="form-control"
                                value="@Session["TEN_DANG_NHAP"]"
-                               name="TEN_ND"
-                               aria-describedby="emailHelp"
+                               id="MAND_DIEU_CHUYEN"
+                               name="MAND_DIEU_CHUYEN"
                                placeholder=""
                                readonly />
                     </div>
                     <div class="form-group">
                         <label for="">Số lượng:</label>
-                        <input type="number" min="1" name="SO_LUONG" />
+                        <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
                     </div>
                     <div class="form-group">
                         <label for="">Ghi chú:</label>
@@ -85,7 +85,7 @@
                     </h4>
                     <div class="form-group">
                         <label for="">ĐV nhận:</label>
-                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="fill_ND()"></select>
+                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="FILL_ND();"></select>
                     </div>
                     <div class="form-group">
                         <label for="">Người nhận:</label>
@@ -113,29 +113,28 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var maTB = $('#MATB').val();
+        var mAND_DIEU_CHUYEN = $('#MAND_DIEU_CHUYEN').val();
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinTB",
-            data: { maTB: maTB },
+            url: "/Script/get_DV_DIEU_CHUYEN",
+            data: { mAND_DIEU_CHUYEN: mAND_DIEU_CHUYEN },
             success: function (data) {
-                $("#MATB").val(data.MATB + " -- " + data.TENTB);
-                $("#MADV_QL").val(data.TEN_DON_VI);
-                $("#MAND_QL").val(data.TEN_ND);
+                $('#MADV_QL').val(data.TEN_DON_VI);
+                $.ajax({
+                    type: "GET",
+                    url: "/Script/get_MATB_DIEU_CHUYEN",
+                    data: {mADV : data.MA_DON_VI},
+                    success: function (data) {
+                        var s = '<option disabled selected value>Xin chọn thiết bị</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
+                        }
+                        $("#MATB").html(s);
+                    }
+                });
             }
         });
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_MATB_DIEU_CHUYEN",
-            data: "{}",
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn thiết bị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
-                }
-                $("#MATB").html(s);
-            }
-        });
+
         $.ajax({
             type: "GET",
             url: "/Script/get_DONVI",
@@ -148,25 +147,46 @@
                 $("#MADV_NHAN").html(s);
             }
         });
-
-
+        //var maTB = $('#MATB').val();
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Script/get_ThongTinTB",
+        //    data: { maTB: maTB },
+        //    success: function (data) {
+        //        $("#MATB").val(data.MATB + " -- " + data.TENTB);
+        //        $("#MADV_QL").val(data.TEN_DON_VI);
+        //        $("#MAND_QL").val(data.TEN_ND);
+        //    }
+        //});
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Script/get_MATB_DIEU_CHUYEN",
+        //    data: "{}",
+        //    success: function (data) {
+        //        var s = '<option disabled selected value>Xin chọn thiết bị</option>';
+        //        for (var i = 0; i < data.length; i++) {
+        //            s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
+        //        }
+        //        $("#MATB").html(s);
+        //    }
+        //});
     });
 
-    function get_ThongTinTB() {
-        var maTB = $('#MATB').val();
+    function get_THONG_TIN_TB() {
+        var mATB = $('#MATB').val();
+        $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinTB",
-            data: { maTB: maTB },
+            data: { mATB: mATB },
             success: function (data) {
-                //$("#TENTB").val(data.TENTB);
-                $("#MADV_QL").val(data.TEN_DON_VI);
                 $("#MAND_QL").val(data.TEN_ND);
+                document.getElementById("SO_LUONG").setAttribute("MAX", data.SO_LUONG);
             }
         });
     };
 
-    function fill_ND() {
+    function FILL_ND() {
         var ma_DV = $('#MADV_NHAN').val();
         $.ajax({
             type: "GET",
@@ -180,18 +200,19 @@
                 $("#MAND_NHAN").html(s);
             }
         });
+    }
 
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_ND",
-            data: { ma_DV: ma_DV },
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn người nhận</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#MAND_NHAN").html(s);
-            }
-        });
-    };
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Script/get_DV",
+    //        data: { ma_DV: ma_DV },
+    //        success: function (data) {
+    //            var s = '<option disabled selected value>Xin chọn người nhận</option>';
+    //            for (var i = 0; i < data.length; i++) {
+    //                s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //            }
+    //            $("#MAND_NHAN").html(s);
+    //        }
+    //    });
+    //};
 </script>

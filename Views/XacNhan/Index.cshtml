@@ -41,7 +41,7 @@
                         {
                             if (item.MA_XUAT_KHO != null)
                             {
-                                <tr class="xn" onclick="Edit(event, '@item.XUAT_KHO.MATB')">
+                                <tr class="xn" onclick="Edit(event, '@item.MA_XAC_NHAN')">
                                     <td>
                                         @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.MATB)
                                     </td>
@@ -52,7 +52,7 @@
                             }
                             else if (item.MA_DIEU_CHUYEN != null)
                             {
-                                <tr class="xn" onclick="Edit(event, '@item.DIEU_CHUYEN_THIET_BI.MATB')">
+                                <tr class="xn" onclick="Edit(event, '@item.MA_XAC_NHAN')">
                                     <td>
                                         @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.MATB)
                                     </td>
@@ -115,9 +115,8 @@
                     </div>
 
                     <div hidden="hidden">
-                        <input name="MA_DIEU_CHUYEN" />
-                        <input name="MA_XUAT_KHO" />
-                        <input name="MATB" />
+                        <input id="MA_XAC_NHAN" name="MA_XAC_NHAN" />
+                        <input id="MATB_temp" name="MATB_temp" />
                     </div>
                 </div>
             }
@@ -139,13 +138,12 @@
 
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinDieuChuyen",
-            data: { mATB: row },
+            url: "/Script/get_THONG_TIN_XAC_NHAN",
+            data: { mA_XAC_NHAN: row },
             success: function (data) {
                 $("#MATB").html(data.MATB);
                 $("#TENTB").html(data.TENTB);
                 $("#NGAY_THUC_HIEN").html(data.NGAY_THUC_HIEN);
-                $("#NGAY_THUC_HIEN").type = "datetime";
                 $("#DV_THUC_HIEN").html(data.DV_THUC_HIEN);
                 $("#DV_NHAN").html(data.DV_NHAN);
                 $("#MAND_THUC_HIEN").html(data.MAND_THUC_HIEN);
@@ -153,9 +151,8 @@
                 $("#GHI_CHU").html(data.GHI_CHU);
                 $("#VAN_CHUYEN").html(data.VAN_CHUYEN);
 
-                document.getElementsByName("MA_DIEU_CHUYEN")[0].value = data.MA_DIEU_CHUYEN;
-                document.getElementsByName("MA_XUAT_KHO")[0].value = data.MA_XUAT_KHO;
-                document.getElementsByName("MATB")[0].value = data.MATB;
+                $("#MA_XAC_NHAN").val(row);
+                $("#MATB_temp").val(data.MATB);
             }
         });
     }

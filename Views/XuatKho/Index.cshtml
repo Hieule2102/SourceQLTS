@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Index";
-    var a = ViewBag.MATB_XK;
 }
 
 <main>
@@ -39,9 +38,9 @@
                         }
                     </div>
                     @*<div class="form-group">
-            <label for="">Tên thiết bị:</label>
-            <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
-        </div>*@
+                        <label for="">Tên thiết bị:</label>
+                        <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
+                    </div>*@
                     <div class="form-group">
                         <label for="">ĐVQL:</label>
                         <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
@@ -66,7 +65,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Số lượng:</label>
-                        <input type="number" min="1" name="SO_LUONG" />
+                        <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
                     </div>
                     <div class="form-group">
                         <label for="">Ghi chú:</label>
@@ -107,6 +106,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var mATB = $('#MATB').val();
+        $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinTB",
@@ -115,6 +115,7 @@
                 $("#MATB").val(data.MATB + " -- " + data.TENTB);
                 $("#MADV_QL").val(data.TEN_DON_VI);
                 $("#MAND_NHAP").val(data.TEN_ND);
+                document.getElementById("SO_LUONG").setAttribute("MAX", data.SO_LUONG);
             }
         });
         $.ajax({
@@ -145,6 +146,7 @@
 
     function get_ThongTinTB() {
         var mATB = $('#MATB').val();
+        $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
             url: "/Script/get_ThongTinTB",
@@ -153,6 +155,7 @@
                 //$("#MATB").val(data.MATB + "--" + data.TENTB);
                 $("#MADV_QL").val(data.TEN_DON_VI);
                 $("#MAND_NHAP").val(data.TEN_ND);
+                document.getElementById("SO_LUONG").setAttribute("MAX", data.SO_LUONG);
             }
         });
     };

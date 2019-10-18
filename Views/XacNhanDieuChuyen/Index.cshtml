@@ -40,14 +40,14 @@
                 @foreach (var item in Model)
                 {
                     <tr class="xn">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MATB)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.THIETBI.TENTB)
-                        </td>
-                        @if(item.MA_XUAT_KHO != null)
+                        @if (item.MA_XUAT_KHO != null)
                         {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.XUAT_KHO.MATB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.XUAT_KHO.THIETBI.TENTB)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.XUAT_KHO.DON_VI.TEN_DON_VI)
                             </td>
@@ -58,8 +58,14 @@
                                 @Html.DisplayFor(modelItem => item.XUAT_KHO.GHI_CHU)
                             </td>
                         }
-                        @if(item.MA_DIEU_CHUYEN != null)
+                        @if (item.MA_DIEU_CHUYEN != null)
                         {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.MATB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DIEU_CHUYEN_THIET_BI.DON_VI.TEN_DON_VI)
                             </td>

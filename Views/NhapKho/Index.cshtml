@@ -57,22 +57,22 @@
                         </div>
                         <div class="form-group">
                             <label for="">Ngày mua:</label>
-                            <input type="date" id="NGAY_MUA" name="NGAY_MUA" />
+                            <input type="date" id="NGAY_MUA" name="NGAY_MUA" onchange="TINH_NGAY_BAO_HANH()"/>
                         </div>
                         <div class="form-group">
                             <label for="">THBH (theo tháng):</label>
-                            <input type="number" id="THOI_HAN_BAO_HANH" name="THOI_HAN_BAO_HANH" oninput="TINH_NGAY_BAO_HANH()" />
+                            <input type="number" min="1" id="THOI_HAN_BAO_HANH" name="THOI_HAN_BAO_HANH" oninput="TINH_NGAY_BAO_HANH()" />
                         </div>
                         <div class="form-group">
                             <label for="">Thời hạn hết BH:</label>
                             <input type="text" id="THOI_HAN_HET_BAO_HANH" name="THOI_HAN_HET_BAO_HANH" readonly />
                         </div>
                         <div class="form-group">
-                            <label for="">Đơn vị mua:</label>
+                            <label for="">Đơn vị nhập:</label>
                             <input class="form-control" id="MA_DON_VI" name="MA_DON_VI" readonly />
                         </div>
                         <div class="form-group">
-                            <label for="">Người quản lý:</label>
+                            <label for="">Người nhập:</label>
                             <input class="form-control"
                                    value="@Session["TEN_DANG_NHAP"]"
                                    id="TEN_DANG_NHAP"
@@ -230,16 +230,13 @@
             }
         });
 
+        var tEN_DANG_NHAP = $('#TEN_DANG_NHAP').val();
         $.ajax({
             type: "GET",
-            url: "/Script/get_DONVI",
-            data: "{}",
+            url: "/Script/get_DON_VI_NHAP_KHO",
+            data: {tEN_DANG_NHAP : tEN_DANG_NHAP},
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#MA_DON_VI").html(s);
+                $('#MA_DON_VI').val(data);
             }
         });
 
@@ -254,17 +251,7 @@
                 }
                 $("#MA_NCC").html(s);
             }
-        });
-
-        var tEN_DANG_NHAP = $('#TEN_DANG_NHAP').val();
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_DV",
-            data: { tEN_DANG_NHAP: tEN_DANG_NHAP },
-            success: function (data) {
-                $('#MA_DON_VI').val(data);
-            }
-        });
+        });        
     });
 
     function preview_images() {                
@@ -572,15 +559,13 @@
 
     function TINH_NGAY_BAO_HANH() {
         var date = new Date($('#NGAY_MUA').val());
-
         var input = $('#THOI_HAN_BAO_HANH').val();
 
-        date.setMonth(date.getMonth() + (input % 12));
-        date.setFullYear(date.getFullYear() + (input / 12));    
+        date.setMonth(date.getMonth() + (input % 12) + 1);
+        date.setFullYear(date.getFullYear() + (input / 12));
 
         if (date.getMonth() == 0) {
-            document.getElementById("THOI_HAN_HET_BAO_HANH").value = 12 + "/" + date.getDate() + "/" + (date.getFullYear() - 1);
-            
+            document.getElementById("THOI_HAN_HET_BAO_HANH").value = 12 + "/" + date.getDate() + "/" + (date.getFullYear() - 1);            
         }
         else {
             document.getElementById("THOI_HAN_HET_BAO_HANH").value = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
