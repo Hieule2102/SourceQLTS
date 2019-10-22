@@ -19,11 +19,10 @@ namespace Source.Controllers
         {
             if (Session["CHUC_NANG"] != null)
             {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
-                                                         a.MA_QUYEN == 5 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 4);
 
+                ViewBag.XacNhan = pHAN_QUYEN.Where(a => a.MA_QUYEN == 5);                     
             }
             else
             {
@@ -44,10 +43,10 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string XAC_NHAN, FormCollection form, string SEARCH_STRING)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                            && a.MA_CHUC_NANG == 4);
+
+            ViewBag.XacNhan = pHAN_QUYEN.Where(a => a.MA_QUYEN == 5);
 
             var xAC_NHAN_DIEU_CHUYEN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);
 

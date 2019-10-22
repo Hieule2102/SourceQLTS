@@ -25,7 +25,6 @@ namespace Source.Controllers
                 var qTenDonVi = (from d in db.DON_VI
                                  orderby d.TEN_DON_VI
                                  select d.TEN_DON_VI);
-
                 dsTenDonVi.AddRange(qTenDonVi.Distinct());
                 ViewBag.donVi = new SelectList(dsTenDonVi);
 
@@ -34,18 +33,14 @@ namespace Source.Controllers
                 var qTenNhom = (from d in db.NHOM_NGUOI_DUNG
                                 orderby d.TEN_NHOM
                                 select d.TEN_NHOM);
-
                 dsTenNhom.AddRange(qTenNhom.Distinct());
                 ViewBag.tenNhom = new SelectList(dsTenNhom);
 
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 15);                
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -60,14 +55,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT, string donVi, string tenNhom, string value)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 15);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 14 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
             //Đơn vị
             var dsTenDonVi = new List<string>();
@@ -103,25 +95,10 @@ namespace Source.Controllers
                 else
                 {
                     //Thêm người dùng
-                    NGUOI_DUNG create_ND = new NGUOI_DUNG();
-                    create_ND.MA_ND = form["MA_ND"];
-                    create_ND.TEN_ND = form["TEN_ND"];
-                    create_ND.DIEN_THOAI = Int32.Parse(form["DIEN_THOAI"]);
-                    create_ND.EMAIL = form["EMAIL"];
-
-                    temp = form["MA_DON_VI"].ToString();
-                    create_ND.MA_DON_VI = (from a in db.DON_VI
-                                           where a.TEN_DON_VI == temp
-                                           select a.MA_DON_VI).FirstOrDefault();
+                    NGUOI_DUNG create_ND = THEM_NGUOI_DUNG(form);
 
                     //Thêm nhóm người dùng
-                    NHOM_ND create_NHOM_ND = new NHOM_ND();
-                    create_NHOM_ND.MA_ND = form["MA_ND"];
-
-                    temp = form["MA_NHOM"].ToString();
-                    create_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                              where a.TEN_NHOM == temp
-                                              select a.MA_NHOM).FirstOrDefault();
+                    NHOM_ND create_NHOM_ND = THEM_NHOM_NGUOI_DUNG(form);
 
                     if (ModelState.IsValid)
                     {
@@ -131,58 +108,23 @@ namespace Source.Controllers
 
                         ViewBag.ErrorMessage = "Thêm thành công";
                     }
-
                 }
             }
             else if (!String.IsNullOrEmpty(EDIT))
-            {
-                var temp = form["MA_ND"].ToString();
-                NGUOI_DUNG edit_ND = db.NGUOI_DUNG.FirstOrDefault(x => x.MA_ND == temp);
-
+            {         
                 //Sửa người dùng
-                edit_ND.TEN_ND = form["TEN_ND"];
-                edit_ND.DIEN_THOAI = Int32.Parse(form["DIEN_THOAI"]);
-                edit_ND.EMAIL = form["EMAIL"];
-
-                temp = form["MA_DON_VI"].ToString();
-                edit_ND.MA_DON_VI = (from a in db.DON_VI
-                                     where a.TEN_DON_VI == temp
-                                     select a.MA_DON_VI).FirstOrDefault();
-
-                if (ModelState.IsValid)
+                if(SUA_NGUOI_DUNG(form) != null)
                 {
-                    db.Entry(edit_ND).State = EntityState.Modified;
+                    db.Entry(SUA_NGUOI_DUNG(form)).State = EntityState.Modified;
                     await db.SaveChangesAsync();
                 }
 
                 //Sửa nhóm người dùng
-                temp = form["MA_NHOM"].ToString();
-                if (db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp) != null)
+                if (SUA_NHOM_NGUOI_DUNG(form) != null)
                 {
-                    //Sửa nhóm người dùng   
-                    NHOM_ND edit_NHOM_ND = db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp);
-
-                    edit_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                            where a.TEN_NHOM == temp
-                                            select a.MA_NHOM).FirstOrDefault();
-
-                    db.Entry(edit_NHOM_ND).State = EntityState.Modified;
+                    db.Entry(SUA_NHOM_NGUOI_DUNG(form)).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
                 }
-                else if (db.NHOM_ND.FirstOrDefault(x => x.MA_ND == temp) == null)
-                {
-                    //Thêm nhóm người dùng
-                    NHOM_ND create_NHOM_ND = new NHOM_ND();
-                    create_NHOM_ND.MA_ND = form["MA_ND"];
-
-                    temp = form["MA_NHOM"].ToString();
-                    create_NHOM_ND.MA_NHOM = (from a in db.NHOM_NGUOI_DUNG
-                                              where a.TEN_NHOM == temp
-                                              select a.MA_NHOM).FirstOrDefault();
-
-                    db.NHOM_ND.Add(create_NHOM_ND);
-                }
-
-                await db.SaveChangesAsync();
                 ViewBag.ErrorMessage = "Sửa thành công";
             }
             else
@@ -207,6 +149,66 @@ namespace Source.Controllers
 
             return View(await nguoi_dung.ToListAsync());
         }
+        #region Thêm người dùng
+        public NGUOI_DUNG THEM_NGUOI_DUNG(FormCollection form)
+        {
+            NGUOI_DUNG nGUOI_DUNG = new NGUOI_DUNG();
+            nGUOI_DUNG.MA_ND = form["MA_ND"];
+            nGUOI_DUNG.TEN_ND = form["TEN_ND"];
+            nGUOI_DUNG.DIEN_THOAI = Int32.Parse(form["DIEN_THOAI"]);
+            nGUOI_DUNG.EMAIL = form["EMAIL"];
+            nGUOI_DUNG.MA_DON_VI = Int32.Parse(form["MA_DON_VI"]);
+            return nGUOI_DUNG;
+        }
+        #endregion
+
+        #region Thêm nhóm người dùng
+        public NHOM_ND THEM_NHOM_NGUOI_DUNG(FormCollection form)
+        {
+            NHOM_ND nHOM_ND = new NHOM_ND();
+            nHOM_ND.MA_ND = form["MA_ND"];            
+            nHOM_ND.MA_NHOM = form["MA_NHOM"];
+            return nHOM_ND;
+        }
+        #endregion
+
+        #region Sửa người dùng
+        public NGUOI_DUNG SUA_NGUOI_DUNG(FormCollection form)
+        {            
+            //Sửa người dùng
+            NGUOI_DUNG eDIT_NGUOI_DUNG = new NGUOI_DUNG();
+            eDIT_NGUOI_DUNG.MA_ND = form["MA_ND"];
+            eDIT_NGUOI_DUNG.TEN_ND = form["TEN_ND"];
+            eDIT_NGUOI_DUNG.MA_DON_VI = Int32.Parse(form["MA_DON_VI"]);
+            eDIT_NGUOI_DUNG.DIEN_THOAI = Int32.Parse(form["DIEN_THOAI"]);
+            eDIT_NGUOI_DUNG.EMAIL = form["EMAIL"];
+
+            //NGUOI_DUNG nGUOI_DUNG = db.NGUOI_DUNG.FirstOrDefault(x => x.MA_ND == eDIT_NGUOI_DUNG.MA_ND);
+            //if (nGUOI_DUNG.Equals(eDIT_NGUOI_DUNG))
+            //{
+            //    return null;
+            //}
+            return eDIT_NGUOI_DUNG;
+        }
+        #endregion
+
+        #region Sửa nhóm người dùng
+        public NHOM_ND SUA_NHOM_NGUOI_DUNG(FormCollection form)
+        {
+            //Sửa nhóm người dùng
+            NHOM_ND eDIT_NHOM_ND = new NHOM_ND();
+            eDIT_NHOM_ND.MA_NHOM_ND = Int32.Parse(form["MA_NHOM_ND"]);
+            eDIT_NHOM_ND.MA_ND = form["MA_ND"];
+            eDIT_NHOM_ND.MA_NHOM = form["MA_NHOM"];
+
+            NHOM_ND nHOM_ND = db.NHOM_ND.FirstOrDefault(x => x.MA_NHOM_ND == eDIT_NHOM_ND.MA_NHOM_ND);
+            if (nHOM_ND.MA_NHOM == eDIT_NHOM_ND.MA_NHOM)
+            {
+                return null;
+            }
+            return eDIT_NHOM_ND;
+        }
+        #endregion        
 
         // GET: /NguoiDung/Details/5
         public async Task<ActionResult> Details(string id)
@@ -222,6 +224,41 @@ namespace Source.Controllers
             }
             return View(nguoi_dung);
         }
+
+        //public bool DeepEquals(NGUOI_DUNG obj, NGUOI_DUNG another)
+        //{
+        //    //if (ReferenceEquals(obj, another))
+        //    //{
+        //    //    return true;
+        //    //}
+        //    if ((obj == null) || (another == null)) return false;
+        //    //So sánh class của 2 object, nếu khác nhau thì trả fail
+        //    //if (obj.GetType() != another.GetType())
+        //    //{
+        //    //    return false;
+        //    //}
+
+        //    //Lấy toàn bộ các properties của obj
+        //    //sau đó so sánh giá trị của từng property
+        //    //foreach (var property in obj.GetType().GetProperties())
+        //    //{
+        //    //    var objValue = property.GetValue(obj);
+        //    //    var anotherValue = property.GetValue(another);
+        //    //    if (!objValue.Equals(anotherValue))
+        //    //    {
+        //    //        return false;
+        //    //    }
+        //    //}
+        //    foreach(var item in obj.GetType())
+        //    {
+        //        if()
+        //        {
+
+        //        }
+        //    }
+
+        //    return true;
+        //}
 
         // GET: /NguoiDung/Create
         public ActionResult Create()

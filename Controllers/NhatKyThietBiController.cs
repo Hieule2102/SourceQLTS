@@ -20,13 +20,17 @@ namespace Source.Controllers
         {
             if (Session["BAO_CAO"] != null)
             {
+                //var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                //                                             && a.MA_CHUC_NANG == 11);
 
+                //ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 1);
+                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
                 return HttpNotFound("You have no accesss permissions at this");
             }
-            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
+            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.OrderBy(a => a.MA_NHAT_KY).Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
             return View(await nHAT_KY_THIET_BI.ToListAsync());
         }
 
@@ -34,7 +38,7 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string TINH_TRANG, string SEARCH_STRING)
         {
-            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
+            var nHAT_KY_THIET_BI = db.NHAT_KY_THIET_BI.OrderBy(a => a.MA_NHAT_KY).Include(n => n.DIEU_CHUYEN_THIET_BI).Include(n => n.NHAP_KHO).Include(n => n.XAC_NHAN_DIEU_CHUYEN).Include(n => n.XUAT_KHO);
             //Tìm tên thiết bị
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {

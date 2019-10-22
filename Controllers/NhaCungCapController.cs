@@ -17,15 +17,12 @@ namespace Source.Controllers
         public async Task<ActionResult> Index()
         {
             if (Session["DANH_MUC"] != null)
-            {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 7 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            {               
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 8);
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 7 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -39,14 +36,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 7 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 8);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 7 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
             if (!String.IsNullOrEmpty(SAVE))
             {
@@ -56,43 +50,50 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    var nha_cung_cap = new NHA_CUNG_CAP();
-                    nha_cung_cap.TEN_NCC = form["TEN_NCC"];
-                    nha_cung_cap.DIA_CHI = form["DIA_CHI"];
-                    nha_cung_cap.DIEN_THOAI = form["DIEN_THOAI"];
-                    nha_cung_cap.FAX = form["FAX"];
-                    nha_cung_cap.GHI_CHU = form["GHI_CHU"];
-
-                    if (ModelState.IsValid)
-                    {
-                        db.NHA_CUNG_CAP.Add(nha_cung_cap);
-                        ViewBag.ErrorMessage = "Thêm thành công!!";
-                        await db.SaveChangesAsync();
-                    }
+                    db.NHA_CUNG_CAP.Add(THEM_NHA_CUNG_CAP(form));
+                    await db.SaveChangesAsync();
+                    ViewBag.ErrorMessage = "Thêm thành công!!";
                 }
 
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                var temp = Int32.Parse(form["MA_NCC"].ToString());
-                NHA_CUNG_CAP edit_nCC = db.NHA_CUNG_CAP.Where(a => a.MA_NCC == temp).FirstOrDefault();
-                edit_nCC.TEN_NCC = form["TEN_NCC"];
-                edit_nCC.DIA_CHI = form["DIA_CHI"];
-                edit_nCC.DIEN_THOAI = form["DIEN_THOAI"];
-                edit_nCC.FAX = form["FAX"];
-                edit_nCC.GHI_CHU = form["GHI_CHU"];
-
-                if (ModelState.IsValid)
-                {
-                    db.Entry(edit_nCC).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-
-                    ViewBag.ErrorMessage = "Sửa thành công";
-                }
+                db.Entry(SUA_NHA_CUNG_CAP(form)).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                ViewBag.ErrorMessage = "Sửa thành công";
             }
 
             return View(await db.NHA_CUNG_CAP.ToListAsync());
         }
+
+        #region Thêm nhà cung cấp
+        public NHA_CUNG_CAP THEM_NHA_CUNG_CAP(FormCollection form)
+        {
+            NHA_CUNG_CAP nHA_CUNG_CAP = new NHA_CUNG_CAP();
+            nHA_CUNG_CAP.TEN_NCC = form["TEN_NCC"];
+            nHA_CUNG_CAP.DIA_CHI = form["DIA_CHI"];
+            nHA_CUNG_CAP.DIEN_THOAI = form["DIEN_THOAI"];
+            nHA_CUNG_CAP.FAX = form["FAX"];
+            nHA_CUNG_CAP.GHI_CHU = form["GHI_CHU"];
+
+            return nHA_CUNG_CAP;
+        }
+        #endregion
+
+        #region Sửa nhà cung cấp
+        public NHA_CUNG_CAP SUA_NHA_CUNG_CAP(FormCollection form)
+        {
+            var mA_NCC = Int32.Parse(form["MA_NCC"].ToString());
+            NHA_CUNG_CAP nHA_CUNG_CAP = db.NHA_CUNG_CAP.Where(a => a.MA_NCC == mA_NCC).FirstOrDefault();
+            nHA_CUNG_CAP.TEN_NCC = form["TEN_NCC"];
+            nHA_CUNG_CAP.DIA_CHI = form["DIA_CHI"];
+            nHA_CUNG_CAP.DIEN_THOAI = form["DIEN_THOAI"];
+            nHA_CUNG_CAP.FAX = form["FAX"];
+            nHA_CUNG_CAP.GHI_CHU = form["GHI_CHU"];
+
+            return nHA_CUNG_CAP;
+        }
+        #endregion
 
         // GET: /NhaCungCap/Details/5
         public async Task<ActionResult> Details(int? id)

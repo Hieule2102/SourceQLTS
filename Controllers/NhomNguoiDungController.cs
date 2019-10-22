@@ -19,15 +19,12 @@ namespace Source.Controllers
             var nhom_nguoi_dung = db.NHOM_NGUOI_DUNG.Include(n => n.NHOM_ND_CHUCNANG);
 
             if (Session["QL_ND"] != null)
-            {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            {                
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 16);
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -39,39 +36,29 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([Bind(Include = "MA_NHOM,TEN_NHOM,GHI_CHU")] NHOM_NGUOI_DUNG nHOM_NGUOI_DUNG, string SAVE, string EDIT)
+        public async Task<ActionResult> Index([Bind(Include = "MA_NHOM,TEN_NHOM,GHI_CHU")] NHOM_NGUOI_DUNG cREATE_NHOM_NGUOI_DUNG, string SAVE, string EDIT)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 16);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
-            var temp = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == temp).FirstOrDefault();
-
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 15 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == temp).FirstOrDefault();
+            var nHOM_NGUOI_DUNG = db.NHOM_NGUOI_DUNG.Include(n => n.NHOM_ND_CHUCNANG);
 
             if (!String.IsNullOrEmpty(SAVE))
             {
-                if (String.IsNullOrEmpty(nHOM_NGUOI_DUNG.MA_NHOM) || String.IsNullOrEmpty(nHOM_NGUOI_DUNG.TEN_NHOM))
+                if (String.IsNullOrEmpty(cREATE_NHOM_NGUOI_DUNG.MA_NHOM) || String.IsNullOrEmpty(cREATE_NHOM_NGUOI_DUNG.TEN_NHOM))
                 {
                     ViewBag.ErrorMessage = "Xin nhập đầy đủ thông tin";
                 }
-                else if (db.NHOM_NGUOI_DUNG.FirstOrDefault(a => a.MA_NHOM == nHOM_NGUOI_DUNG.MA_NHOM) != null)
+                else if (nHOM_NGUOI_DUNG.FirstOrDefault(a => a.MA_NHOM == cREATE_NHOM_NGUOI_DUNG.MA_NHOM) != null)
                 {
                     ViewBag.ErrorMessage = "Trùng mã nhóm người dùng";
                 }
                 else if (ModelState.IsValid)
                 {
-                    db.NHOM_NGUOI_DUNG.Add(nHOM_NGUOI_DUNG);
+                    db.NHOM_NGUOI_DUNG.Add(cREATE_NHOM_NGUOI_DUNG);
                     await db.SaveChangesAsync();
 
                     ViewBag.ErrorMessage = "Thêm thành công";
@@ -79,22 +66,20 @@ namespace Source.Controllers
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                NHOM_NGUOI_DUNG edit_nHOM_NGUOI_DUNG = db.NHOM_NGUOI_DUNG.Where(a => a.MA_NHOM == nHOM_NGUOI_DUNG.MA_NHOM).FirstOrDefault();
-                edit_nHOM_NGUOI_DUNG.TEN_NHOM = nHOM_NGUOI_DUNG.TEN_NHOM;
-                edit_nHOM_NGUOI_DUNG.GHI_CHU = nHOM_NGUOI_DUNG.GHI_CHU;
+                NHOM_NGUOI_DUNG eDIT_NHOM_NGUOI_DUNG = nHOM_NGUOI_DUNG.Where(a => a.MA_NHOM == cREATE_NHOM_NGUOI_DUNG.MA_NHOM).FirstOrDefault();
+                eDIT_NHOM_NGUOI_DUNG.TEN_NHOM = cREATE_NHOM_NGUOI_DUNG.TEN_NHOM;
+                eDIT_NHOM_NGUOI_DUNG.GHI_CHU = cREATE_NHOM_NGUOI_DUNG.GHI_CHU;
 
                 if (ModelState.IsValid)
                 {
-                    db.Entry(edit_nHOM_NGUOI_DUNG).State = EntityState.Modified;
+                    db.Entry(eDIT_NHOM_NGUOI_DUNG).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
                     ViewBag.ErrorMessage = "Sửa thành công";
                 }
 
             }
-
-            var nhom_nguoi_dung = db.NHOM_NGUOI_DUNG.Include(n => n.NHOM_ND_CHUCNANG);
-            return View(await nhom_nguoi_dung.ToListAsync());
+            return View(await nHOM_NGUOI_DUNG.ToListAsync());
         }
 
         // GET: /NhomNguoiDung/Details/5

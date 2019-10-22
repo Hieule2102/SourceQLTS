@@ -27,14 +27,11 @@ namespace Source.Controllers
                 dsNhomTB.AddRange(qNhomTB.Distinct());
                 ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 6);
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -47,43 +44,34 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([Bind(Include = "MA_LOAITB,TEN_LOAI,MA_NHOMTB,GHI_CHU")] LOAI_THIETBI loai_thietbi, FormCollection form, string SAVE, string EDIT)
+        public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 6);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 5 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
             if (!String.IsNullOrEmpty(SAVE))
             {
-                if (db.LOAI_THIETBI.FirstOrDefault(a => a.MA_LOAITB == loai_thietbi.MA_LOAITB) != null)
+                var temp = form["MA_LOAITB"];
+                if (db.LOAI_THIETBI.FirstOrDefault(a => a.MA_LOAITB == temp) != null)
                 {
                     ViewBag.ErrorMessage = "Trùng mã loại thiết bị";
                 }
                 else if (ModelState.IsValid)
                 {
-                    loai_thietbi.MA_NHOMTB = (from m in db.NHOM_THIETBI
-                                              where m.TEN_NHOM == loai_thietbi.MA_NHOMTB
-                                              select m.MA_NHOMTB).First();
-                    db.LOAI_THIETBI.Add(loai_thietbi);
+                    LOAI_THIETBI lOAI_THIETBI = THEM_LOAITB(form);
+                    db.LOAI_THIETBI.Add(lOAI_THIETBI);
                     await db.SaveChangesAsync();
-                    ViewBag.ErrorMessage = "Thêm thành công";
 
+                    ViewBag.ErrorMessage = "Thêm thành công";
                 }
 
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                LOAI_THIETBI edit_LOAITB = db.LOAI_THIETBI.Where(a => a.MA_LOAITB == loai_thietbi.MA_LOAITB).FirstOrDefault();
-                edit_LOAITB.TEN_LOAI = loai_thietbi.TEN_LOAI;
-                edit_LOAITB.MA_NHOMTB = (from m in db.NHOM_THIETBI
-                                         where m.TEN_NHOM == loai_thietbi.MA_NHOMTB
-                                         select m.MA_NHOMTB).FirstOrDefault();
-                edit_LOAITB.GHI_CHU = form["GHI_CHU"];
+                LOAI_THIETBI edit_LOAITB = SUA_LOAITB(form);
 
                 if (ModelState.IsValid)
                 {
@@ -96,6 +84,32 @@ namespace Source.Controllers
 
             return View(await db.LOAI_THIETBI.Include(l => l.NHOM_THIETBI).ToListAsync());
         }
+
+        #region Thêm loại thiết bị
+        public LOAI_THIETBI THEM_LOAITB(FormCollection form)
+        {
+            LOAI_THIETBI lOAI_THIETBI = new LOAI_THIETBI();
+            lOAI_THIETBI.MA_LOAITB = form["MA_LOAITB"];
+            lOAI_THIETBI.TEN_LOAI = form["TEN_LOAI"];
+            lOAI_THIETBI.MA_NHOMTB = form["MA_NHOMTB"];
+            lOAI_THIETBI.GHI_CHU = form["GHI_CHU"];
+
+            return lOAI_THIETBI;
+        }
+        #endregion
+
+        #region Sửa loại thiết bị
+        public LOAI_THIETBI SUA_LOAITB(FormCollection form)
+        {
+            var mA_LOAITB = form["MA_LOAITB"];
+            LOAI_THIETBI lOAI_THIETBI = db.LOAI_THIETBI.Where(a => a.MA_LOAITB == mA_LOAITB).FirstOrDefault();
+            lOAI_THIETBI.TEN_LOAI = form["TEN_LOAI"];
+            lOAI_THIETBI.MA_NHOMTB = form["MA_NHOMTB"];
+            lOAI_THIETBI.GHI_CHU = form["GHI_CHU"];
+
+            return lOAI_THIETBI;
+        }
+        #endregion
 
         // GET: /LoaiThietBi/Details/5
         public async Task<ActionResult> Details(string id)

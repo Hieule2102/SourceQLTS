@@ -21,10 +21,11 @@ namespace Source.Controllers
 
             if (Session["CHUC_NANG"] != null)
             {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 2);
+
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                //ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -38,10 +39,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string MATB_XK, string MATB_XK_ct)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 2 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 2);
+
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            //ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
 
             if (!String.IsNullOrEmpty(SAVE))
@@ -56,69 +58,30 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    #region Thay đổi trạng thái thiết bị
-                    var temp = form["MATB"].ToString();
-                    var tHIETBI = db.THIETBIs.Where(a => a.MATB == temp).FirstOrDefault();
+                    //Thay đổi trạng thái thiết bị
+                    var tHIETBI = THAY_DOI_TRANG_THAI_TB(form["MATB"]);
 
-                    tHIETBI.TINH_TRANG = "Đang xuất kho";
-                    #endregion
-
-                    #region Tạo xuất kho
-                    var xuat_kho = new XUAT_KHO();
-                    xuat_kho.MATB = tHIETBI.MATB;
-
-                    temp = Session["TEN_DANG_NHAP"].ToString();
-                    xuat_kho.MADV_XUAT = (from p in db.NGUOI_DUNG
-                                          where p.TEN_DANG_NHAP == temp
-                                          select p.MA_DON_VI).FirstOrDefault();
-
-                    xuat_kho.MAND_XUAT = (from p in db.NGUOI_DUNG
-                                          where p.TEN_DANG_NHAP == temp
-                                          select p.MA_ND).FirstOrDefault();
-
-                    temp = form["MADV_NHAN"].ToString();
-                    xuat_kho.MADV_NHAN = (from p in db.DON_VI
-                                          where p.TEN_DON_VI == temp
-                                          select p.MA_DON_VI).FirstOrDefault();
-
-                    temp = form["MAND_NHAN"].ToString();
-                    xuat_kho.MAND_NHAN = (from p in db.NGUOI_DUNG
-                                          where p.TEN_ND == temp
-                                          select p.MA_ND).FirstOrDefault();
-
-                    xuat_kho.NGAY_XUAT = DateTime.Now;
-                    xuat_kho.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
-                    xuat_kho.GHI_CHU = form["GHI_CHU"];
-                    xuat_kho.VAN_CHUYEN = form["VAN_CHUYEN"];
-                    #endregion
+                    //Thêm xuất kho
+                    var xUAT_KHO = THEM_XUAT_KHO(form, form["MATB"]);                    
 
                     if (ModelState.IsValid)
                     {
                         db.Entry(tHIETBI).State = EntityState.Modified;
-                        db.XUAT_KHO.Add(xuat_kho);
-                        await db.SaveChangesAsync();
-
-                        ViewBag.ErrorMessage = "Thêm thành công";
+                        db.XUAT_KHO.Add(xUAT_KHO);
+                        await db.SaveChangesAsync();                        
                     }
 
-                    #region Thêm vào xác nhận
-                    var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
-                    xAC_NHAN.XAC_NHAN = false;
-                    xAC_NHAN.MA_XUAT_KHO = (from a in db.XUAT_KHO
-                                            where a.MATB == tHIETBI.MATB
-                                            select a.MA_XUAT_KHO).FirstOrDefault();
-
+                    //Thêm vào xác nhận
+                    var xAC_NHAN = XAC_NHAN_XUAT_KHO_TB(form["MATB"]);
                     db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
-                    #endregion
 
-                    #region Thêm vào nhật ký thiết bị
-                    NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
-                    nHAT_KY_THIET_BI.MA_XUAT_KHO = xAC_NHAN.MA_XUAT_KHO;
-                    nHAT_KY_THIET_BI.TINH_TRANG = "Đang xuất kho";
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
-                    #endregion
+                    //Thêm vào nhật ký thiết bị
+                    var nHAT_KY_THIET_BI = THEM_NHAT_KY_THIET_BI(xAC_NHAN.MA_XUAT_KHO);
+                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);                    
 
                     await db.SaveChangesAsync();
+
+                    ViewBag.ErrorMessage = "Thêm thành công";
 
                     //Email.EmailUsername = "angellove27101997@gmail.com";
                     //Email.EmailPassword = "toantran168";
@@ -149,7 +112,58 @@ namespace Source.Controllers
             return View();
         }
 
+        #region Thay đổi trạng thái thiết bị
+        public THIETBI THAY_DOI_TRANG_THAI_TB(string mATB)
+        {
+            var tHIETBI = db.THIETBIs.Where(a => a.MATB == mATB).FirstOrDefault();
+            tHIETBI.TINH_TRANG = "Đang xuất kho";
 
+            return tHIETBI;
+        }
+        #endregion
+
+        #region Thêm xuất kho
+        public XUAT_KHO THEM_XUAT_KHO(FormCollection form, string mATB)
+        {
+            var xUAT_KHO = new XUAT_KHO();
+            xUAT_KHO.MATB = mATB;
+
+            var tEN_DANG_NHAP = Session["TEN_DANG_NHAP"].ToString();
+            var nGUOI_DUNG = db.NGUOI_DUNG.FirstOrDefault(a => a.TEN_DANG_NHAP == tEN_DANG_NHAP);
+            xUAT_KHO.MADV_XUAT = nGUOI_DUNG.MA_DON_VI;
+            xUAT_KHO.MAND_XUAT = nGUOI_DUNG.MA_ND;
+
+            xUAT_KHO.MADV_NHAN = Int32.Parse(form["MADV_NHAN"]);
+            xUAT_KHO.MAND_NHAN = form["MAND_NHAN"];
+            xUAT_KHO.NGAY_XUAT = DateTime.Now;
+            xUAT_KHO.SO_LUONG = Int32.Parse(form["SO_LUONG"]);
+            xUAT_KHO.GHI_CHU = form["GHI_CHU"];
+            xUAT_KHO.VAN_CHUYEN = form["VAN_CHUYEN"];
+
+            return xUAT_KHO;
+        }
+        #endregion
+
+        #region Thêm vào xác nhận xuất kho thiết bị
+        public XAC_NHAN_DIEU_CHUYEN XAC_NHAN_XUAT_KHO_TB(string mATB)
+        {
+            var xAC_NHAN = new XAC_NHAN_DIEU_CHUYEN();
+            xAC_NHAN.XAC_NHAN = false;
+            xAC_NHAN.MA_XUAT_KHO = db.XUAT_KHO.FirstOrDefault(a => a.MATB == mATB).MA_XUAT_KHO;
+            return xAC_NHAN;
+        }
+        #endregion
+
+        #region Thêm vào nhật ký thiết bị
+        public NHAT_KY_THIET_BI THEM_NHAT_KY_THIET_BI(int? mA_XUAT_KHO)
+        {
+            NHAT_KY_THIET_BI nHAT_KY_THIET_BI = new NHAT_KY_THIET_BI();
+            nHAT_KY_THIET_BI.MA_XUAT_KHO = mA_XUAT_KHO;
+            nHAT_KY_THIET_BI.TINH_TRANG = "Đang xuất kho";
+
+            return nHAT_KY_THIET_BI;
+        }
+        #endregion
 
         // GET: /XuatKho/Details/5
         public async Task<ActionResult> Details(int? id)

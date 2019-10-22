@@ -19,6 +19,12 @@ namespace Source.Controllers
         {
             if (Session["BAO_CAO"] != null)
             {
+                //var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                //                                             && a.MA_CHUC_NANG == 10);
+
+                //ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 1);
+                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
+
                 //Đơn vị
                 var dsTenDonVi = new List<string>();
                 var qTenDonVi = (from d in db.DON_VI

@@ -19,15 +19,12 @@ namespace Source.Controllers
         {
 
             if (Session["BAO_CAO"] != null)
-            {
-                var temp = Session["NHOM_ND"].ToString();
-                //ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 8 &&
-                //                                         a.MA_QUYEN == 4 &&
-                //                                         a.MA_NHOM == temp).FirstOrDefault();
+            {                
+                //var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                //                                             && a.MA_CHUC_NANG == 9);
 
-                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 3 &&
-                //                                        a.MA_QUYEN == 3 &&
-                //                                        a.MA_NHOM == temp).FirstOrDefault();
+                //ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 1);
+                //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
 
                 //Nhóm thiết bị
                 var dsLOAITB = new List<string>();
@@ -77,7 +74,6 @@ namespace Source.Controllers
             var qLOAITB = (from d in db.LOAI_THIETBI
                            orderby d.TEN_LOAI
                            select d.TEN_LOAI);
-
 
             //Nhóm thiết bị
             var dsNhomTB = new List<string>();

@@ -17,15 +17,12 @@ namespace Source.Controllers
         public async Task<ActionResult> Index()
         {
             if (Session["DANH_MUC"] != null)
-            {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            { 
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 5);
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -37,46 +34,45 @@ namespace Source.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index([Bind(Include = "MA_NHOMTB,TEN_NHOM,GHI_CHU")] NHOM_THIETBI nHOM_THIETBI, string SAVE, string EDIT)
+        public async Task<ActionResult> Index([Bind(Include = "MA_NHOMTB,TEN_NHOM,GHI_CHU")] NHOM_THIETBI cREATE_NHOM_THIETBI, string SAVE, string EDIT)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 5);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 4 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
+
+            var nHOM_THIETBI = db.NHOM_THIETBI;
 
             if (!String.IsNullOrEmpty(SAVE))
             {
-                if (db.NHOM_THIETBI.FirstOrDefault(a => a.MA_NHOMTB == nHOM_THIETBI.MA_NHOMTB) != null)
+                if (nHOM_THIETBI.FirstOrDefault(a => a.MA_NHOMTB == cREATE_NHOM_THIETBI.MA_NHOMTB) != null)
                 {
                     ViewBag.ErrorMessage = "Trùng mã nhóm thiết bị";
                 }
                 else if (ModelState.IsValid)
                 {
-                    db.NHOM_THIETBI.Add(nHOM_THIETBI);
+                    db.NHOM_THIETBI.Add(cREATE_NHOM_THIETBI);
                     await db.SaveChangesAsync();
                     ViewBag.ErrorMessage = "Thêm thành công";
                 }
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                NHOM_THIETBI edit_nHOM_THIETBI = db.NHOM_THIETBI.Where(a => a.MA_NHOMTB == nHOM_THIETBI.MA_NHOMTB).FirstOrDefault();
-                edit_nHOM_THIETBI.TEN_NHOM = nHOM_THIETBI.TEN_NHOM;
-                edit_nHOM_THIETBI.GHI_CHU = nHOM_THIETBI.GHI_CHU;
+                NHOM_THIETBI edit_nHOM_THIETBI = nHOM_THIETBI.Where(a => a.MA_NHOMTB == cREATE_NHOM_THIETBI.MA_NHOMTB).FirstOrDefault();
+                edit_nHOM_THIETBI.TEN_NHOM = cREATE_NHOM_THIETBI.TEN_NHOM;
+                edit_nHOM_THIETBI.GHI_CHU = cREATE_NHOM_THIETBI.GHI_CHU;
 
                 if (ModelState.IsValid)
                 {
                     db.Entry(edit_nHOM_THIETBI).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-
                     ViewBag.ErrorMessage = "Sửa thành công";
                 }
             }
 
-            return View(await db.NHOM_THIETBI.ToListAsync());
+            nHOM_THIETBI = db.NHOM_THIETBI;
+            return View(await nHOM_THIETBI.ToListAsync());
         }
 
         // GET: /NhomThietBi/Details/5

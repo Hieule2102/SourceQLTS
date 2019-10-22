@@ -18,14 +18,11 @@ namespace Source.Controllers
         {
             if (Session["DANH_MUC"] != null)
             {
-                var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
-                                                         a.MA_QUYEN == 1 &&
-                                                         a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 7);
 
-                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
-                                                        a.MA_QUYEN == 3 &&
-                                                        a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+                ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 1);
+                ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
             }
             else
             {
@@ -38,14 +35,11 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(FormCollection form, string SAVE, string EDIT)
         {
-            var pHAN_QUYEN = Session["NHOM_ND"].ToString();
-            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
-                                                     a.MA_QUYEN == 1 &&
-                                                     a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
+                                                             && a.MA_CHUC_NANG == 7);
 
-            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_CHUC_NANG == 6 &&
-                                                    a.MA_QUYEN == 3 &&
-                                                    a.MA_NHOM == pHAN_QUYEN).FirstOrDefault();
+            ViewBag.Them = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 1);
+            ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
 
             if (!String.IsNullOrEmpty(SAVE))
             {
@@ -55,22 +49,12 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    DON_VI don_vi = new DON_VI();
-                    don_vi.TEN_DON_VI = form["TEN_DON_VI"];
-                    don_vi.DIA_CHI = form["DIA_CHI"];
-                    don_vi.DIEN_THOAI = form["DIEN_THOAI"];
-                    don_vi.FAX = form["FAX"];
-                    if (!String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
-                    {
-                        var temp = form["DON_VI_CAP_TREN"];
-                        don_vi.DON_VI_CAP_TREN = (from a in db.DON_VI
-                                                  where a.TEN_DON_VI == temp
-                                                  select a.MA_DON_VI).FirstOrDefault();
-                    }
+                    //Thêm đơn vị
+                    DON_VI dON_VI = THEM_DON_VI(form);
 
                     if (ModelState.IsValid)
                     {
-                        db.DON_VI.Add(don_vi);
+                        db.DON_VI.Add(dON_VI);
                         await db.SaveChangesAsync();
                         ViewBag.ErrorMessage = "Thêm thành công!!";
                     }
@@ -78,24 +62,8 @@ namespace Source.Controllers
             }
             else if (!String.IsNullOrEmpty(EDIT))
             {
-                var ma_DV = Int32.Parse(form["MA_DON_VI"].ToString());
-                DON_VI edit_DONVI = db.DON_VI.Where(a => a.MA_DON_VI == ma_DV).FirstOrDefault();
-                edit_DONVI.TEN_DON_VI = form["TEN_DON_VI"];
-                edit_DONVI.DIA_CHI = form["DIA_CHI"];
-                edit_DONVI.DIEN_THOAI = form["DIEN_THOAI"];
-                edit_DONVI.FAX = form["FAX"];
-
-                if (!String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
-                {
-                    var temp1 = form["DON_VI_CAP_TREN"];
-                    edit_DONVI.DON_VI_CAP_TREN = (from a in db.DON_VI
-                                                  where a.TEN_DON_VI == temp1
-                                                  select a.MA_DON_VI).FirstOrDefault();
-                }
-                else if (String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
-                {
-                    edit_DONVI.DON_VI_CAP_TREN = 7;
-                }
+                //Sửa đơn vị
+                DON_VI edit_DONVI = SUA_DON_VI(form);
 
                 if (ModelState.IsValid)
                 {
@@ -109,8 +77,48 @@ namespace Source.Controllers
             return View(await db.DON_VI.Where(a => a.MA_DON_VI != 7).ToListAsync());
         }
 
-        // GET: /DonVi/Details/5
-        public async Task<ActionResult> Details(int? id)
+        #region Thêm đơn vị
+        public DON_VI THEM_DON_VI(FormCollection form)
+        {
+            DON_VI dON_VI = new DON_VI();
+            dON_VI.TEN_DON_VI = form["TEN_DON_VI"];
+            dON_VI.DIA_CHI = form["DIA_CHI"];
+            dON_VI.DIEN_THOAI = form["DIEN_THOAI"];
+            dON_VI.FAX = form["FAX"];
+            if (!String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
+            {
+                var mA_DON_VI_CAP_TREN = Int32.Parse(form["DON_VI_CAP_TREN"]);
+                dON_VI.DON_VI_CAP_TREN = (from a in db.DON_VI
+                                          where a.MA_DON_VI == mA_DON_VI_CAP_TREN
+                                          select a.MA_DON_VI).FirstOrDefault();
+            }
+            return dON_VI;
+        }
+        #endregion
+
+        #region Sửa đơn vị
+        public DON_VI SUA_DON_VI(FormCollection form)
+        {
+            var mA_DV = Int32.Parse(form["MA_DON_VI"]);
+            DON_VI dON_VI = db.DON_VI.Where(a => a.MA_DON_VI == mA_DV).FirstOrDefault();
+            dON_VI.TEN_DON_VI = form["TEN_DON_VI"];
+            dON_VI.DIA_CHI = form["DIA_CHI"];
+            dON_VI.DIEN_THOAI = form["DIEN_THOAI"];
+            dON_VI.FAX = form["FAX"];
+
+            if (!String.IsNullOrEmpty(form["DON_VI_CAP_TREN"]))
+            {
+                var mA_DON_VI_CAP_TREN = Int32.Parse(form["DON_VI_CAP_TREN"]);
+                dON_VI.DON_VI_CAP_TREN = (from a in db.DON_VI
+                                          where a.MA_DON_VI == mA_DON_VI_CAP_TREN
+                                          select a.MA_DON_VI).FirstOrDefault();
+            }
+            return dON_VI;
+        }
+            #endregion
+
+            // GET: /DonVi/Details/5
+            public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {

@@ -38,34 +38,28 @@ namespace Source.Controllers
                 else
                 {
                     Session["iS_ALREADY"] = 1;
-                    Session["TEN_DANG_NHAP"] = (from b in db.NGUOI_DUNG
-                                                where b.TEN_DANG_NHAP == tEN_DANG_NHAP
-                                                select b.TEN_DANG_NHAP).FirstOrDefault();
 
-                    var ma_ND = (from b in db.NGUOI_DUNG
-                                 where b.TEN_DANG_NHAP == tEN_DANG_NHAP
-                                 select b.MA_ND).FirstOrDefault();
+                    Session["TEN_DANG_NHAP"] = tEN_DANG_NHAP;                    
+                    
+                    Session["NHOM_ND"] = db.NHOM_ND
+                                        .FirstOrDefault(b => b.MA_ND == db.NGUOI_DUNG
+                                                                        .FirstOrDefault(a => a.TEN_DANG_NHAP == tEN_DANG_NHAP)
+                                                                        .MA_ND)
+                                        .MA_NHOM;
 
-                    Session["NHOM_ND"] = (from b in db.NHOM_ND
-                                          where b.MA_ND == ma_ND
-                                          select b.MA_NHOM).FirstOrDefault();
-                    var nhom_ND = Session["NHOM_ND"].ToString();
+                    var nHOM_ND = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString());
+                    
+                    Session["CHUC_NANG"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 1)
+                                                  .Select(a => a.MA_NHOM);
 
-                    Session["CHUC_NANG"] = (from b in db.NHOM_ND_CHUCNANG
-                                            where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 1
-                                            select b.MA_NHOM).FirstOrDefault();
+                    Session["DANH_MUC"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2)
+                                                 .Select(a => a.MA_NHOM);
 
-                    Session["DANH_MUC"] = (from b in db.NHOM_ND_CHUCNANG
-                                           where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2
-                                           select b.MA_NHOM).FirstOrDefault();
+                    Session["BAO_CAO"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3)
+                                                .Select(a => a.MA_NHOM);
 
-                    Session["BAO_CAO"] = (from b in db.NHOM_ND_CHUCNANG
-                                          where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3
-                                          select b.MA_NHOM).FirstOrDefault();
-
-                    Session["QL_ND"] = (from b in db.NHOM_ND_CHUCNANG
-                                        where b.MA_NHOM == nhom_ND && b.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4
-                                        select b.MA_NHOM).FirstOrDefault();
+                    Session["QL_ND"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4)
+                                              .Select(a => a.MA_NHOM);
 
                     return RedirectToAction("Index", "Home");
                 }
