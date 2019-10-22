@@ -137,12 +137,12 @@
 
         $.ajax({
             type: "GET",
-            url: "/Script/get_DONVI",
+            url: "/Script/get_DON_VI",
             data: "{}",
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_DON_VI + '">' + data[i].TEN_DON_VI + '</option>';
                 }
                 $("#MADV_NHAN").html(s);
             }
@@ -177,7 +177,7 @@
         $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinTB",
+            url: "/Script/get_THONG_TIN_TB",
             data: { mATB: mATB },
             success: function (data) {
                 $("#MAND_QL").val(data.TEN_ND);
@@ -195,24 +195,10 @@
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn người nhận</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_ND + '">' + data[i].TEN_ND + '</option>';
                 }
                 $("#MAND_NHAN").html(s);
             }
         });
-    }
-
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Script/get_DV",
-    //        data: { ma_DV: ma_DV },
-    //        success: function (data) {
-    //            var s = '<option disabled selected value>Xin chọn người nhận</option>';
-    //            for (var i = 0; i < data.length; i++) {
-    //                s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-    //            }
-    //            $("#MAND_NHAN").html(s);
-    //        }
-    //    });
-    //};
+    };
 </script>

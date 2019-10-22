@@ -80,7 +80,7 @@
                     </h4>
                     <div class="form-group">
                         <label for="">ĐV nhận:</label>
-                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="fill_ND()"></select>
+                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="FILL_ND()"></select>
                     </div>
                     <div class="form-group">
                         <label for="">Người nhận:</label>
@@ -109,7 +109,7 @@
         $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinTB",
+            url: "/Script/get_THONG_TIN_TB",
             data: { mATB: mATB },
             success: function (data) {
                 $("#MATB").val(data.MATB + " -- " + data.TENTB);
@@ -132,24 +132,24 @@
         });
         $.ajax({
             type: "GET",
-            url: "/Script/get_DONVI",
+            url: "/Script/get_DON_VI",
             data: "{}",
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_DON_VI + '">' + data[i].TEN_DON_VI + '</option>';
                 }
                 $("#MADV_NHAN").html(s);
             }
         });
     });
 
-    function get_ThongTinTB() {
+    function get_THONG_TIN_TB() {
         var mATB = $('#MATB').val();
         $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinTB",
+            url: "/Script/get_THONG_TIN_TB",
             data: { mATB: mATB },
             success: function (data) {
                 //$("#MATB").val(data.MATB + "--" + data.TENTB);
@@ -160,16 +160,16 @@
         });
     };
 
-    function fill_ND() {
-        var ma_DV = $('#MADV_NHAN').val();
+    function FILL_ND() {
+        var mA_DV = $('#MADV_NHAN').val();
         $.ajax({
             type: "GET",
             url: "/Script/get_ND",
-            data: { ma_DV: ma_DV },
+            data: { mA_DV: mA_DV },
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn người nhận</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_ND + '">' + data[i].TEN_ND + '</option>';
                 }
                 $("#MAND_NHAN").html(s);
             }

@@ -118,7 +118,7 @@
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_NHOMTB + '">' + data[i].TEN_NHOM + '</option>';
                 }
                 $("#MA_NHOMTB").html(s);
             }
@@ -128,12 +128,12 @@
     function Edit(row) {
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinLoaiTB",
+            url: "/Script/get_THONG_TIN_LOAITB",
             data: { ma_LOAITB: row },
             success: function (data) {
                 $("#MA_LOAITB").val(row);
                 $("#TEN_LOAI").val(data.TEN_LOAI);
-                $("#MA_NHOMTB").val(data.TEN_NHOM);
+                $("#MA_NHOMTB").val(data.MA_NHOMTB);
                 $("#GHI_CHU").val(data.GHI_CHU);
             }
         });

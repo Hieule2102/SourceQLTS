@@ -137,7 +137,7 @@
     function Edit(row) {
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinNCC",
+            url: "/Script/get_THONG_TIN_NCC",
             data: { ma_NCC: row },
             success: function (data) {
                 $("#MA_NCC").val(row);

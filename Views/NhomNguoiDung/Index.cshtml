@@ -103,8 +103,8 @@
     function Edit(row) {
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinNhomND",
-            data: { ma_NHOM: row },
+            url: "/Script/get_THONG_TIN_NHOM_ND",
+            data: { mA_NHOM: row },
             success: function (data) {
                 $("#MA_NHOM").val(row);
                 $("#TEN_NHOM").val(data.TEN_NHOM);

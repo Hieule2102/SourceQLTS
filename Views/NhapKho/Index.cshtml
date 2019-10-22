@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Đơn vị nhập:</label>
-                            <input class="form-control" id="MA_DON_VI" name="MA_DON_VI" readonly />
+                            <input type="text" class="form-control" id="MA_DON_VI" name="MA_DON_VI" readonly>
                         </div>
                         <div class="form-group">
                             <label for="">Người nhập:</label>
@@ -224,7 +224,7 @@
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_NHOMTB + '">' + data[i].TEN_NHOM + '</option>';
                 }
                 $("#MA_NHOMTB").html(s);
             }
@@ -235,8 +235,8 @@
             type: "GET",
             url: "/Script/get_DON_VI_NHAP_KHO",
             data: {tEN_DANG_NHAP : tEN_DANG_NHAP},
-            success: function (data) {
-                $('#MA_DON_VI').val(data);
+            success: function (data) {               
+                $("#MA_DON_VI").val(data.TEN_DON_VI);
             }
         });
 
@@ -245,9 +245,9 @@
             url: "/Script/get_NCC",
             data: "{}",
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn nhà cung cấp</option>';
+                var s = '<option value=""> Xin chọn nhà cung cấp </option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_NCC + '">' + data[i].TEN_NCC + '</option>';
                 }
                 $("#MA_NCC").html(s);
             }
@@ -300,16 +300,16 @@
     }
 
     function FILL_LOAITB() {
-        var nhom_TB = $('#MA_NHOMTB').val();
+        var nHOM_TB = $('#MA_NHOMTB').val();
         $.ajax({
             type: "GET",
             url: "/Script/get_LOAITB",
-            data: { nhom_TB: nhom_TB },
+            data: { nHOM_TB: nHOM_TB },
             success: function (data) {
                 $("#MA_LOAITB").html("");
                 var options = '<option disabled selected value>Xin chọn loại thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    options += '<option value="' + data[i].MA_LOAITB + '">' + data[i].TEN_LOAI + '</option>';
                 }
                 $("#MA_LOAITB").html(options);
             }
@@ -321,11 +321,12 @@
         document.getElementById("fourth").hidden = true;
         document.getElementById("fifth").hidden = true;
         document.getElementById("sixth").hidden = true;
-        $("#TENTB").val("");
+        //$("#TENTB").val("");
     };
 
     function FILL_CAU_HINH_LOAITB() {
         var mA_LOAITB = $('#MA_LOAITB').val();
+        var mA_NHOMTB = $('#MA_NHOMTB').val();
         document.getElementById("thong-so-ky-thuat").hidden = false;
         $.ajax({
             type: "POST",
@@ -333,13 +334,14 @@
             data: { mA_LOAITB: mA_LOAITB },
             success: function (data) {
                 $("#TENTB").val(data.TEN_LOAI);
-                if (data.MA_NHOMTB == "PC" || data.MA_NHOMTB == "LT") {
+                if (mA_NHOMTB == "PC" || mA_NHOMTB == "LT") {
                     document.getElementById("first").hidden = false;
                     document.getElementById("second").hidden = false;
                     document.getElementById("third").hidden = false;
                     document.getElementById("fourth").hidden = false;
                     document.getElementById("fifth").hidden = false;
                     document.getElementById("sixth").hidden = false;
+
                     //document.getElementById("fifth").setAttribute("hidden", "false");
                     //document.getElementById("sixth").setAttribute("hidden", "false");
 
@@ -411,7 +413,7 @@
 
 
                 }
-                else if (data.MA_NHOMTB == "PR") {
+                else if (mA_NHOMTB == "PR") {
                     document.getElementById("first").hidden = false;
                     document.getElementById("second").hidden = false;
                     document.getElementById("third").hidden = false;
@@ -610,6 +612,4 @@
     //    }
     //    return S;
     //}
-
-
 </script>

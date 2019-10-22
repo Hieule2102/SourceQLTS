@@ -88,11 +88,13 @@
                         <div class="img-container">
                             <img id="img" alt="hinh-anh-thiet-bi" />
                         </div>
+                        <input id="MATB" hidden/>
                         <p class="ten-tb" id="TENTB"></p>
+                        <input id="MA_LOAITB" hidden/>
+                        <input id="MA_NHOMTB" hidden/>
                     </div>
                     <h4 class="sub-title">Thông số kỹ thuật</h4>
                     <div class="div-thong-so">
-
                         <table>
                             <tr>
                                 <td id="label1"></td>
@@ -112,10 +114,8 @@
                             </tr>
                         </table>
                     </div>
-
-                    <button id="chct">Cấu hình chi tiết</button>
+                    <button id="chct" onclick="CAU_HINH_CHI_TIET()">Cấu hình chi tiết</button>               
                 </div>
-
 
             </div>
             <div class="cau-hinh-chi-tiet d-none">
@@ -177,58 +177,13 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
 </main>
 
-<script type="text/javascript">
-    //$(document).ready(function () {
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Script/get_NHOMTB",
-    //        data: "{}",
-    //        success: function (data) {
-    //            var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
-    //            for (var i = 0; i < data.length; i++) {
-    //                s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-    //            }
-    //            $("#MA_NHOMTB").html(s);
-    //        }
-    //    });
-    //    //$.ajax({
-    //    //    type: "GET",
-    //    //    url: "/Script/get_DONVI",
-    //    //    data: "{}",
-    //    //    success: function (data) {
-    //    //        var s = '<option disabled selected value>Xin chọn đơn vị</option>';
-    //    //        for (var i = 0; i < data.length; i++) {
-    //    //            s += '<option value="' + data[i] + '">' + data[i] + '</option>';
-    //    //        }
-    //    //        $("#MA_DON_VI").html(s);
-    //    //    }
-    //    //});
-    //});
-
-    //function Fill_LoaiTB() {
-    //    var nhom_TB = $('#MA_NHOMTB').val();
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Script/get_LOAITB",
-    //        data: { nhom_TB: nhom_TB },
-    //        success: function (data) {
-    //            $("#MA_LOAITB").html("");
-    //            var options = '<option value="-1">Xin chọn loại thiết bị</option>';
-    //            for (var i = 0; i < data.length; i++) {
-    //                options += '<option value="' + data[i] + '">' + data[i] + '</option>';
-    //            }
-    //            $("#MA_LOAITB").html(options);
-    //        }
-    //    });
-    //};
-
+<script type="text/javascript">    
     function Edit(evt, row) {
         var i, tablinks;
         tablinks = document.getElementsByClassName("tablinks");
@@ -239,21 +194,29 @@
 
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinTB",
+            url: "/Script/get_THONG_TIN_TB",
             data: { mATB: row },
             success: function (data) {
                 $("#MATB_DC").val(row);
                 $("#MATB_XK").val(row);
                 $("#MATB_DC_ct").val(row);
                 $("#MATB_XK_ct").val(row);
-                $("#TENTB").html(data.TENTB);
+
+                $("#TENTB").html(data.TENTB);                                
                 $("#TENTB_ct").html(data.TENTB);
+
+                $("#MATB").val(row);
+                $("#MA_LOAITB").val(data.MA_LOAITB);
+                $("#MA_NHOMTB").val(data.MA_NHOMTB);
+
+                var mA_NHOMTB = data.MA_NHOMTB;
+                var mA_LOAITB = data.MA_LOAITB;
                 $.ajax({
                     type: "POST",
                     url: "/Script/get_CAU_HINH",
-                    data: { mA_LOAITB: data.TEN_LOAI },
+                    data: { mA_LOAITB: mA_LOAITB },
                     success: function (data) {
-                        if (data.MA_NHOMTB == "PC" || data.MA_NHOMTB == "LT") {
+                        if (mA_NHOMTB == "PC" || mA_NHOMTB == "LT") {
                             //Thông số kỹ thuật
                             document.getElementById("label1").innerHTML = "CPU:";
                             document.getElementById("label2").innerHTML = "RAM:";
@@ -263,23 +226,8 @@
                             $("#thong_so2").html(data.RAM);
                             $("#thong_so3").html(data.MAN_HINH);
                             $("#thong_so4").html(data.O_CUNG);
-                            //Thông số kỹ thuật chi tiết
-                            document.getElementById("more1").hidden = false;
-                            document.getElementById("more2").hidden = false;
-                            document.getElementById("label1_ct").innerHTML = "CPU:";
-                            document.getElementById("label2_ct").innerHTML = "RAM:";
-                            document.getElementById("label3_ct").innerHTML = "Màn hình:";
-                            document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
-                            document.getElementById("label5_ct").innerHTML = "VGA:";
-                            document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
-                            $("#thong_so1_ct").html(data.CPU);
-                            $("#thong_so2_ct").html(data.RAM);
-                            $("#thong_so3_ct").html(data.MAN_HINH);
-                            $("#thong_so4_ct").html(data.O_CUNG);
-                            $("#thong_so5_ct").html(data.VGA);
-                            $("#thong_so6_ct").html(data.HDH);
                         }
-                        else if (data.MA_NHOMTB == "PR") {
+                        else if (mA_NHOMTB == "PR") {
                             //Thông số kỹ thuật
                             document.getElementById("label1").innerHTML = "Kích thước:";
                             document.getElementById("label2").innerHTML = "Loại mực:";
@@ -289,17 +237,6 @@
                             $("#thong_so2").html(data.LOAI_MUC);
                             $("#thong_so3").html(data.TOC_DO);
                             $("#thong_so4").html(data.DO_PHAN_GIAI);
-                            //Thông số kỹ thuật chi tiết
-                            document.getElementById("label1_ct").innerHTML = "Kích thước:";
-                            document.getElementById("label2_ct").innerHTML = "Loại mực:";
-                            document.getElementById("label3_ct").innerHTML = "Tốc độ:";
-                            document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
-                            document.getElementById("more1").hidden = true;
-                            document.getElementById("more2").hidden = true;
-                            $("#thong_so1_ct").html(data.KICH_THUOC);
-                            $("#thong_so2_ct").html(data.LOAI_MUC);
-                            $("#thong_so3_ct").html(data.TOC_DO);
-                            $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
                         }
                         else {
                             //Thông số kỹ thuật
@@ -311,31 +248,93 @@
                             $("#thong_so2").html("");
                             $("#thong_so3").html("");
                             $("#thong_so4").html("");
-                            //Thông số kỹ thuật chi tiết
-                            document.getElementById("label1_ct").innerHTML = "";
-                            document.getElementById("label2_ct").innerHTML = "";
-                            document.getElementById("label3_ct").innerHTML = "";
-                            document.getElementById("label4_ct").innerHTML = "";
-                            document.getElementById("more1").hidden = true;
-                            document.getElementById("more2").hidden = true;
-                            $("#thong_so1_ct").html("");
-                            $("#thong_so2_ct").html("");
-                            $("#thong_so3_ct").html("");
-                            $("#thong_so4_ct").html("");
                         }
                     }
-                });
+                });                
             }
         });
+
+        $.ajax({
+                    type: "GET",
+                    url: "/Script/get_HINH_ANH",
+                    data: { mATB: row },
+                    success: function (data) {
+                        //Thông số kỹ thuật
+                        var src = document.createAttribute("src");
+                        var img = document.getElementById("img");
+
+                        if (data != null) {
+                            src.value = "Images/" + data.HINH1;
+                        }
+                        else {
+                            src.value = "Images/alibaba";
+                        }
+                        img.setAttributeNode(src);
+                    }
+                });
+    };
+
+    function CAU_HINH_CHI_TIET()
+    {
+        var mATB = $('#MATB').val();
+        var mA_NHOMTB = $('#MA_NHOMTB').val();
+        var mA_LOAITB = $('#MA_LOAITB').val();
+        $.ajax({
+            type: "POST",
+            url: "/Script/get_CAU_HINH",
+            data: { mA_LOAITB: mA_LOAITB },
+            success: function (data) {
+                if (mA_NHOMTB == "PC" || mA_NHOMTB == "LT") {
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("more1").hidden = false;
+                    document.getElementById("more2").hidden = false;
+                    document.getElementById("label1_ct").innerHTML = "CPU:";
+                    document.getElementById("label2_ct").innerHTML = "RAM:";
+                    document.getElementById("label3_ct").innerHTML = "Màn hình:";
+                    document.getElementById("label4_ct").innerHTML = "Ổ cứng:";
+                    document.getElementById("label5_ct").innerHTML = "VGA:";
+                    document.getElementById("label6_ct").innerHTML = "Hệ điều hành:";
+                    $("#thong_so1_ct").html(data.CPU);
+                    $("#thong_so2_ct").html(data.RAM);
+                    $("#thong_so3_ct").html(data.MAN_HINH);
+                    $("#thong_so4_ct").html(data.O_CUNG);
+                    $("#thong_so5_ct").html(data.VGA);
+                    $("#thong_so6_ct").html(data.HDH);
+                }
+                else if (mA_NHOMTB == "PR") {
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("label1_ct").innerHTML = "Kích thước:";
+                    document.getElementById("label2_ct").innerHTML = "Loại mực:";
+                    document.getElementById("label3_ct").innerHTML = "Tốc độ:";
+                    document.getElementById("label4_ct").innerHTML = "Độ phân giải:";
+                    document.getElementById("more1").hidden = true;
+                    document.getElementById("more2").hidden = true;
+                    $("#thong_so1_ct").html(data.KICH_THUOC);
+                    $("#thong_so2_ct").html(data.LOAI_MUC);
+                    $("#thong_so3_ct").html(data.TOC_DO);
+                    $("#thong_so4_ct").html(data.DO_PHAN_GIAI);
+                }
+                else {
+                    //Thông số kỹ thuật chi tiết
+                    document.getElementById("label1_ct").innerHTML = "";
+                    document.getElementById("label2_ct").innerHTML = "";
+                    document.getElementById("label3_ct").innerHTML = "";
+                    document.getElementById("label4_ct").innerHTML = "";
+                    document.getElementById("more1").hidden = true;
+                    document.getElementById("more2").hidden = true;
+                    $("#thong_so1_ct").html("");
+                    $("#thong_so2_ct").html("");
+                    $("#thong_so3_ct").html("");
+                    $("#thong_so4_ct").html("");
+                }
+            }
+        });
+
         $.ajax({
             type: "GET",
             url: "/Script/get_HINH_ANH",
-            data: { mATB: row },
+            data: { mATB: mATB },
             success: function (data) {
-                //Thông số kỹ thuật
-                var src = document.createAttribute("src");
-                var img = document.getElementById("img");
-
                 //Thông số kỹ thuật chi tiết
                 var img_ct = document.getElementById("img_ct");
                 var img_ct1 = document.getElementById("img_ct1");
@@ -343,14 +342,15 @@
                 var img_ct3 = document.getElementById("img_ct3");
                 var img_ct4 = document.getElementById("img_ct4");
                 var img_ct5 = document.getElementById("img_ct5");
+
                 var src_ct = document.createAttribute("src");
                 var src_ct1 = document.createAttribute("src");
                 var src_ct2 = document.createAttribute("src");
                 var src_ct3 = document.createAttribute("src");
                 var src_ct4 = document.createAttribute("src");
                 var src_ct5 = document.createAttribute("src");
+
                 if (data != null) {
-                    src.value = "Images/" + data.HINH1;
                     src_ct.value = "Images/" + data.HINH1;
                     src_ct1.value = "Images/" + data.HINH1;
                     src_ct2.value = "Images/" + data.HINH2;
@@ -359,7 +359,6 @@
                     src_ct5.value = "Images/" + data.HINH5;
                 }
                 else {
-                    src.value = "Images/alibaba";
                     src_ct.value = "Images/alibaba";
                     src_ct1.value = "Images/alibaba";
                     src_ct2.value = "Images/alibaba";
@@ -367,50 +366,19 @@
                     src_ct4.value = "Images/alibaba";
                     src_ct5.value = "Images/alibaba";
                 }
-                img.setAttributeNode(src);
+
                 img_ct.setAttributeNode(src_ct);
                 img_ct1.setAttributeNode(src_ct1);
                 img_ct2.setAttributeNode(src_ct2);
                 img_ct3.setAttributeNode(src_ct3);
                 img_ct4.setAttributeNode(src_ct4);
                 img_ct5.setAttributeNode(src_ct5);
-
-                //$('#img_ct1').click(function () {
-                //    var src = document.createAttribute("src");
-                //    src.value = "Images/" + data.HINH1;
-                //    var img = document.getElementById("img_ct");
-                //    img.setAttributeNode(src);
-                //});
-                //$('#img_ct2').click(function () {
-                //    var src = document.createAttribute("src");
-                //    src.value = "Images/" + data.HINH2;
-                //    var img = document.getElementById("img_ct");
-                //    img.setAttributeNode(src);
-                //});
-                //$('#img_ct3').click(function () {
-                //    var src = document.createAttribute("src");
-                //    src.value = "Images/" + data.HINH3;
-                //    var img = document.getElementById("img_ct");
-                //    img.setAttributeNode(src);
-                //});
-                //$('#img_ct4').click(function () {
-                //    var src = document.createAttribute("src");
-                //    src.value = "Images/" + data.HINH4;
-                //    var img = document.getElementById("img_ct");
-                //    img.setAttributeNode(src);
-                //});
-                //$('#img_ct5').click(function () {
-                //    var src = document.createAttribute("src");
-                //    src.value = "Images/" + data.HINH5;
-                //    var img = document.getElementById("img_ct");
-                //    img.setAttributeNode(src);
-                //});
             }
         });
     };
 
     function CHANGE_IMG(src) {
         document.getElementById("img_ct").src = src;
-    }
+    };
 </script>
 

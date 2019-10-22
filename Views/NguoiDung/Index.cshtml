@@ -68,6 +68,15 @@
                                    aria-describedby="emailHelp"
                                    placeholder="">
                         </div>
+                        <div class="form-group">
+                            <input type="text"
+                                   class="form-control"
+                                   id="MA_NHOM_ND"
+                                   name="MA_NHOM_ND"
+                                   aria-describedby="emailHelp"
+                                   placeholder=""
+                                   hidden>
+                        </div>
 
                         @if (ViewBag.Them != null)
                         {
@@ -175,12 +184,12 @@
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: "/Script/get_DONVI",
+            url: "/Script/get_DON_VI",
             data: "{}",
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_DON_VI + '">' + data[i].TEN_DON_VI + '</option>';
                 }
                 $("#MA_DON_VI").html(s);
             }
@@ -193,7 +202,7 @@
             success: function (data) {
                 var s = '<option disabled selected value>Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_NHOM + '">' + data[i].TEN_NHOM + '</option>';
                 }
                 $("#MA_NHOM").html(s);
             }
@@ -203,15 +212,16 @@
     function Edit(row) {
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinND",
-            data: { ma_ND: row },
+            url: "/Script/get_THONG_TIN_ND",
+            data: { mA_ND: row },
             success: function (data) {
                 $("#MA_ND").val(row);
                 $("#TEN_ND").val(data.TEN_ND);
-                $("#MA_NHOM").val(data.nhom_ND);
-                $("#MA_DON_VI").val(data.TEN_DON_VI);
+                $("#MA_NHOM").val(data.MA_NHOM);
+                $("#MA_DON_VI").val(data.MA_DON_VI);
                 $("#DIEN_THOAI").val(data.DIEN_THOAI);
                 $("#EMAIL").val(data.EMAIL);
+                $("#MA_NHOM_ND").val(data.MA_NHOM_ND);
             }
         });
         document.getElementById("MA_ND").setAttribute("readonly", "readonly");

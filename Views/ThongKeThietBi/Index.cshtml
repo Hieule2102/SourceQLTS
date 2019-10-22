@@ -123,21 +123,21 @@
     //    });
     //});
 
-    function Fill_LoaiTB() {
-        var nhom_TB = $('#nhomTB').val();
-        $.ajax({
-            type: "POST",
-            url: "/ThongKeThietBi/get_LOAITB",
-            data: { nhom_TB: nhom_TB },
-            success: function (data) {
-                //$("#loaiTB").html("");
-                var options = '<option value="-1">Xin chọn loại thiết bị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    options += '<option value="' + data[i] + '">' + data[i] + '</option>';
-                }
-                $("#loaiTB").html(options);
-            }
-        });
-    };
+    //function Fill_LoaiTB() {
+    //    var nhom_TB = $('#nhomTB').val();
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/ThongKeThietBi/get_LOAITB",
+    //        data: { nhom_TB: nhom_TB },
+    //        success: function (data) {
+    //            //$("#loaiTB").html("");
+    //            var options = '<option value="-1">Xin chọn loại thiết bị</option>';
+    //            for (var i = 0; i < data.length; i++) {
+    //                options += '<option value="' + data[i] + '">' + data[i] + '</option>';
+    //            }
+    //            $("#loaiTB").html(options);
+    //        }
+    //    });
+    //};
 </script>
 

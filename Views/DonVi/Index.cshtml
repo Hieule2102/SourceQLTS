@@ -133,12 +133,12 @@
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: "/Script/get_DONVI",
+            url: "/Script/get_DON_VI",
             data: "{}",
             success: function (data) {
                 var s = '<option value="">Xin chọn đơn vị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i] + '">' + data[i] + '</option>';
+                    s += '<option value="' + data[i].MA_DON_VI + '">' + data[i].TEN_DON_VI + '</option>';
                 }
                 $("#DON_VI_CAP_TREN").html(s);
             }
@@ -148,8 +148,8 @@
     function Edit(row) {
         $.ajax({
             type: "GET",
-            url: "/Script/get_ThongTinDonVi",
-            data: { ma_DON_VI: row },
+            url: "/Script/get_THONG_TIN_DON_VI",
+            data: { mA_DON_VI: row },
             success: function (data) {
                 $("#MA_DON_VI").val(row);
                 $("#TEN_DON_VI").val(data.TEN_DON_VI);

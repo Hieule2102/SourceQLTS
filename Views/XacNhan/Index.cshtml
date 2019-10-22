@@ -31,7 +31,7 @@
                 <br>
                 <p class="thong-bao">Click chọn thiết bị để xác nhận.</p>
                 <div class="xac-nhan">
-                    <table id="myTable" onclick="on_click()">
+                    <table id="myTable">
                         <tr>
                             <th>Mã TB</th>
                             <th>Tên TB</th>
@@ -106,7 +106,7 @@
                             </tr>
                         </table>
                         <div class="submit">
-                            @if (ViewBag.Them != null)
+                            @if (ViewBag.XacNhan != null)
                             {
                                 <button class="da-nhan" name="XAC_NHAN" value="xac_nhan">XÁC NHẬN</button>
                             }
@@ -155,7 +155,7 @@
                 $("#MATB_temp").val(data.MATB);
             }
         });
-    }
+    };
 
     //function on_click() {
     //    var table = document.getElementById('myTable');
