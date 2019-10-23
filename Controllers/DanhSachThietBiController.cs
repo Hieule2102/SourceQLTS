@@ -19,7 +19,7 @@ namespace Source.Controllers
         {
 
             if (Session["BAO_CAO"] != null)
-            {                
+            {
                 //var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
                 //                                             && a.MA_CHUC_NANG == 9);
 
@@ -27,27 +27,21 @@ namespace Source.Controllers
                 //ViewBag.Sua = db.NHOM_ND_CHUCNANG.Where(a => a.MA_QUYEN == 3);
 
                 //Nhóm thiết bị
-                var dsLOAITB = new List<string>();
-                var qLOAITB = (from d in db.LOAI_THIETBI
-                               orderby d.TEN_LOAI
-                               select d.TEN_LOAI);
-                dsLOAITB.AddRange(qLOAITB.Distinct());
+                var dsLOAITB = db.LOAI_THIETBI.Select(a => a.TEN_LOAI)
+                                              .ToList()
+                                              .Distinct();
                 ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
 
                 //Nhóm thiết bị
-                var dsNhomTB = new List<string>();
-                var qNhomTB = (from d in db.NHOM_THIETBI
-                               orderby d.TEN_NHOM
-                               select d.TEN_NHOM);
-                dsNhomTB.AddRange(qNhomTB.Distinct());
+                var dsNhomTB = db.NHOM_THIETBI.Select(a => a.TEN_NHOM)
+                                              .ToList()
+                                              .Distinct(); ;
                 ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
                 //Đơn vị
-                var dsTenDonVi = new List<string>();
-                var qTenDonVi = (from d in db.DON_VI
-                                 orderby d.TEN_DON_VI
-                                 select d.TEN_DON_VI);
-                dsTenDonVi.AddRange(qTenDonVi.Distinct());
+                var dsTenDonVi = db.DON_VI.Select(a => a.TEN_DON_VI)
+                                           .ToList()
+                                           .Distinct();
                 ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
             }
             else
@@ -62,26 +56,23 @@ namespace Source.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(string SEARCH_STRING, string MA_LOAITB, string MA_DON_VI, string MA_NHOMTB)
         {
-            //Đơn vị
-            var dsTenDonVi = new List<string>();
-            var qTenDonVi = (from d in db.DON_VI
-                             orderby d.TEN_DON_VI
-                             select d.TEN_DON_VI);
-            dsTenDonVi.AddRange(qTenDonVi.Distinct());
-            ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
-
-            var dsLOAITB = new List<string>();
-            var qLOAITB = (from d in db.LOAI_THIETBI
-                           orderby d.TEN_LOAI
-                           select d.TEN_LOAI);
+            //Nhóm thiết bị
+            var dsLOAITB = db.LOAI_THIETBI.Select(a => a.TEN_LOAI)
+                                          .ToList()
+                                          .Distinct();
+            ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
 
             //Nhóm thiết bị
-            var dsNhomTB = new List<string>();
-            var qNhomTB = (from d in db.NHOM_THIETBI
-                           orderby d.TEN_NHOM
-                           select d.TEN_NHOM);
-            dsNhomTB.AddRange(qNhomTB.Distinct());
+            var dsNhomTB = db.NHOM_THIETBI.Select(a => a.TEN_NHOM)
+                                          .ToList()
+                                          .Distinct(); ;
             ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
+
+            //Đơn vị
+            var dsTenDonVi = db.DON_VI.Select(a => a.TEN_DON_VI)
+                                       .ToList()
+                                       .Distinct();
+            ViewBag.MA_DON_VI = new SelectList(dsTenDonVi);
 
             var thietbis = db.THIETBIs.Include(t => t.DON_VI).Include(t => t.LOAI_THIETBI).Include(t => t.NHA_CUNG_CAP);
 
@@ -89,10 +80,11 @@ namespace Source.Controllers
             if (!String.IsNullOrEmpty(MA_NHOMTB))
             {
                 //Nhóm thiết bị
-                qLOAITB = (from d in db.LOAI_THIETBI
-                           where d.NHOM_THIETBI.TEN_NHOM == MA_NHOMTB
-                           orderby d.TEN_LOAI
-                           select d.TEN_LOAI);
+                dsLOAITB = db.LOAI_THIETBI.Where(a => a.NHOM_THIETBI.TEN_NHOM.Contains(MA_NHOMTB))
+                                          .Select(a => a.TEN_LOAI)
+                                          .ToList()
+                                          .Distinct();
+                ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
                 if (!String.IsNullOrEmpty(MA_LOAITB))
                 {
                     thietbis = thietbis.Where(data => data.LOAI_THIETBI.TEN_LOAI == MA_LOAITB);
@@ -115,10 +107,7 @@ namespace Source.Controllers
             else if (!String.IsNullOrEmpty(MA_DON_VI))
             {
                 thietbis = thietbis.Where(data => data.DON_VI.TEN_DON_VI == MA_DON_VI);
-            }
-
-            dsLOAITB.AddRange(qLOAITB.Distinct());
-            ViewBag.MA_LOAITB = new SelectList(dsLOAITB);
+            }            
 
             return View(await thietbis.OrderBy(a => a.MATB).ToListAsync());
         }

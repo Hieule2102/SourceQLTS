@@ -41,7 +41,11 @@ namespace Source.Controllers
 
             if (!String.IsNullOrEmpty(SEARCH_STRING))
             {
-                //xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.THIETBI.TENTB.Contains(SEARCH_STRING));
+                xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.XUAT_KHO.THIETBI.TENTB.Contains(SEARCH_STRING));
+                if(xac_nhan_dieu_chuyen == null)
+                {
+                    xac_nhan_dieu_chuyen = xac_nhan_dieu_chuyen.Where(a => a.DIEU_CHUYEN_THIET_BI.THIETBI.TENTB.Contains(SEARCH_STRING));                    
+                }
             }
             return View(await xac_nhan_dieu_chuyen.ToListAsync());
         }

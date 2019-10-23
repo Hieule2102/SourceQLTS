@@ -1,4 +1,4 @@
-using Source.Models;
+﻿using Source.Models;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -31,6 +31,7 @@ namespace Source.Controllers
             {
                 var tEN_DANG_NHAP = form["TEN_DANG_NHAP"];
                 var mAT_KHAU = form["MAT_KHAU"];
+
                 if (db.NGUOI_DUNG.FirstOrDefault(x => x.TEN_DANG_NHAP == tEN_DANG_NHAP) == null || db.NGUOI_DUNG.FirstOrDefault(x => x.MAT_KHAU == mAT_KHAU) == null)
                 {
                     ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ";

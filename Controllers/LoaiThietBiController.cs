@@ -20,11 +20,9 @@ namespace Source.Controllers
             if (Session["DANH_MUC"] != null)
             {
                 //Nhóm thiết bị
-                var dsNhomTB = new List<string>();
-                var qNhomTB = (from d in db.NHOM_THIETBI
-                               orderby d.TEN_NHOM
-                               select d.TEN_NHOM);
-                dsNhomTB.AddRange(qNhomTB.Distinct());
+                var dsNhomTB = db.NHOM_THIETBI.Select(a => a.TEN_NHOM)
+                                              .ToList()
+                                              .Distinct();                
                 ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
                 var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
@@ -51,6 +49,11 @@ namespace Source.Controllers
 
             ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
             ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
+
+            var dsNhomTB = db.NHOM_THIETBI.Select(a => a.TEN_NHOM)
+                                              .ToList()
+                                              .Distinct();
+            ViewBag.MA_NHOMTB = new SelectList(dsNhomTB);
 
             if (!String.IsNullOrEmpty(SAVE))
             {

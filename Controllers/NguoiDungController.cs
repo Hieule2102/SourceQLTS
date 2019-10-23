@@ -21,19 +21,15 @@ namespace Source.Controllers
             if (Session["QL_ND"] != null)
             {
                 //Đơn vị
-                var dsTenDonVi = new List<string>();
-                var qTenDonVi = (from d in db.DON_VI
-                                 orderby d.TEN_DON_VI
-                                 select d.TEN_DON_VI);
-                dsTenDonVi.AddRange(qTenDonVi.Distinct());
+                var dsTenDonVi = db.DON_VI.Select(a => a.TEN_DON_VI)
+                                          .ToList()
+                                          .Distinct();
                 ViewBag.donVi = new SelectList(dsTenDonVi);
 
                 //Nhóm người dùng
-                var dsTenNhom = new List<string>();
-                var qTenNhom = (from d in db.NHOM_NGUOI_DUNG
-                                orderby d.TEN_NHOM
-                                select d.TEN_NHOM);
-                dsTenNhom.AddRange(qTenNhom.Distinct());
+                var dsTenNhom = db.NHOM_NGUOI_DUNG.Select(a => a.TEN_NHOM)
+                                                  .ToList()
+                                                  .Distinct();                
                 ViewBag.tenNhom = new SelectList(dsTenNhom);
 
                 var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
@@ -62,19 +58,15 @@ namespace Source.Controllers
             ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
             //Đơn vị
-            var dsTenDonVi = new List<string>();
-            var qTenDonVi = (from d in db.DON_VI
-                             orderby d.TEN_DON_VI
-                             select d.TEN_DON_VI);
-            dsTenDonVi.AddRange(qTenDonVi.Distinct());
+            var dsTenDonVi = db.DON_VI.Select(a => a.TEN_DON_VI)
+                                      .ToList()
+                                      .Distinct();
             ViewBag.donVi = new SelectList(dsTenDonVi);
 
             //Nhóm người dùng
-            var dsTenNhom = new List<string>();
-            var qTenNhom = (from d in db.NHOM_NGUOI_DUNG
-                            orderby d.TEN_NHOM
-                            select d.TEN_NHOM);
-            dsTenNhom.AddRange(qTenNhom.Distinct());
+            var dsTenNhom = db.NHOM_NGUOI_DUNG.Select(a => a.TEN_NHOM)
+                                              .ToList()
+                                              .Distinct();
             ViewBag.tenNhom = new SelectList(dsTenNhom);
 
 
@@ -135,6 +127,12 @@ namespace Source.Controllers
                 }
                 else if (!String.IsNullOrEmpty(tenNhom))
                 {
+                    //var mA_ND = db.NHOM_ND.Where(a => a.NHOM_NGUOI_DUNG.TEN_NHOM == tenNhom)
+                    //                      .Select(a => a.MA_ND)
+                    //                      .ToList();
+
+                    //nguoi_dung = nguoi_dung.Where(a => a.MA_ND == "");
+
                     var nhom_ND = new List<NGUOI_DUNG>();
                     foreach (var a in db.NHOM_ND)
                     {
@@ -146,9 +144,9 @@ namespace Source.Controllers
                     return View(nhom_ND.ToList());
                 }
             }
-
             return View(await nguoi_dung.ToListAsync());
         }
+
         #region Thêm người dùng
         public NGUOI_DUNG THEM_NGUOI_DUNG(FormCollection form)
         {
