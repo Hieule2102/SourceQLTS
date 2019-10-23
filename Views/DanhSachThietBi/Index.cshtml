@@ -4,261 +4,254 @@
     ViewBag.Title = "Index";
 }
 
-
-<main>
-    <div class="container link">
-        <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
-        <hr />
-        <h2>@ViewBag.HINH_ANH</h2>
-    </div>
-    <section class="container" id="ds-tb">
-        @using (Html.BeginForm("Index", "DanhSachThietBi", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-            <h1 class="title">DANH SÁCH THIẾT BỊ</h1>
-            <div class="search">
-                <input type="text"
-                       name="SEARCH_STRING"
-                       class="placeholder"
-                       placeholder="Nhập tên thiết bị" />
-                <button type="submit" class="btn-search">
-                    <span><i class="fas fa-search"></i></span>
-                </button>
-            </div>
-            <div class="loc">
-                <h4><i class="fas fa-filter"></i></h4>
-                <div class="div-filter">
-                    <div class="filter1">
-                        <div class="filter">
-                            <label for="">Nhóm TB</label>
-                            @Html.DropDownList("MA_NHOMTB", null, "Tất cả", new
-                                {
-                                    @class = "form-control",
-                                    @placeholder = "",
-                                    @onchange = @"form.submit()"
-                                })
-                            @*<select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="form.submit()"></select>*@
-                        </div>
-                        <div class="filter">
-                            <label for="">Loại TB</label>
-                            @Html.DropDownList("MA_LOAITB", null, "Tất cả", new
-                                {
-                                    @class = "form-control",
-                                    @placeholder = "",
-                                    @onchange = @"form.submit()"
-                                })
-                            @*<select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="form.submit()"></select>*@
-                        </div>
-                    </div>
-                    <div class="filter2">
-                        <div class="filter">
-                            <label for="">Đơn vị</label>
-                            @Html.DropDownList("MA_DON_VI", null, "Tất cả", new
-                                {
-                                    @class = "form-control",
-                                    @placeholder = "",
-                                    @onchange = @"form.submit()"
-                                })
-                            @*<select class="form-control" id="MA_DON_VI" name="MA_DON_VI" onchange="form.submit()"></select>*@
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    <div class="div-dstb">
-        <div class="ds-tb">
-            <table>
-                <tr>
-                    <th>Mã TB</th>
-                    <th>Tên TB</th>
-                    <th>Nhóm TB</th>
-                    <th>Loại TB</th>
-                    <th>Serial</th>
-                    <th>Giá tiền</th>
-                    <th>THBH</th>
-                    <th>Tình trạng</th>
-                    <th>ĐVQL</th>
-                    <th>Người QL</th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    <tr class="tablinks" onclick="Edit(event, '@item.MATB')">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MATB)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TENTB)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LOAI_THIETBI.NHOM_THIETBI.TEN_NHOM)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LOAI_THIETBI.TEN_LOAI)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SO_SERIAL)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GIA_TIEN)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.THOI_HAN_BAO_HANH)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TINH_TRANG)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NGUOI_DUNG.TEN_ND)
-                        </td>
-                    </tr>
-                }
-            </table>
+    <main>
+        <div class="container link">
+            <p>Trang chủ > Báo cáo > Danh sách thiết bị</p>
+            <hr />
         </div>
-
-        <div class="div-cauhinh d-none">
-            <div class="cau-hinh">
-                <span class="close-cauhinh">
-                    <i class="far fa-times-circle fa-2x"></i>
-                </span>
-                <div class="img">
-                    <div class="img-container">
-                        <img id="img" alt="hinh-anh-thiet-bi" />
-                    </div>
-                    <input id="MATB" hidden />
-                    <p class="ten-tb" id="TENTB"></p>
-                    <input id="MA_LOAITB" hidden />
-                    <input id="MA_NHOMTB" hidden />
+        <section class="container" id="ds-tb">
+            <h1 class="sub-title">Danh sách thiết bị</h1>
+            @using (Html.BeginForm("Index", "DanhSachThietBi", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="search">
+                    <input type="text"
+                           name="SEARCH_STRING"
+                           class="placeholder"
+                           placeholder="Nhập tên thiết bị" />
+                    <button type="submit" class="btn-search">
+                        <span><i class="fas fa-search"></i></span>
+                    </button>
                 </div>
-                <h4 class="sub-title">Thông số kỹ thuật</h4>
-                <div class="div-thong-so">
-
+                <div class="loc">
+                    <h4><i class="fas fa-filter"></i></h4>
+                    <div class="div-filter">
+                        <div class="filter1">
+                            <div class="filter">
+                                <label for="">Nhóm TB</label>
+                                @Html.DropDownList("MA_NHOMTB", null, "Tất cả", new
+                                    {
+                                        @class = "form-control",
+                                        @placeholder = "",
+                                        @onchange = @"form.submit()"
+                                    })
+                                @*<select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="form.submit()"></select>*@
+                            </div>
+                            <div class="filter">
+                                <label for="">Loại TB</label>
+                                @Html.DropDownList("MA_LOAITB", null, "Tất cả", new
+                                    {
+                                        @class = "form-control",
+                                        @placeholder = "",
+                                        @onchange = @"form.submit()"
+                                    })
+                                @*<select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="form.submit()"></select>*@
+                            </div>
+                        </div>
+                        <div class="filter2">
+                            <div class="filter">
+                                <label for="">Đơn vị</label>
+                                @Html.DropDownList("MA_DON_VI", null, "Tất cả", new
+                                    {
+                                        @class = "form-control",
+                                        @placeholder = "",
+                                        @onchange = @"form.submit()"
+                                    })
+                                @*<select class="form-control" id="MA_DON_VI" name="MA_DON_VI" onchange="form.submit()"></select>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="div-dstb">
+                <div class="ds-tb">
                     <table>
                         <tr>
-                            <td id="label1"></td>
-                            <td id="thong_so1"></td>
+                            <th>Mã TB</th>
+                            <th>Tên TB</th>
+                            <th>Loại TB</th>
+                            <th>Serial</th>
+                            <th>Số lượng</th>
+                            <th>Giá tiền</th>
+                            <th>THBH</th>
+                            <th>Tình trạng</th>
+                            <th>ĐVQL</th>
+                            <th>Người QL</th>
                         </tr>
-                        <tr>
-                            <td id="label2"></td>
-                            <td id="thong_so2"></td>
-                        </tr>
-                        <tr>
-                            <td id="label3"></td>
-                            <td id="thong_so3"></td>
-                        </tr>
-                        <tr>
-                            <td id="label4"></td>
-                            <td id="thong_so4"></td>
-                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="tablinks" onclick="Edit(event, '@item.MATB')">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MATB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TENTB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LOAI_THIETBI.TEN_LOAI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SO_SERIAL)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SO_LUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GIA_TIEN)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.THOI_HAN_BAO_HANH)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TINH_TRANG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DON_VI.TEN_DON_VI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NGUOI_DUNG.TEN_ND)
+                                </td>
+                            </tr>
+                        }
                     </table>
                 </div>
 
-                <button id="chct" onclick="CAU_HINH_CHI_TIET()">Cấu hình chi tiết</button>
-                <div class="xk-dc">
-                    @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true)
-                        <input class="ten-tb" id="MATB_XK" name="MATB_XK" hidden="hidden" />
-                        <button>Xuất kho</button>
-                    }
-                    @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true)
-                        <input class="ten-tb" id="MATB_DC" name="MATB_DC" hidden="hidden" />
-                        <button>Điều chuyển</button>
-                    }
-                </div>
-            </div>
-
-
-        </div>
-        <div class="cau-hinh-chi-tiet d-none">
-            <span class="close-cauhinh">
-                <i class="far fa-times-circle fa-2x"></i>
-            </span>
-            <div class="div-chct">
-                <div class="chct">
-                    <div class="img">
-                        <div class="img-container">
-                            <img id="img_ct" alt="hinh-anh-thiet-bi" />
+                <div class="div-cauhinh d-none">
+                    <div class="cau-hinh">
+                        <span class="close-cauhinh">
+                            <i class="far fa-times-circle fa-2x"></i>
+                        </span>
+                        <div class="img">
+                            <div class="img-container">
+                                <img id="img" alt="hinh-anh-thiet-bi" />
+                            </div>
+                            <input id="MATB" hidden />
+                            <p class="ten-tb" id="TENTB"></p>
+                            <input id="MA_LOAITB" hidden />
+                            <input id="MA_NHOMTB" hidden />
                         </div>
-                        <div class="small-container-div">
-                            <div class="small-img-container">
-                                <img id="img_ct1" alt="" onclick="CHANGE_IMG(this.src)">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_ct2" alt="" onclick="CHANGE_IMG(this.src)">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_ct3" alt="" onclick="CHANGE_IMG(this.src)">
-                            </div>
-                            <div class="small-img-container">
-                                <img id="img_ct4" alt="" onclick="CHANGE_IMG(this.src)">
-                            </div>
-                            <div class="small -img-container">
-                                <img id="img_ct5" alt="" onclick="CHANGE_IMG(this.src)">
-                            </div>
+                        <h4 class="sub-title">Thông số kỹ thuật</h4>
+                        <div class="div-thong-so">
+                            <table>
+                                <tr>
+                                    <td id="label1"></td>
+                                    <td id="thong_so1"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label2"></td>
+                                    <td id="thong_so2"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label3"></td>
+                                    <td id="thong_so3"></td>
+                                </tr>
+                                <tr>
+                                    <td id="label4"></td>
+                                    <td id="thong_so4"></td>
+                                </tr>
+                            </table>
                         </div>
-                        <p class="ten-tb" id="TENTB_ct"></p>
-                    </div>
-                    <h4 class="sub-title">Thông số kỹ thuật</h4>
-                    <div class="div-thong-so">
-                        <table>
-                            <tr>
-                                <td id="label1_ct"></td>
-                                <td id="thong_so1_ct"></td>
-                            </tr>
-                            <tr>
-                                <td id="label2_ct"></td>
-                                <td id="thong_so2_ct"></td>
-                            </tr>
-                            <tr>
-                                <td id="label3_ct"></td>
-                                <td id="thong_so3_ct"></td>
-                            </tr>
-                            <tr>
-                                <td id="label4_ct"></td>
-                                <td id="thong_so4_ct"></td>
-                            </tr>
-                            <tr id="more1">
-                                <td id="label5_ct"></td>
-                                <td id="thong_so5_ct"></td>
-                            </tr>
-                            <tr id="more2">
-                                <td id="label6_ct"></td>
-                                <td id="thong_so6_ct"></td>
-                            </tr>
-                        </table>
-                        <div class="xk-dc d-none">
+                        <button id="chct" onclick="CAU_HINH_CHI_TIET()">Cấu hình chi tiết</button>
+                        <div class="xk-dc">
                             @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true)
-                                <input class="ten-tb" id="MATB_XK_ct" name="MATB_XK_ct" hidden="hidden" />
+                                <input class="ten-tb" id="MATB_XK" name="MATB_XK" hidden="hidden" />
                                 <button>Xuất kho</button>
                             }
                             @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true)
-                                <input class="ten-tb" id="MATB_DC_ct" name="MATB_DC_ct" hidden="hidden" />
+                                <input class="ten-tb" id="MATB_DC" name="MATB_DC" hidden="hidden" />
                                 <button>Điều chuyển</button>
                             }
                         </div>
                     </div>
                 </div>
-
+                <div class="cau-hinh-chi-tiet d-none">
+                    <span class="close-cauhinh">
+                        <i class="far fa-times-circle fa-2x"></i>
+                    </span>
+                    <div class="div-chct">
+                        <div class="chct">
+                            <div class="img">
+                                <div class="img-container">
+                                    <img id="img_ct" alt="hinh-anh-thiet-bi" />
+                                </div>
+                                <div class="small-container-div">
+                                    <div class="small-img-container">
+                                        <img id="img_ct1" alt="" onclick="CHANGE_IMG(this.src)">
+                                    </div>
+                                    <div class="small-img-container">
+                                        <img id="img_ct2" alt="" onclick="CHANGE_IMG(this.src)">
+                                    </div>
+                                    <div class="small-img-container">
+                                        <img id="img_ct3" alt="" onclick="CHANGE_IMG(this.src)">
+                                    </div>
+                                    <div class="small-img-container">
+                                        <img id="img_ct4" alt="" onclick="CHANGE_IMG(this.src)">
+                                    </div>
+                                    <div class="small-img-container">
+                                        <img id="img_ct5" alt="" onclick="CHANGE_IMG(this.src)">
+                                    </div>
+                                </div>
+                                <p class="ten-tb" id="TENTB_ct"></p>
+                            </div>
+                            <h4 class="sub-title">Thông số kỹ thuật</h4>
+                            <div class="div-thong-so">
+                                <table>
+                                    <tr>
+                                        <td id="label1_ct"></td>
+                                        <td id="thong_so1_ct"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="label2_ct"></td>
+                                        <td id="thong_so2_ct"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="label3_ct"></td>
+                                        <td id="thong_so3_ct"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="label4_ct"></td>
+                                        <td id="thong_so4_ct"></td>
+                                    </tr>
+                                    <tr id="more1">
+                                        <td id="label5_ct"></td>
+                                        <td id="thong_so5_ct"></td>
+                                    </tr>
+                                    <tr id="more2">
+                                        <td id="label6_ct"></td>
+                                        <td id="thong_so6_ct"></td>
+                                    </tr>
+                                </table>
+                                <div class="xk-dc d-none">
+                                    @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true)
+                                        <input class="ten-tb" id="MATB_XK_ct" name="MATB_XK_ct" hidden="hidden" />
+                                        <button>Xuất kho</button>
+                                    }
+                                    @using (Html.BeginForm("Index", "DieuChuyenThietBi", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true)
+                                        <input class="ten-tb" id="MATB_DC_ct" name="MATB_DC_ct" hidden="hidden" />
+                                        <button>Điều chuyển</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    </section>
-</main>
+        </section>
+    </main>
 
 <script type="text/javascript">
     //$(document).ready(function () {
@@ -271,7 +264,7 @@
     //            s += '<option value="' + 0 + '">' + "Tất cả" + '</option>';
     //            for (var i = 0; i < data.length; i++) {
     //                if (i == 0) {
-                        
+
     //                }
     //                s += '<option value="' + data[i].MA_NHOMTB + '">' + data[i].TEN_NHOM + '</option>';
     //            }
@@ -333,7 +326,7 @@
                 $("#MATB_DC_ct").val(row);
                 $("#MATB_XK_ct").val(row);
 
-                $("#TENTB").html(data.TENTB);                                
+                $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
 
                 $("#MATB").val(row);
@@ -381,32 +374,31 @@
                             $("#thong_so4").html("");
                         }
                     }
-                });                
+                });
             }
         });
 
         $.ajax({
-                    type: "GET",
-                    url: "/Script/get_HINH_ANH",
-                    data: { mATB: row },
-                    success: function (data) {
-                        //Thông số kỹ thuật
-                        var src = document.createAttribute("src");
-                        var img = document.getElementById("img");
+            type: "GET",
+            url: "/Script/get_HINH_ANH",
+            data: { mATB: row },
+            success: function (data) {
+                //Thông số kỹ thuật
+                var src = document.createAttribute("src");
+                var img = document.getElementById("img");
 
-                        if (data != null) {
-                            src.value = "Images/" + data.HINH1;
-                        }
-                        else {
-                            src.value = "Images/alibaba";
-                        }
-                        img.setAttributeNode(src);
-                    }
-                });
+                if (data != null) {
+                    src.value = "Images/" + data.HINH1;
+                }
+                else {
+                    src.value = "Images/alibaba";
+                }
+                img.setAttributeNode(src);
+            }
+        });
     };
 
-    function CAU_HINH_CHI_TIET()
-    {
+    function CAU_HINH_CHI_TIET() {
         var mATB = $('#MATB').val();
         var mA_NHOMTB = $('#MA_NHOMTB').val();
         var mA_LOAITB = $('#MA_LOAITB').val();
