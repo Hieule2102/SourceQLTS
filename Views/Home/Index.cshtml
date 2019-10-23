@@ -88,10 +88,10 @@
                         <div class="img-container">
                             <img id="img" alt="hinh-anh-thiet-bi" />
                         </div>
-                        <input id="MATB" hidden/>
+                        <input id="MATB" hidden />
                         <p class="ten-tb" id="TENTB"></p>
-                        <input id="MA_LOAITB" hidden/>
-                        <input id="MA_NHOMTB" hidden/>
+                        <input id="MA_LOAITB" hidden />
+                        <input id="MA_NHOMTB" hidden />
                     </div>
                     <h4 class="sub-title">Thông số kỹ thuật</h4>
                     <div class="div-thong-so">
@@ -114,9 +114,8 @@
                             </tr>
                         </table>
                     </div>
-                    <button id="chct" onclick="CAU_HINH_CHI_TIET()">Cấu hình chi tiết</button>               
+                    <button id="chct" onclick="CAU_HINH_CHI_TIET()">Cấu hình chi tiết</button>
                 </div>
-
             </div>
             <div class="cau-hinh-chi-tiet d-none">
                 <span class="close-cauhinh">
@@ -183,7 +182,7 @@
     </section>
 </main>
 
-<script type="text/javascript">    
+<script type="text/javascript">
     function Edit(evt, row) {
         var i, tablinks;
         tablinks = document.getElementsByClassName("tablinks");
@@ -202,7 +201,7 @@
                 $("#MATB_DC_ct").val(row);
                 $("#MATB_XK_ct").val(row);
 
-                $("#TENTB").html(data.TENTB);                                
+                $("#TENTB").html(data.TENTB);
                 $("#TENTB_ct").html(data.TENTB);
 
                 $("#MATB").val(row);
@@ -250,32 +249,31 @@
                             $("#thong_so4").html("");
                         }
                     }
-                });                
+                });
             }
         });
 
         $.ajax({
-                    type: "GET",
-                    url: "/Script/get_HINH_ANH",
-                    data: { mATB: row },
-                    success: function (data) {
-                        //Thông số kỹ thuật
-                        var src = document.createAttribute("src");
-                        var img = document.getElementById("img");
+            type: "GET",
+            url: "/Script/get_HINH_ANH",
+            data: { mATB: row },
+            success: function (data) {
+                //Thông số kỹ thuật
+                var src = document.createAttribute("src");
+                var img = document.getElementById("img");
 
-                        if (data != null) {
-                            src.value = "Images/" + data.HINH1;
-                        }
-                        else {
-                            src.value = "Images/alibaba";
-                        }
-                        img.setAttributeNode(src);
-                    }
-                });
+                if (data != null) {
+                    src.value = "Images/" + data.HINH1;
+                }
+                else {
+                    src.value = "Images/alibaba";
+                }
+                img.setAttributeNode(src);
+            }
+        });
     };
 
-    function CAU_HINH_CHI_TIET()
-    {
+    function CAU_HINH_CHI_TIET() {
         var mATB = $('#MATB').val();
         var mA_NHOMTB = $('#MA_NHOMTB').val();
         var mA_LOAITB = $('#MA_LOAITB').val();
