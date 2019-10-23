@@ -1,4 +1,4 @@
-﻿using Source.Models;
+using Source.Models;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -47,19 +47,16 @@ namespace Source.Controllers
                                                                         .MA_ND)
                                         .MA_NHOM;
 
-                    var nHOM_ND = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString());
-                    
-                    Session["CHUC_NANG"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 1)
-                                                  .Select(a => a.MA_NHOM);
+                    var temp = Session["NHOM_ND"].ToString();
+                    var nHOM_ND = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == temp);
 
-                    Session["DANH_MUC"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2)
-                                                 .Select(a => a.MA_NHOM);
+                    Session["CHUC_NANG"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 1);
 
-                    Session["BAO_CAO"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3)
-                                                .Select(a => a.MA_NHOM);
+                    Session["DANH_MUC"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 2);
 
-                    Session["QL_ND"] = nHOM_ND.Where(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4)
-                                              .Select(a => a.MA_NHOM);
+                    Session["BAO_CAO"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3);
+
+                    Session["QL_ND"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4);
 
                     return RedirectToAction("Index", "Home");
                 }
