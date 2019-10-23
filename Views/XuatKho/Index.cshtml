@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Source.Models.XUAT_KHO>
+@model IEnumerable<Source.Models.XUAT_KHO>
 
 @{
     ViewBag.Title = "Index";
@@ -27,7 +27,10 @@
                         Thông tin thiết bị xuất kho
                     </h4>
                     <div class="form-group">
-                        <label for="">Mã thiết bị:</label>
+                        <span class="muti-tb">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </span>
+                        <label for="">Chọn thiết bị:</label>
                         @if (ViewBag.MATB_XK != null)
                         {
                             <input class="form-control" id="MATB" name="MATB" value=@ViewBag.MATB_XK readonly />
@@ -36,6 +39,11 @@
                         {
                             <select class="form-control" id="MATB" name="MATB" onchange="get_THONG_TIN_TB()"></select>
                         }
+                        <div class="div-so-luong">
+                            <span>-</span>
+                            <span>1</span>
+                            <span>+</span>
+                        </div>
                     </div>
                     @*<div class="form-group">
                         <label for="">Tên thiết bị:</label>
@@ -63,10 +71,7 @@
                                placeholder=""
                                readonly />
                     </div>
-                    <div class="form-group">
-                        <label for="">Số lượng:</label>
-                        <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
-                    </div>
+                    
                     <div class="form-group">
                         <label for="">Ghi chú:</label>
                         <input type="text" name="GHI_CHU" />
