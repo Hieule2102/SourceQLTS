@@ -290,7 +290,7 @@ main #login .dang-nhap .form-group-dn label {
   font-size: 1em;
   margin-bottom: 5px;
   text-align: left;
-  color: #1F271B;
+  color: #1f271b;
   font-weight: 500;
 }
 
@@ -419,7 +419,7 @@ main button.sua {
   margin-top: 1rem;
   border: none;
   color: #fff;
-  background-color: #59C3C3;
+  background-color: #59c3c3;
   font-family: inherit;
   cursor: pointer;
   -webkit-transition: all 300ms linear;
@@ -509,6 +509,55 @@ main .form-group {
           justify-content: space-between;
   width: 100%;
   margin-bottom: 15px;
+  position: relative;
+}
+
+main .form-group .muti-tb {
+  position: absolute;
+  left: -40px;
+}
+
+main .form-group .muti-tb i {
+  color: #d73347;
+  cursor: pointer;
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+main .form-group .muti-tb i:hover {
+  color: #0f848d;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+main .form-group .div-so-luong {
+  position: absolute;
+  top: 0;
+  right: -105px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+
+main .form-group .div-so-luong span {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 28px;
+  border: 2px solid #555555;
+  margin: 0px 2px;
+}
+
+main .form-group .div-so-luong span:nth-child(1), main .form-group .div-so-luong span:nth-child(3) {
+  cursor: pointer;
+}
+
+main .form-group .div-so-luong span:nth-child(1):hover, main .form-group .div-so-luong span:nth-child(3):hover {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
 }
 
 main .form-group label {
@@ -622,14 +671,14 @@ main .inputfile-div .js .inputfile {
 
 main .inputfile-div .inputfile + label {
   max-width: 80%;
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
   display: inline-block;
   overflow: hidden;
-  padding: .6em 1.2em;
+  padding: 0.6em 1.2em;
 }
 
 main .inputfile-div input {
@@ -1018,29 +1067,54 @@ main #loai-tb .div-loai-tb {
   display: flex;
 }
 
-main #loai-tb .div-loai-tb .them-loai-tb {
+main #loai-tb .div-loai-tb .div-them-loai-tb {
   width: 25%;
   margin-right: 50px;
 }
 
-main #loai-tb .div-loai-tb .them-loai-tb .form-group {
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb .form-group {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
 }
 
-main #loai-tb .div-loai-tb .them-loai-tb .form-group label {
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb .form-group label {
   margin-bottom: 0px;
 }
 
-main #loai-tb .div-loai-tb .them-loai-tb .form-group input,
-main #loai-tb .div-loai-tb .them-loai-tb .form-group select {
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb .form-group input,
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb .form-group select {
   width: 100%;
 }
 
-main #loai-tb .div-loai-tb .them-loai-tb .form-group textarea {
+main #loai-tb .div-loai-tb .div-them-loai-tb .them-loai-tb .form-group textarea {
   width: 100% !important;
+}
+
+main #loai-tb .div-loai-tb .div-them-loai-tb .thongso-cauhinh {
+  width: 100%;
+}
+
+main #loai-tb .div-loai-tb .div-them-loai-tb .thongso-cauhinh .form-group {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+main #loai-tb .div-loai-tb .div-them-loai-tb .thongso-cauhinh .form-group label {
+  margin-bottom: 0px;
+}
+
+main #loai-tb .div-loai-tb .div-them-loai-tb .thongso-cauhinh .form-group input,
+main #loai-tb .div-loai-tb .div-them-loai-tb .thongso-cauhinh .form-group select {
+  width: 100%;
 }
 
 main #loai-tb .div-loai-tb .ds-ltb {
@@ -1284,7 +1358,7 @@ main #ds-tb .div-dstb .xk-dc button {
   width: 60%;
   margin-bottom: 15px;
   border: none;
-  background-color: #59C3C3;
+  background-color: #59c3c3;
   color: white;
   font-weight: 400;
   padding: 8px;
@@ -1525,7 +1599,7 @@ main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .chct .div-thong-so td:nth-of
 
 main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .xk-dc {
   width: 100%;
-  margin-top: 0px;
+  margin-top: 30px;
 }
 
 main #ds-tb .div-dstb .cau-hinh-chi-tiet .div-chct .xk-dc form {
