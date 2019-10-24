@@ -4,108 +4,105 @@
     ViewBag.Title = "Index";
 }
 
-    <main>
-        <div class="container link">
-            <p>Trang chủ > Chức năng > Xuất kho</p>
-            <hr />
-        </div>        
-        <section class="container" id="xuat-kho">
-            <h1 class="title">XUẤT KHO</h1>
-            <div id="ErrorMessage">
-                @if (ViewBag.ErrorMessage != null)
-                {
-                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
-                }
-            </div>
-            @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+<main>
+    <div class="container link">
+        <p>Trang chủ > Chức năng > Xuất kho</p>
+        <hr />
+    </div>
+    <section class="container" id="xuat-kho">
+        <h1 class="title">XUẤT KHO</h1>
+        <div id="ErrorMessage">
+            @if (ViewBag.ErrorMessage != null)
             {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
-                <div class="form-xuat-kho">
-                    <div class="thong-tin-tb-xuat-kho">
-                        <h4 class="sub-title">
-                            Thông tin thiết bị xuất kho
-                        </h4>
-                        <div class="form-group">
-                            <span class="muti-tb" onclick="ADD();">
-                                <i class="far fa-plus-square fa-2x"></i>
-                            </span>
-                            <label for="">Chọn thiết bị:</label>
-                            @if (ViewBag.MATB_XK != null)
-                            {
-                                <input class="form-control" id="MATB" name="MATB" value=@ViewBag.MATB_XK readonly />
-                            }
-                            else
-                            {
-                                <select class="form-control" id="MATB" name="MATB" onchange="get_THONG_TIN_TB()"></select>
-                            }
-                            <div class="div-so-luong">
-                                <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
-                            </div>
-
-                            <div id="parents"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="">ĐVQL:</label>
-                            <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
-                        </div>
-                        <div class="form-group">
-                            <label for="">Người nhập:</label>
-                            <input class="form-control"
-                                   id="MAND_NHAP"
-                                   name="MAND_NHAP"
-                                   aria-describedby="emailHelp"
-                                   placeholder=""
-                                   readonly />
-                        </div>
-                        <div class="form-group">
-                            <label for="">Người xuất:</label>
-                            <input class="form-control"
-                                   value="@Session["TEN_DANG_NHAP"]"
-                                   name="TEN_ND"
-                                   aria-describedby="emailHelp"
-                                   placeholder=""
-                                   readonly />
-                        </div>
-                        @*<div class="form-group">
-                            <label for="">Số lượng:</label>
-                            <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
-                        </div>*@
-                        <div class="form-group">
-                            <label for="">Ghi chú:</label>
-                            <input type="text" id="GHI_CHU" name="GHI_CHU" />
-                        </div>
-
-                    </div>
-
-                    <div class="dv-nhan">
-                        <h4 class="sub-title">
-                            Đơn vị tiếp nhận
-                        </h4>
-                        <div class="form-group">
-                            <label for="">ĐV nhận:</label>
-                            <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="FILL_ND()"></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Người nhận:</label>
-                            <select class="form-control" id="MAND_NHAN" name="MAND_NHAN"></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Phương thức vận chuyển:</label>
-                            <input type="text" id="VAN_CHUYEN" name="VAN_CHUYEN" />
-                        </div>
-                    </div>
-                </div>
-                <div class="submit">
-                    @if (ViewBag.Them != null)
-                    {
-                        <button class="luu" name="SAVE" value="save">LƯU</button>
-                    }
-                    <button class="reset" name="REFESH" value="refesh">Làm mới</button>
-                </div>
+                <p id="tb-sm">@ViewBag.ErrorMessage</p>
             }
-        </section>
-    </main>
+        </div>
+        @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="form-xuat-kho">
+                <div class="thong-tin-tb-xuat-kho">
+                    <h4 class="sub-title">
+                        Thông tin thiết bị xuất kho
+                    </h4>
+                    <div class="form-group">
+                        <span class="muti-tb" onclick="ADD();">
+                            <i class="far fa-plus-square fa-2x"></i>
+                        </span>
+                        <label for="">Chọn thiết bị:</label>
+                        @if (ViewBag.MATB_XK != null)
+                        {
+                            <input id="MATB" class="form-control" name="MATB" value=@ViewBag.MATB_XK readonly />
+                        }
+                        else
+                        {
+                            <select id="MATB" class="form-control" name="MATB" onchange="get_THONG_TIN_TB()"></select>
+                        }
+                        <input type="number" min="1" id="SO_LUONG" class="so-luong" name="SO_LUONG" />
+                    </div>
+                    <span id="parents"></span>
+                    <div class="form-group">
+                        <label for="">ĐVQL:</label>
+                        <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người nhập:</label>
+                        <input class="form-control"
+                               id="MAND_NHAP"
+                               name="MAND_NHAP"
+                               aria-describedby="emailHelp"
+                               placeholder=""
+                               readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người xuất:</label>
+                        <input class="form-control"
+                               value="@Session["TEN_DANG_NHAP"]"
+                               name="TEN_ND"
+                               aria-describedby="emailHelp"
+                               placeholder=""
+                               readonly />
+                    </div>
+                    @*<div class="form-group">
+            <label for="">Số lượng:</label>
+            <input type="number" min="1" id="SO_LUONG" name="SO_LUONG" />
+        </div>*@
+                    <div class="form-group">
+                        <label for="">Ghi chú:</label>
+                        <input type="text" id="GHI_CHU" name="GHI_CHU" />
+                    </div>
+
+                </div>
+
+                <div class="dv-nhan">
+                    <h4 class="sub-title">
+                        Đơn vị tiếp nhận
+                    </h4>
+                    <div class="form-group">
+                        <label for="">ĐV nhận:</label>
+                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="FILL_ND()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Người nhận:</label>
+                        <select class="form-control" id="MAND_NHAN" name="MAND_NHAN"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Phương thức vận chuyển:</label>
+                        <input type="text" id="VAN_CHUYEN" name="VAN_CHUYEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="submit">
+                @if (ViewBag.Them != null)
+                {
+                    <button class="luu" name="SAVE" value="save">LƯU</button>
+                }
+                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+            </div>
+        }
+    </section>
+</main>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -145,7 +142,7 @@
                 }
                 $("#MADV_NHAN").html(s);
             }
-        });        
+        });
     });
 
     function get_THONG_TIN_TB() {
@@ -183,16 +180,15 @@
     function ADD() {
         var count = $('div.child').length + 1;
 
-        $('#parents').append("<div class='child' id='child"
-                             + count +
+        $('#parents').append("<div class='child form-group' id='child"
+            + count +
             "'><label for=''>Chọn thiết bị:</label>"
             + "<select class='form-control' id='MATB"
             + count + "' name='MATB' onchange='get_THONG_TIN_TB_ADD(" + count + ")' ></select>"
-            + "<div class='div-so-luong'>"
             + "<input type='number' min='1' id='SO_LUONG"
-            + count + "' name='SO_LUONG' /></div>"
-            + "<a id='child"
-            + count + "' onclick='REMOVE(this.id)'>Remove</a></div>");
+            + count + "' name='SO_LUONG' />"
+            + "<span id='child" 
+            + count + "' class='delete' onclick='REMOVE(this.id)'><i class='fas fa-trash-alt'></i></span></div>");
 
         $.ajax({
             type: "GET",
@@ -205,11 +201,11 @@
                 }
                 $("#MATB" + count).html(s);
             }
-        });        
+        });
     };
 
     function REMOVE(value) {
-        $('#'+value).remove();
+        $('#' + value).remove();
     };
 
     function get_THONG_TIN_TB_ADD(value) {
