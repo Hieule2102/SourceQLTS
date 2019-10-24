@@ -530,34 +530,28 @@ main .form-group .muti-tb i:hover {
           transform: scale(1.1);
 }
 
-main .form-group .div-so-luong {
+main .form-group .so-luong {
   position: absolute;
-  top: 0;
-  right: -105px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  margin-left: 10px;
-  margin-bottom: 15px;
-}
-
-main .form-group .div-so-luong span {
+  top: 7px;
+  right: -40px;
   display: inline-block;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 25px;
   text-align: center;
-  line-height: 28px;
+  line-height: 22px;
   border: 2px solid #555555;
   margin: 0px 2px;
 }
 
-main .form-group .div-so-luong span:nth-child(1), main .form-group .div-so-luong span:nth-child(3) {
-  cursor: pointer;
+main .form-group .delete {
+  position: absolute;
+  top: 10px;
+  right: -60px;
 }
 
-main .form-group .div-so-luong span:nth-child(1):hover, main .form-group .div-so-luong span:nth-child(3):hover {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
+main .form-group .delete i {
+  font-size: 1.3em;
+  color: #555555;
 }
 
 main .form-group label {
