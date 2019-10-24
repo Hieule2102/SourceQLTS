@@ -1,183 +1,615 @@
-@model IEnumerable<Source.Models.XUAT_KHO>
+@model IEnumerable<Source.Models.NHAP_KHO>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<main>
-    <div class="container link">
-        <p>Trang chủ > Chức năng > Xuất kho</p>
-        <hr />
-    </div>
-    <section class="container" id="xuat-kho">
-        <h1 class="title">XUẤT KHO</h1>
-        <div id="ErrorMessage">
-            @if (ViewBag.ErrorMessage != null)
-            {
-                <p id="tb-sm">@ViewBag.ErrorMessage</p>
-            }
+    <main>
+        <div class="container link">
+            <p>Trang chủ > Chức năng > Nhập kho</p>
+            <hr />
         </div>
-        @using (Html.BeginForm("Index", "XuatKho", FormMethod.Post))
+        @using (Html.BeginForm("Index", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-            <div class="form-xuat-kho">
-                <div class="thong-tin-tb-xuat-kho">
-                    <h4 class="sub-title">
-                        Thông tin thiết bị xuất kho
-                    </h4>
-                    <div class="form-group">
-                        <span class="muti-tb">
-                            <i class="far fa-plus-square fa-2x"></i>
-                        </span>
-                        <label for="">Chọn thiết bị:</label>
-                        @if (ViewBag.MATB_XK != null)
-                        {
-                            <input class="form-control" id="MATB" name="MATB" value=@ViewBag.MATB_XK readonly />
-                        }
-                        else
-                        {
-                            <select class="form-control" id="MATB" name="MATB" onchange="get_THONG_TIN_TB()"></select>
-                        }
-                        <div class="div-so-luong">
-                            <span>-</span>
-                            <span>1</span>
-                            <span>+</span>
+            <section class="container" id="nhap-kho">
+                <h1 class="title">NHẬP KHO</h1>
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p id="tb-sm">@ViewBag.ErrorMessage</p>
+                }
+                <div class="form-nhap-kho">
+
+                    <div class="thong-tin-chung">
+
+                        <h4 class="sub-title">
+                            Thông tin chung
+                        </h4>
+                        <div class="form-group">
+                            <label for="">Nhóm thiết bị: </label>
+                            @*@Html.DropDownList("MA_NHOMTB", null, String.Empty, new { @class = "form-control", @placeholder = "", @onchange = "Fill_LoaiTB()" })*@
+                            <select class="form-control" id="MA_NHOMTB" name="MA_NHOMTB" onchange="FILL_LOAITB()"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Loại thiết bị: </label>
+                            <select class="form-control" id="MA_LOAITB" name="MA_LOAITB" onchange="FILL_CAU_HINH_LOAITB()"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tên thiết bị:</label>
+                            <input type="text" id="TENTB" name="TENTB" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Số serial:</label>
+                            <input type="text" name="SO_SERIAL" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Số lượng:</label>
+                            <input type="number" min="1" step="1" max="2500" name="SO_LUONG" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Giá tiền:</label>
+                            <input type="number" min="1" name="GIA_TIEN" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Nhà cung cấp:</label>
+                            <select class="form-control" id="MA_NCC" name="MA_NCC"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Ngày mua:</label>
+                            <input type="date" id="NGAY_MUA" name="NGAY_MUA" onchange="TINH_NGAY_BAO_HANH()"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="">THBH (theo tháng):</label>
+                            <input type="number" min="1" id="THOI_HAN_BAO_HANH" name="THOI_HAN_BAO_HANH" oninput="TINH_NGAY_BAO_HANH()" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Thời hạn hết BH:</label>
+                            <input type="text" id="THOI_HAN_HET_BAO_HANH" name="THOI_HAN_HET_BAO_HANH" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Đơn vị nhập:</label>
+                            <input type="text" class="form-control" id="MA_DON_VI" name="MA_DON_VI" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Người nhập:</label>
+                            <input class="form-control"
+                                   value="@Session["TEN_DANG_NHAP"]"
+                                   id="TEN_DANG_NHAP"
+                                   name="TEN_DANG_NHAP"
+                                   aria-describedby="emailHelp"
+                                   placeholder=""
+                                   readonly />
                         </div>
                     </div>
-                    @*<div class="form-group">
-                        <label for="">Tên thiết bị:</label>
-                        <input type="text" class="form-control" id="TENTB" name="TENTB" readonly />
-                    </div>*@
-                    <div class="form-group">
-                        <label for="">ĐVQL:</label>
-                        <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Người nhập:</label>
-                        <input class="form-control"
-                               id="MAND_NHAP"
-                               name="MAND_NHAP"
-                               aria-describedby="emailHelp"
-                               placeholder=""
-                               readonly />
-                    </div>
-                    <div class="form-group">
-                        <label for="">Người xuất:</label>
-                        <input class="form-control"
-                               value="@Session["TEN_DANG_NHAP"]"
-                               name="TEN_ND"
-                               aria-describedby="emailHelp"
-                               placeholder=""
-                               readonly />
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="">Ghi chú:</label>
-                        <input type="text" name="GHI_CHU" />
-                    </div>
+                    <div class="thongso-hinhanh">
+                        <div class="them-hinh-anh">
+                            <h4 class="sub-title">
+                                Thêm hình ảnh
+                            </h4>
+                            <div class="img-container">
+                                <img id="img" alt="your image" />
+                                <span class="delete-img"><i class="far fa-times-circle" onclick="REMOVE_IMG()"></i></span>
+                            </div>
+                            @*<div class="row" id="image_preview"></div>*@
+                            <div class="small-container-div">
+                                <div class="small-img-container">
+                                    <img id="img1" alt="" onclick="cHANGE_IMG(this.src)">
+                                </div>
+                                <div class="small-img-container">                                    
+                                    <img id="img2" alt="" onclick="cHANGE_IMG(this.src)">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img3" alt="" onclick="cHANGE_IMG(this.src)">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img4" alt="" onclick="cHANGE_IMG(this.src)">
+                                </div>
+                                <div class="small-img-container">
+                                    <img id="img5" alt="" onclick="cHANGE_IMG(this.src)">
+                                </div>
+                            </div>
+                            <div class="inputfile-div">
+                                <input type="file" class="inputfile inputfile-1"
+                                       data-multiple-caption="{count} files selected" id="file-1" name="HINH_ANH" onchange="preview_images();" multiple/>
+                                <label for="file-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="20"
+                                         height="17"
+                                         viewBox="0 0 20 17">
+                                        <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
+                                    </svg>
+                                    <span>Choose a file&hellip;</span>
+                                </label>
+                            </div>
+                            @*<div class="inputfile-div">
+                                <input type="file"
+                                       name="file-1[]"
+                                       id="file-1"
+                                       class="inputfile inputfile-1"
+                                       data-multiple-caption="{count} files selected"
+                                       multiple />
+                                <label for="file-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="20"
+                                         height="17"
+                                         viewBox="0 0 20 17">
+                                        <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
+                                    </svg>
+                                    <span>Choose a file&hellip;</span>
+                                </label>
+                            </div>*@
+                        </div>
+                        <div class="thong-so-ky-thuat" id="thong-so-ky-thuat" hidden="hidden">
+                            <h4 class="sub-title">
+                                Thông số kỹ thuật
+                            </h4>
+                            <div id="first">
+                                <div class="form-group">
+                                    <label id="label1"></label>                                
+                                    @*<select class="form-control"
+                                        id="thong_so1"
+                                        name="thong_so1"></select>*@
+                                    <input type="text" id="input_thong_so1" name="input_thong_so1" readonly/>
+                                </div>
+                            </div>
+                            <div id="second">
+                                <div class="form-group">
+                                    <label id="label2"></label>
+                                    @*<select class="form-control"
+                                        id="thong_so2"
+                                        name="thong_so2"></select>*@
+                                    <input type="text" id="input_thong_so2" name="input_thong_so2" readonly/>
+                                </div>
+                            </div>
+                            <div id="third">
+                                <div class="form-group">
+                                    <label id="label3"></label>
+                                    @*<select class="form-control"
+                                        id="thong_so3"
+                                        name="thong_so3"></select>*@
+                                    <input type="text" id="input_thong_so3" name="input_thong_so3" readonly/>
+                                </div>
+                            </div>
+                            <div id="fourth">                                
+                                <div class="form-group">
+                                    <label id="label4"></label>
+                                    @*<select class="form-control"
+                                        id="thong_so4"
+                                        name="thong_so4"></select>*@
+                                    <input type="text" id="input_thong_so4" name="input_thong_so4" readonly/>
+                                </div>
+                            </div>
+                            <div id="fifth">
+                                <div class="form-group">
+                                    <label id="label5"></label>
+                                    @*<select class="form-control"
+                                    id="thong_so5"
+                                    name="thong_so5"></select>*@
+                                    <input type="text" id="input_thong_so5" name="input_thong_so5" readonly/>
+                                </div>
+                            </div>
 
-                </div>
-
-                <div class="dv-nhan">
-                    <h4 class="sub-title">
-                        Đơn vị tiếp nhận
-                    </h4>
-                    <div class="form-group">
-                        <label for="">ĐV nhận:</label>
-                        <select class="form-control" id="MADV_NHAN" name="MADV_NHAN" onchange="FILL_ND()"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Người nhận:</label>
-                        <select class="form-control" id="MAND_NHAN" name="MAND_NHAN"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Phương thức vận chuyển:</label>
-                        <input type="text" id="VAN_CHUYEN" name="VAN_CHUYEN" />
+                            <div id="sixth">
+                                <div class="form-group">
+                                    <label id="label6"></label>
+                                    @*<select class="form-control"
+                                        id="thong_so6"
+                                        name="thong_so6"></select>*@
+                                    <input type="text" id="input_thong_so6" name="input_thong_so6" readonly/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="submit">
-                @if (ViewBag.Them != null)
-                {
-                    <button class="luu" name="SAVE" value="save">LƯU</button>
-                }
-                <button class="reset" name="REFESH" value="refesh">Làm mới</button>
-            </div>
+                <div class="submit">
+                    @if (ViewBag.Them != null)
+                    {
+                        <button type="submit" id="SAVE" name="SAVE" value="save" class="luu">THÊM</button>
+                        <button class="reset" name="REFESH" value="refesh">Làm mới</button>
+                    }
+                </div>
+            </section>      
         }
-    </section>
-</main>
+    </main>
+
+<script type="text/javascript" src="~/Scripts/main.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var mATB = $('#MATB').val();
-        $('#SO_LUONG').val(1);
         $.ajax({
             type: "GET",
-            url: "/Script/get_THONG_TIN_TB",
-            data: { mATB: mATB },
-            success: function (data) {
-                $("#MATB").val(data.MATB + " -- " + data.TENTB);
-                $("#MADV_QL").val(data.TEN_DON_VI);
-                $("#MAND_NHAP").val(data.TEN_ND);
-                document.getElementById("SO_LUONG").setAttribute("MAX", data.SO_LUONG);
-            }
-        });
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_MATB_XUAT_KHO",
+            url: "/Script/get_NHOMTB",
             data: "{}",
             success: function (data) {
-                var s = '<option disabled selected value>Xin chọn thiết bị</option>';
+                var s = '<option disabled selected value>Xin chọn nhóm thiết bị</option>';
                 for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i].MATB + '">' + data[i].MATB + " -- " + data[i].TENTB + '</option>';
+                    s += '<option value="' + data[i].MA_NHOMTB + '">' + data[i].TEN_NHOM + '</option>';
                 }
-                $("#MATB").html(s);
+                $("#MA_NHOMTB").html(s);
             }
         });
+
+        var tEN_DANG_NHAP = $('#TEN_DANG_NHAP').val();
         $.ajax({
             type: "GET",
-            url: "/Script/get_DON_VI",
-            data: "{}",
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn đơn vị</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i].MA_DON_VI + '">' + data[i].TEN_DON_VI + '</option>';
-                }
-                $("#MADV_NHAN").html(s);
+            url: "/Script/get_DON_VI_NHAP_KHO",
+            data: {tEN_DANG_NHAP : tEN_DANG_NHAP},
+            success: function (data) {               
+                $("#MA_DON_VI").val(data.TEN_DON_VI);
             }
         });
+
+        $.ajax({
+            type: "GET",
+            url: "/Script/get_NCC",
+            data: "{}",
+            success: function (data) {
+                var s = '<option value=""> Xin chọn nhà cung cấp </option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].MA_NCC + '">' + data[i].TEN_NCC + '</option>';
+                }
+                $("#MA_NCC").html(s);
+            }
+        });        
     });
 
-    function get_THONG_TIN_TB() {
-        var mATB = $('#MATB').val();
-        $('#SO_LUONG').val(1);
+    function preview_images() {                
+        var total_file = document.getElementById("file-1").files.length;
+        var flag = 1;
+        
+        for (var i = 0; i < total_file; i++) {
+            //$('#image_preview').append("<div style='display: inline-block; margin: 10px;'><img class='img-responsive' width='50' height='50' src='" + URL.createObjectURL(event.target.files[i]) + "' onclick='cHANGE_IMG(this.src)'></div>");
+
+            if (document.getElementById("img1").src == "") {
+                document.getElementById("img1").src = URL.createObjectURL(event.target.files[i]);
+            }
+            else if (document.getElementById("img2").src == "") {
+                document.getElementById("img2").src = URL.createObjectURL(event.target.files[i]);
+            }
+            else if (document.getElementById("img3").src == "") {
+                document.getElementById("img3").src = URL.createObjectURL(event.target.files[i]);
+            }
+            else if (document.getElementById("img4").src == "") {
+                document.getElementById("img4").src = URL.createObjectURL(event.target.files[i]);
+            }
+            else if (document.getElementById("img5").src == "") {
+                document.getElementById("img5").src = URL.createObjectURL(event.target.files[i]);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img')
+                        .attr('src', e.target.result)
+                        .width(313)
+                        .height(178);
+                };
+                reader.readAsDataURL(event.target.files[i]);
+                flag = 0;
+                break;
+            }
+        }
+        if (flag != 0) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img')
+                    .attr('src', e.target.result)
+                    .width(313)
+                    .height(178);
+            };
+            reader.readAsDataURL(event.target.files[total_file - 1]);
+        }
+    }
+
+    function FILL_LOAITB() {
+        var nHOM_TB = $('#MA_NHOMTB').val();
         $.ajax({
             type: "GET",
-            url: "/Script/get_THONG_TIN_TB",
-            data: { mATB: mATB },
+            url: "/Script/get_LOAITB",
+            data: { nHOM_TB: nHOM_TB },
             success: function (data) {
-                //$("#MATB").val(data.MATB + "--" + data.TENTB);
-                $("#MADV_QL").val(data.TEN_DON_VI);
-                $("#MAND_NHAP").val(data.TEN_ND);
-                document.getElementById("SO_LUONG").setAttribute("MAX", data.SO_LUONG);
+                $("#MA_LOAITB").html("");
+                var options = '<option disabled selected value>Xin chọn loại thiết bị</option>';
+                for (var i = 0; i < data.length; i++) {
+                    options += '<option value="' + data[i].MA_LOAITB + '">' + data[i].TEN_LOAI + '</option>';
+                }
+                $("#MA_LOAITB").html(options);
+            }
+        });
+        document.getElementById("thong-so-ky-thuat").hidden = true;
+        document.getElementById("first").hidden = true;
+        document.getElementById("second").hidden = true;
+        document.getElementById("third").hidden = true;
+        document.getElementById("fourth").hidden = true;
+        document.getElementById("fifth").hidden = true;
+        document.getElementById("sixth").hidden = true;
+        //$("#TENTB").val("");
+    };
+
+    function FILL_CAU_HINH_LOAITB() {
+        var mA_LOAITB = $('#MA_LOAITB').val();
+        var mA_NHOMTB = $('#MA_NHOMTB').val();
+        document.getElementById("thong-so-ky-thuat").hidden = false;
+        $.ajax({
+            type: "POST",
+            url: "/Script/get_CAU_HINH",
+            data: { mA_LOAITB: mA_LOAITB },
+            success: function (data) {
+                $("#TENTB").val(data.TEN_LOAI);
+                if (mA_NHOMTB == "PC" || mA_NHOMTB == "LT") {
+                    document.getElementById("first").hidden = false;
+                    document.getElementById("second").hidden = false;
+                    document.getElementById("third").hidden = false;
+                    document.getElementById("fourth").hidden = false;
+                    document.getElementById("fifth").hidden = false;
+                    document.getElementById("sixth").hidden = false;
+
+                    //document.getElementById("fifth").setAttribute("hidden", "false");
+                    //document.getElementById("sixth").setAttribute("hidden", "false");
+
+                    //document.getElementById("thong_so1").hidden = false;
+                    //document.getElementById("input_thong_so1").hidden = true;
+                    //document.getElementById("thong_so3").hidden = false;
+                    //document.getElementById("input_thong_so3").hidden = true;
+                    //document.getElementById("thong_so4").hidden = false;
+                    //document.getElementById("input_thong_so4").hidden = true;
+
+                    document.getElementById("label1").innerHTML = "CPU:";
+                    document.getElementById("label2").innerHTML = "RAM";
+                    document.getElementById("label3").innerHTML = "Màn hình:";
+                    document.getElementById("label4").innerHTML = "Ổ cứng:";
+                    document.getElementById("label5").innerHTML = "VGA:";
+                    document.getElementById("label6").innerHTML = "Hệ điều hành:";
+
+                    $("#input_thong_so1").val(data.CPU);
+                    $("#input_thong_so2").val(data.RAM);
+                    $("#input_thong_so3").val(data.MAN_HINH);
+                    $("#input_thong_so4").val(data.O_CUNG);
+                    $("#input_thong_so5").val(data.VGA);
+                    $("#input_thong_so6").val(data.HDH);
+
+                    //$("#thong_so1").html("");
+                    //$("#thong_so2").html("");
+                    //$("#thong_so3").html("");
+                    //$("#thong_so4").html("");
+                    //$("#thong_so5").html("");
+                    //$("#thong_so6").html("");
+
+                    //var options1 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    //var options2 = '<option disabled selected value></option>';
+                    //var options3 = '<option disabled selected value></option>';
+                    //var options4 = '<option disabled selected value></option>';
+                    //var options5 = '<option disabled selected value></option>';
+                    //var options6 = '<option disabled selected value></option>';
+
+                    //for (var i = 0; i < data.CPU.length; i++) {
+                    //    options1 += '<option value="' + data.CPU[i] + '">' + data.CPU[i] + '</option>';
+                    //}
+
+                    //for (var i = 0; i < data.RAM.length; i++) {
+                    //    options2 += '<option value="' + data.RAM[i] + '">' + data.RAM[i] + '</option>';
+                    //}
+
+                    //for (var i = 0; i < data.MAN_HINH.length; i++) {
+                    //    options3 += '<option value="' + data.MAN_HINH[i] + '">' + data.MAN_HINH[i] + '</option>';
+                    //}
+
+                    //for (var i = 0; i < data.O_CUNG.length; i++) {
+                    //    options4 += '<option value="' + data.O_CUNG[i] + '">' + data.O_CUNG[i] + '</option>';
+                    //}
+
+                    //for (var i = 0; i < data.VGA.length; i++) {
+                    //    options5 += '<option value="' + data.VGA[i] + '">' + data.VGA[i] + '</option>';
+                    //}
+
+                    //for (var i = 0; i < data.HDH.length; i++) {
+                    //    options6 += '<option value="' + data.HDH[i] + '">' + data.HDH[i] + '</option>';
+                    //}
+
+                    //$("#thong_so1").html(options1);
+                    //$("#thong_so2").html(options2);
+                    //$("#thong_so3").html(options3);
+                    //$("#thong_so4").html(options4);
+                    //$("#thong_so5").html(options5);
+                    //$("#thong_so6").html(options6);
+
+
+                }
+                else if (mA_NHOMTB == "PR") {
+                    document.getElementById("first").hidden = false;
+                    document.getElementById("second").hidden = false;
+                    document.getElementById("third").hidden = false;
+                    document.getElementById("fourth").hidden = false;
+                    document.getElementById("fifth").hidden = true;
+                    document.getElementById("sixth").hidden = true;
+                    //document.getElementById("fifth").setAttribute("hidden", "true");
+                    //document.getElementById("sixth").setAttribute("hidden", "true");
+
+                    //document.getElementById("thong_so1").hidden = true;
+                    //document.getElementById("input_thong_so1").hidden = false;
+                    //document.getElementById("thong_so3").hidden = true;
+                    //document.getElementById("input_thong_so3").hidden = false;
+                    //document.getElementById("thong_so4").hidden = true;
+                    //document.getElementById("input_thong_so4").hidden = false;
+
+                    document.getElementById("label1").innerHTML = "Kích thước:";
+                    document.getElementById("label2").innerHTML = "Loại mực:";
+                    document.getElementById("label3").innerHTML = "Tốc độ:";
+                    document.getElementById("label4").innerHTML = "Độ phân giải:";
+
+                    $("#input_thong_so1").val(data.KICH_THUOC);
+                    $("#input_thong_so2").val(data.LOAI_MUC);
+                    $("#input_thong_so3").val(data.TOC_DO);
+                    $("#input_thong_so4").val(data.DO_PHAN_GIAI);
+                    //$("#thong_so2").html("");
+
+                    //var options2 = '<option disabled selected value>Xin chọn các thông số kỹ thuật</option>';
+                    ////var options3 = '<option value="null"></option>';
+
+                    //for (var i = 0; i < data.LOAI_MUC.length; i++) {
+                    //    options2 += '<option value="' + data.LOAI_MUC[i] + '">' + data.LOAI_MUC[i] + '</option>';
+                    //}
+
+                    //$("#thong_so2").html(options2);
+                    //$("#thong_so3").html(options3);
+                }
             }
         });
     };
 
-    function FILL_ND() {
-        var mA_DV = $('#MADV_NHAN').val();
-        $.ajax({
-            type: "GET",
-            url: "/Script/get_ND",
-            data: { mA_DV: mA_DV },
-            success: function (data) {
-                var s = '<option disabled selected value>Xin chọn người nhận</option>';
-                for (var i = 0; i < data.length; i++) {
-                    s += '<option value="' + data[i].MA_ND + '">' + data[i].TEN_ND + '</option>';
-                }
-                $("#MAND_NHAN").html(s);
-            }
-        });
+    function cHANGE_IMG(src) {
+        document.getElementById("img").src = src;
     };
+
+    function REMOVE_IMG() {
+        var remove = document.getElementById("img").src;
+       
+        if (document.getElementById("img").src != "") {
+            if (document.getElementById("img1").src == remove) {
+                if (document.getElementById("img2").src == "") {
+                    document.getElementById("img").removeAttribute("src");
+                    document.getElementById("img1").removeAttribute("src");
+                }
+                else if (document.getElementById("img3").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img2").removeAttribute("src");
+                }
+                else if (document.getElementById("img4").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img1").src = document.getElementById("img2").src;
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img1").src;
+                }
+            }
+            else if (document.getElementById("img2").src == remove) {
+                if (document.getElementById("img3").src == "") {
+                    document.getElementById("img").src = document.getElementById("img1").src;
+
+                    document.getElementById("img2").removeAttribute("src");
+                }
+                else if (document.getElementById("img4").src == "") {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img2").src = document.getElementById("img3").src;
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img2").src;
+                }
+            }
+            else if (document.getElementById("img3").src == remove) {
+                if (document.getElementById("img4").src == "") {
+                    document.getElementById("img").src = document.getElementById("img2").src;
+
+                    document.getElementById("img3").removeAttribute("src");
+                }
+                else if (document.getElementById("img5").src == "") {
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                    document.getElementById("img").src = document.getElementById("img3").src;
+                }
+                else {
+                    document.getElementById("img3").src = document.getElementById("img4").src;
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img3").src;
+                }
+            }
+            else if (document.getElementById("img4").src == remove) {
+                if (document.getElementById("img5").src == "") {
+                    document.getElementById("img").src = document.getElementById("img3").src;
+
+                    document.getElementById("img4").removeAttribute("src");
+                }
+                else {
+                    document.getElementById("img4").src = document.getElementById("img5").src;
+                    document.getElementById("img").src = document.getElementById("img4").src;
+                }
+            }
+            else if (document.getElementById("img5").src == remove) {
+                document.getElementById("img").src = document.getElementById("img4").src;
+            }
+            document.getElementById("img5").removeAttribute("src");
+        }
+    };   
+
+    function TINH_NGAY_BAO_HANH() {
+        var date = new Date($('#NGAY_MUA').val());
+        var input = $('#THOI_HAN_BAO_HANH').val();
+
+        date.setMonth(date.getMonth() + (input % 12) + 1);
+        date.setFullYear(date.getFullYear() + (input / 12));
+
+        if (date.getMonth() == 0) {
+            document.getElementById("THOI_HAN_HET_BAO_HANH").value = 12 + "/" + date.getDate() + "/" + (date.getFullYear() - 1);            
+        }
+        else {
+            document.getElementById("THOI_HAN_HET_BAO_HANH").value = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+        }
+    };    
+
+    //function KIEM_TRA_NAM_NHUAN(nam) {
+    //    return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
+    //};
+
+    //function SO_NGAY_TRONG_THANG(thang, nam) {
+    //    var NgayTrongThang;
+    //    switch (thang)
+    //    {
+    //        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+    //            NgayTrongThang = 31;
+    //            break;
+    //        case 4: case 6: case 9: case 11:
+    //            NgayTrongThang = 30;
+    //            break;
+    //        case 2: 
+    //            var Check = KiemTraNamNhuan(nam); 
+    //            if (Check == 1) 
+    //            {  
+    //                NgayTrongThang = 29;
+    //            }
+    //            else
+    //            {
+    //                NgayTrongThang = 28;
+    //            }
+    //    }
+    //    return NgayTrongThang;
+    //};
+
+    //function NGAY_BAO_NHIEU_TRONG_NAM(ngay, thang, nam) {
+    //    var S = ngay;
+        
+    //    for (var i = 1; i < thang; i++)
+    //    { 
+    //        var NgayTrongThang = SO_NGAY_TRONG_THANG(thang, nam);
+    //        S = S + NgayTrongThang;
+    //    }
+    //    return S;
+    //}
 </script>
