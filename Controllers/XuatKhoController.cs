@@ -16,9 +16,6 @@ namespace Source.Controllers
         // GET: /XuatKho/
         public ActionResult Index()
         {
-            //var xuat_kho = db.XUAT_KHO.Include(x => x.DON_VI).Include(x => x.DON_VI1).Include(x => x.NGUOI_DUNG).Include(x => x.NGUOI_DUNG1).Include(x => x.THIETBI);
-            //return View(await xuat_kho.ToListAsync());
-
             if (Session["CHUC_NANG"] != null)
             {
                 var pHAN_QUYEN = db.NHOM_ND_CHUCNANG.Where(a => a.MA_NHOM == Session["NHOM_ND"].ToString()
@@ -45,7 +42,6 @@ namespace Source.Controllers
             ViewBag.Them = pHAN_QUYEN.Where(a => a.MA_QUYEN == 1);
             //ViewBag.Sua = pHAN_QUYEN.Where(a => a.MA_QUYEN == 3);
 
-
             if (!String.IsNullOrEmpty(SAVE))
             {
                 if (String.IsNullOrEmpty(form["MATB"]))
@@ -58,35 +54,39 @@ namespace Source.Controllers
                 }
                 else
                 {
-                    //Thay đổi trạng thái thiết bị
-                    var tHIETBI = THAY_DOI_TRANG_THAI_TB(form["MATB"]);
-
-                    //Thêm xuất kho
-                    var xUAT_KHO = THEM_XUAT_KHO(form, form["MATB"]);                    
-
-                    if (ModelState.IsValid)
+                    var mATB = form["MATB"].Split(new char[] { ',' });
+                    foreach (var i in mATB)
                     {
-                        db.Entry(tHIETBI).State = EntityState.Modified;
-                        db.XUAT_KHO.Add(xUAT_KHO);
-                        await db.SaveChangesAsync();                        
+                        //Thay đổi trạng thái thiết bị
+                        var tHIETBI = THAY_DOI_TRANG_THAI_TB(i);
+
+                        //Thêm xuất kho
+                        var xUAT_KHO = THEM_XUAT_KHO(form, i);
+
+                        if (ModelState.IsValid)
+                        {
+                            db.Entry(tHIETBI).State = EntityState.Modified;
+                            db.XUAT_KHO.Add(xUAT_KHO);
+                            await db.SaveChangesAsync();
+                        }
+
+                        //Thêm vào xác nhận
+                        var xAC_NHAN = XAC_NHAN_XUAT_KHO_TB(i);
+                        db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
+
+                        //Thêm vào nhật ký thiết bị
+                        var nHAT_KY_THIET_BI = THEM_NHAT_KY_THIET_BI(xAC_NHAN.MA_XUAT_KHO);
+                        db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);
+
+                        await db.SaveChangesAsync();
+
+                        ViewBag.ErrorMessage = "Thêm thành công";
                     }
 
-                    //Thêm vào xác nhận
-                    var xAC_NHAN = XAC_NHAN_XUAT_KHO_TB(form["MATB"]);
-                    db.XAC_NHAN_DIEU_CHUYEN.Add(xAC_NHAN);
-
-                    //Thêm vào nhật ký thiết bị
-                    var nHAT_KY_THIET_BI = THEM_NHAT_KY_THIET_BI(xAC_NHAN.MA_XUAT_KHO);
-                    db.NHAT_KY_THIET_BI.Add(nHAT_KY_THIET_BI);                    
-
-                    await db.SaveChangesAsync();
-
-                    ViewBag.ErrorMessage = "Thêm thành công";
-
-                    //Email.EmailUsername = "angellove27101997@gmail.com";
-                    //Email.EmailPassword = "toantran168";
+                    //Email.EmailUsername = "huytnh@kienlongbank.com";
+                    //Email.EmailPassword = "Klb1234567";
                     //Email email = new Email();
-                    //email.ToEmail = "tnhuy2710@gmail.com";
+                    //email.ToEmail = "hieulmi@kienlongbank.com";
                     //email.Subject = "Thiết bị xuất kho";
                     //email.Body = "Thanks for Registering your account.<br>"
                     //             + "Thiết bị " + form["MATB"] + ".<br>"
@@ -99,7 +99,7 @@ namespace Source.Controllers
                     //             + "Phương thức vận chuyển: " + form["VAN_CHUYEN"] + ".<br>";
                     //email.IsHtml = true;
                     //email.Send();
-                }
+                }                
             }
             else if (!String.IsNullOrEmpty(MATB_XK))
             {
