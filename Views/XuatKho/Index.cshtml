@@ -192,6 +192,8 @@
             + "<span id='child"
             + count + "' class='delete' onclick='REMOVE(this.id)'><i class='fas fa-trash-alt'></i></span></div>");
 
+        $('#SO_LUONG' + count).val(1);
+        
         $.ajax({
             type: "GET",
             url: "/Script/get_MATB_XUAT_KHO",
