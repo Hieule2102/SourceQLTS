@@ -39,9 +39,11 @@
                         {
                             <select id="MATB" class="form-control" name="MATB" onchange="get_THONG_TIN_TB()"></select>
                         }
-                        <input type="number" min="1" id="SO_LUONG" class="so-luong" name="SO_LUONG" />
+                        <input type="number" class="so-luong" min="1" id="SO_LUONG" name="SO_LUONG" />
                     </div>
+
                     <span id="parents"></span>
+
                     <div class="form-group">
                         <label for="">ĐVQL:</label>
                         <input type="text" class="form-control" id="MADV_QL" name="MADV_QL" readonly />
@@ -185,9 +187,9 @@
             "'><label for=''>Chọn thiết bị:</label>"
             + "<select class='form-control' id='MATB"
             + count + "' name='MATB' onchange='get_THONG_TIN_TB_ADD(" + count + ")' ></select>"
-            + "<input type='number' min='1' id='SO_LUONG"
+            + "<input type='number' class='so-luong' min='1' id='SO_LUONG"
             + count + "' name='SO_LUONG' />"
-            + "<span id='child" 
+            + "<span id='child"
             + count + "' class='delete' onclick='REMOVE(this.id)'><i class='fas fa-trash-alt'></i></span></div>");
 
         $.ajax({
@@ -219,6 +221,5 @@
                 document.getElementById("SO_LUONG" + value).setAttribute("MAX", data.SO_LUONG);
             }
         });
-    }
-
+    };
 </script>
