@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -32,14 +32,35 @@
                             @if (Session["CHUC_NANG"] != null)
                             {
                                 <li class="menuc1">
-                                    <a href="javascript:void(0);" class="c1 toggle">
-                                        Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
-                                    </a>
+                                    @if (Session["COUNT"].ToString() == "0")
+                                    {
+                                        <a href="javascript:void(0);" class="c1 toggle">
+                                            Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0);" class="c1 toggle">
+                                            Chức năng<span><i class="fas fa-sort-down fa-2x"></i></span>
+                                            <code class="badge">!</code>
+                                        </a>
+                                    }
                                     <ul class="c2 menuc2 inner">
                                         <li>@Html.ActionLink("Nhập kho", "Index", "NhapKho")<span></span></li>
                                         <li>@Html.ActionLink("Xuất kho", "Index", "XuatKho")<span></span></li>
                                         <li>@Html.ActionLink("Điều chuyển", "Index", "DieuChuyenThietBi")<span></span></li>
-                                        <li>@Html.ActionLink("Xác nhận", "Index", "XacNhan")<span></span></li>
+                                        @if (Session["COUNT"].ToString() == "0")
+                                        {
+                                            <li>@Html.ActionLink("Xác nhận", "Index", "XacNhan")<span></span></li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                @Html.ActionLink("Xác nhận", "Index", "XacNhan")
+                                                <span></span>
+                                                <code class="badge">@Session["COUNT"]</code>
+                                            </li>
+                                        }
                                     </ul>
                                 </li>
                             }
