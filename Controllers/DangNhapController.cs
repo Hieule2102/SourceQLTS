@@ -1,4 +1,4 @@
-﻿using Source.Models;
+using Source.Models;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -16,7 +16,7 @@ namespace Source.Controllers
         // GET: /DangNhap/
         public ActionResult Index()
         {
-            if (Session["iS_ALREADY"] != null)
+            if (Session["TEN_DANG_NHAP"] != null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -37,9 +37,7 @@ namespace Source.Controllers
                     ViewBag.ErrorMessage = "Thông tin đăng nhập không hợp lệ";
                 }
                 else
-                {
-                    Session["iS_ALREADY"] = 1;
-
+                {                    
                     Session["TEN_DANG_NHAP"] = tEN_DANG_NHAP;                    
                     
                     Session["NHOM_ND"] = db.NHOM_ND
@@ -58,6 +56,14 @@ namespace Source.Controllers
                     Session["BAO_CAO"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 3);
 
                     Session["QL_ND"] = nHOM_ND.FirstOrDefault(a => a.DM_CHUC_NANG.CHUC_NANG.MA_CHUC_NANG == 4);
+
+                    var xAC_NHAN = db.XAC_NHAN_DIEU_CHUYEN.Where(a => a.XAC_NHAN == false);                    
+                    if (tEN_DANG_NHAP != "admin")
+                    {
+                        xAC_NHAN = xAC_NHAN.Where(a => (a.XUAT_KHO.NGUOI_DUNG1.TEN_DANG_NHAP == tEN_DANG_NHAP
+                                                     || a.DIEU_CHUYEN_THIET_BI.NGUOI_DUNG.TEN_DANG_NHAP == tEN_DANG_NHAP));
+                    }
+                    Session["COUNT"] = xAC_NHAN.Count();
 
                     return RedirectToAction("Index", "Home");
                 }
